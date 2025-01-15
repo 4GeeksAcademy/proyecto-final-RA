@@ -1,0 +1,38 @@
+/* Estilos generales del footer */
+.footer {
+  background-color: #222;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+  width: 100%; /* Asegura que el footer ocupe todo el ancho */
+  position: relative; /* Para control absoluto si es necesario */
+  bottom: 0;
+}
+
+/* Contenedor del footer */
+.footer-container {
+  width: 100%; /* Asegura que el contenedor del footer ocupe todo el ancho */
+  padding: 0 20px; /* Padding para que el contenido no toque los bordes */
+  box-sizing: border-box; /* Para incluir el padding dentro del ancho total */
+  margin: 0 auto; /* Centra el contenido */
+}
+
+/* Navegación del footer */
+.footer-nav {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* Enlaces del footer */
+.footer-link {
+  color: #61dafb;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
