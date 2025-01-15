@@ -14,7 +14,7 @@ const RecordsList = () => {
 
     return (
         <div>
-            <h1>Buscar Discos</h1>
+            <h1 className="text-warning">Search Vinyls!</h1>
             <input
                 type="text"
                 value={query}
