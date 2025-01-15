@@ -1,54 +1,52 @@
 const getState = ({ getStore, getActions, setStore }) => {
-	return {
-		store: {
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
-		},
-		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
+    return {
+        store: {
+            records: [],   // Aquí almacenaremos los registros obtenidos de la API
+            loading: false, // Indicador de carga
+            error: null,    // Almacenará posibles errores
+        },
+        actions: {
+            // Acción para cambiar el estado a cargando
+            setLoading: () => {
+                const store = getStore();
+                setStore({ ...store, loading: true });
+            },
 
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+            // Acción para actualizar el estado con los registros obtenidos
+            setRecords: (records) => {
+                const store = getStore();
+                setStore({ ...store, records, loading: false });
+            },
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+            // Acción para manejar errores
+            setError: (error) => {
+                const store = getStore();
+                setStore({ ...store, error, loading: false });
+            },
 
-				//reset the global store
-				setStore({ demo: demo });
-			}
-		}
-	};
+            // Acción para hacer el fetch de los registros desde Discogs
+            fetchDiscogsRecords: async (query) => {
+                if (!query) return; // Evitar consultas vacías
+                const store = getStore();
+                const token = "KICgBsOUcAETzwuzpfafDmhRVgkEwPmxpPIzsxmK"; // Tu token Discogs
+                const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&token=${token}`;
+
+                setStore({ ...store, loading: true });
+
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error("Error fetching records");
+
+                    const data = await response.json();
+                    const actions = getActions();
+                    actions.setRecords(data.results);
+                } catch (error) {
+                    const actions = getActions();
+                    actions.setError(error.message || "An error occurred");
+                }
+            },
+        },
+    };
 };
 
 export default getState;
