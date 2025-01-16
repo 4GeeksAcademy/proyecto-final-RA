@@ -8,7 +8,7 @@
     max-width: 600px; /* Ajusta el ancho máximo */
     /* max-height: 80vh;  */
     margin: 0 auto; /* Centrado horizontal */
-    background-color: rgba(87, 85, 85, 0.21); /* Fondo semitransparente */
+    background-color: rgba(87, 85, 85, 0.21); 
     backdrop-filter: blur(5px); 
     border-radius: 10px; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
