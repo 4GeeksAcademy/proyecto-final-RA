@@ -26,7 +26,7 @@ export const Register = () => {
     };
 
     return (
-        <div className="form-container container-fluid">
+        <div className="form-container container-fluid cuerpo">
             <h2>{isRegister ? 'Registro' : 'Inicio de Sesión'}</h2>
             <form onSubmit={handleSubmit} className="form-control">
                 <input

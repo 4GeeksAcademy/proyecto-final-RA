@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../store/appContext';
 
-const RecordsList = () => {
+const Test = () => {
     const { store, actions } = useContext(Context);
     const [query, setQuery] = useState('');
 
@@ -40,4 +40,4 @@ const RecordsList = () => {
     );
 };
 
-export default RecordsList;
+export default Test;

@@ -1,0 +1,50 @@
+.search-music {
+    padding: 20px;
+}
+
+.search-music h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.search-music select, .search-music input {
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-music button {
+    padding: 10px 20px;
+    background-color: #ffbb33;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.search-music button:hover {
+    background-color: #343a40;
+}
+
+.search-music ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.search-music li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.search-music img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.search-music button {
+    margin-top: 10px;
+}

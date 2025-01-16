@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Record
+from api.models import db, User, Record, Collection
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -124,3 +124,37 @@ def search_discogs():
 
     except request.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+@api.route('/add_to_collection', methods=['POST'])
+@jwt_required()  # Aseguramos que el usuario esté autenticado
+def add_to_collection():
+    try:
+        # Obtener la identidad del usuario (id)
+        user_id = get_jwt_identity()
+
+        # Obtener el disco a agregar (ID del disco)
+        record_id = request.json.get('record_id', None)
+
+        # Verificar si el disco existe
+        record = Record.query.get(record_id)
+        if not record:
+            return jsonify({"msg": "Disco no encontrado"}), 404
+
+        # Verificar si el usuario ya tiene este disco en su colección
+        existing_collection = Collection.query.filter_by(user_id=user_id, record_id=record_id).first()
+        if existing_collection:
+            return jsonify({"msg": "Este disco ya está en tu colección"}), 400
+
+        # Crear una nueva entrada en la colección
+        new_collection = Collection(user_id=user_id, record_id=record_id)
+        db.session.add(new_collection)
+        db.session.commit()
+
+        return jsonify({"msg": "Disco agregado a tu colección con éxito"}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+

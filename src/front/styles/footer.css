@@ -1,38 +1,51 @@
-/* Estilos generales del footer */
-.footer {
-  background-color: #222;
-  color: #fff;
-  padding: 20px 0;
-  text-align: center;
-  width: 100%; /* Asegura que el footer ocupe todo el ancho */
-  position: relative; /* Para control absoluto si es necesario */
+/* Estilos generales para el footer */
+footer {
+  position: relative;
   bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semi-transparente */
+  color: #f7f7f7; /* Texto claro */
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  /* z-index: 1;  */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave en la parte superior del footer */
 }
 
-/* Contenedor del footer */
+/* Contenedor dentro del footer */
 .footer-container {
-  width: 100%; /* Asegura que el contenedor del footer ocupe todo el ancho */
-  padding: 0 20px; /* Padding para que el contenido no toque los bordes */
-  box-sizing: border-box; /* Para incluir el padding dentro del ancho total */
-  margin: 0 auto; /* Centra el contenido */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Navegación del footer */
+/* Estilo para el texto del footer */
+footer p {
+  margin: 0;
+  font-weight: bold;
+}
+
+/* Estilo para los enlaces en el footer */
 .footer-nav {
   list-style-type: none;
+  margin: 0;
   padding: 0;
-  margin: 10px 0 0;
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  gap: 1rem;
 }
 
-/* Enlaces del footer */
-.footer-link {
-  color: #61dafb;
+/* Estilo para los enlaces del footer */
+.footer-nav li a {
+  color: #f7f7f7;
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-.footer-link:hover {
-  text-decoration: underline;
+/* Hover en los enlaces */
+.footer-nav li a:hover {
+  color: #ffbb33;
 }

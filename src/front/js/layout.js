@@ -12,6 +12,8 @@ import { Navbar } from "./component/navbar";
 import { Register } from "./component/register.jsx";
 import { Footer } from "./component/footer";
 import { Private } from "./component/private.jsx";
+import { SearchMusic } from "./component/searchMusic.jsx";
+import { SearchWorldWide } from "./component/searchWorldWide.jsx";
 
 //create your first component
 const Layout = () => {
@@ -28,6 +30,8 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/" />
+                        <Route element={<SearchMusic />} path="/searchmusic" />
+                        <Route element={<SearchWorldWide />} path="/searchworldwide" />
                         <Route element={<Register />} path="/register" />
                         <Route element={<Private />} path="/private" />
                         <Route element={<h1>Not found!</h1>} />

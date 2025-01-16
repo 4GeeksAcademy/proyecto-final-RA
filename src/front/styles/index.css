@@ -1,43 +1,59 @@
-/* Register.css */
-
-/* Fondo con el video */
+/* Estilo del body */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #121212;
+    background-image: url("https://images.freeimages.com/images/large-previews/bd3/mischpult-serie2-1565695.jpg");
     color: #ffffff;
-    display: flex;
+
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 400rem; /* Asegura que ocupe todo el alto */
+    width: 100vw; /* Asegura que ocupe todo el ancho */
     margin: 0;
-    position: relative; /* Para colocar el video detrás del contenido */
+    padding: 0;
+    position: absolute;
+    overflow: hidden; /* Oculta cualquier contenido que exceda la pantalla */
 }
 
+/* Fondo de video */
 .video-background {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Hace que el video cubra toda la pantalla */
-    z-index: -1; /* Coloca el video detrás del contenido */
+    width: 100vw; 
+    height: 100vh; 
+    object-fit: cover; 
+    z-index: -1; 
 }
-
+/* Contenedor del formulario */
 .form-container {
-    background-color: rgba(30, 30, 47, 0.8); /* Fondo ligeramente oscuro para el formulario */
+    background-color: rgba(30, 30, 47, 0.8); /* Fondo oscuro translúcido */
     border-radius: 10px;
     padding: 20px 30px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 600px;
-    position: relative; /* Asegura que el formulario esté sobre el video */
+    max-width: 600px; /* Ancho máximo */
+    width: 90%; /* Se ajusta al tamaño de la pantalla */
+    position: relative;
 }
 
+/* Títulos */
 h2, h3 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
-    color: #f7df1e;
+    color: #f7df1e; /* Amarillo */
 }
 
-/* Otros estilos siguen igual... */
+/* Ajuste del contenido principal */
+.main-content {
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    height: 100%; /* Asegura que ocupe todo el alto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.cuerpo {
+    height: 570px;
+}
