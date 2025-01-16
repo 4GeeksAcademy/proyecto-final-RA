@@ -52,7 +52,8 @@ export const SearchMusic = () => {
     };
 
     return (
-        <div className="search-music">
+        <div className="app">
+             <div className="search-music">
             <h2>Buscar Música</h2>
             <div>
                 <label>
@@ -102,5 +103,7 @@ export const SearchMusic = () => {
                 )}
             </div>
         </div>
+        </div>
+       
     );
 };

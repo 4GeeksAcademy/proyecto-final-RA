@@ -4,7 +4,7 @@ import { SearchMusic } from '../component/searchMusic.jsx'; // Asegúrate de que
 export const SearchWorldWide = () => {
   return (
     <div className="music-search-container">
-      <h2>Busca tu música favorita</h2>
+      <h2>Descubre Artistas</h2>
       <SearchMusic />
     </div>
   );
