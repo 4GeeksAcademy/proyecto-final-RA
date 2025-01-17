@@ -1,12 +1,17 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+
+import { SearchMusic } from '../component/searchMusic.jsx';
+
+
 import { UserProfile } from "./UserProfile.jsx"
+
 
 export const Private = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const checkAuthentication = async () => {
             const token = localStorage.getItem("token");
@@ -24,6 +29,8 @@ export const Private = () => {
         checkAuthentication();
     }, []);
 
+    console.log("------>", store);
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         navigate("/");
@@ -33,12 +40,16 @@ export const Private = () => {
         <div className="private-view">
             <h2>Perfil</h2>
             <h3>del usuario</h3>
+
+            <SearchMusic />
+
             <UserProfile /> 
+
             <p>{store.user?.email || "No disponible"}</p>
             <button className="logout" onClick={handleLogout}>Cerrar Sesión</button>
 
- 
-            
+
+
         </div>
     );
 };

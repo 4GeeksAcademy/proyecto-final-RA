@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             records: [],   // Aquí almacenaremos los registros obtenidos de la API
             loading: false, // Indicador de carga
             error: null,    // Almacenará posibles errores
-			user: null,
+            user: null,
         },
         actions: {
             register: async (formData) => {
@@ -108,6 +108,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                         return; // Si el tipo no es válido, no hacer nada
                 }
 
+                console.log("------>",`https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=artist&token=${token}`);
+
                 setStore({ ...store, loading: true });
 
                 try {
@@ -131,40 +133,74 @@ const getState = ({ getStore, getActions, setStore }) => {
 
         },
 
-		 // Nueva acción para agregar un disco a la colección
-		 addToCollection: async (recordId) => {
-			const store = getStore();
-			const token = localStorage.getItem('token'); // Obtener el token desde el localStorage
+        // Nueva acción para agregar un disco a la tabla record
+        addRecord: async (record) => {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:5000/api/records", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(record),
+            });
+        
+            if (!response.ok) {
+                const error = await response.json();
+                console.error("Error al agregar el registro:", error);
+                return false;
+            }
+        
+            const data = await response.json();
+            console.log("Registro agregado:", data);
+            return true;
+        },
+        
+       
+        
+        
+        
+        
+        // -------------------------------------------------------------------------------------
 
-			if (!token) {
-				console.log("No hay token disponible.");
-				return;
-			}
+        editUser: async (userId, formData) => {
+            try {
+                // Realizamos la solicitud al backend
+                const resp = await fetch(`https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/edit_user/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData) // Convertimos el objeto formData a JSON
+                });
 
-			try {
-				const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_to_collection', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${token}`, // Se incluye el token en el header
-					},
-					body: JSON.stringify({ record_id: recordId }), // El ID del disco a agregar
-				});
+                if (!resp.ok) throw new Error("Error al actualizar el usuario");
 
-				if (!response.ok) throw new Error("Error al agregar el disco a la colección");
+                const data = await resp.json(); // Obtenemos la respuesta del servidor
+                console.log(data.msg); // Mensaje de éxito del backend
+                return true;
+            } catch (error) {
+                console.error("Error al editar el usuario:", error);
+                return false;
+            }
+        },
+        // ------------------------------------------------------------------------------------------------------------------------
 
-				const data = await response.json();
-				console.log(data.msg); // Mensaje de éxito o error
-
-				// Si es necesario, podrías actualizar el estado de la colección aquí
-				// Ejemplo: setStore({ ...store, userCollection: data.collection });
-
-			} catch (error) {
-				console.error("Error al agregar el disco:", error);
-			}
-		},
-
-
+        searchDiscogs: async (query) => {
+            try {
+                const response = await fetch(`https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/search?q=${query}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (!response.ok) throw new Error("Error al buscar discos");
+                const results = await response.json();
+                console.log(results); // Mostrar resultados para seleccionarlos en el frontend
+                return results; // Devolver la lista de discos al componente
+            } catch (error) {
+                console.error("Error al buscar discos:", error);
+                return [];
+            }
+        },
 
 
 
