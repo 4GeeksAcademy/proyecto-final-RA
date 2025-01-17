@@ -4,7 +4,7 @@ import enum
 
 db = SQLAlchemy()
 
-# Definir los tipos ENUM de manera segura
+# ENUMs
 class ConditionEnum(enum.Enum):
     new = 'new'
     used = 'used'
@@ -22,19 +22,10 @@ class StatusEnum(enum.Enum):
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=True)
+    name = db.Column(db.String(120), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    is_active = db.Column(db.Boolean, nullable=True)
-
-    # Relaciones
-    records = db.relationship('Record', backref='owner', lazy=True)
-    collections = db.relationship('Collection', backref='user', lazy=True)
-    sell_list = db.relationship('SellList', backref='user', lazy=True)
-    wish_list = db.relationship('WishList', backref='user', lazy=True)
-    comments = db.relationship('Comment', backref='user', lazy=True)
-    transactions_buyer = db.relationship('Transaction', foreign_keys='Transaction.buyer_id', backref='buyer', lazy=True)
-    transactions_seller = db.relationship('Transaction', foreign_keys='Transaction.seller_id', backref='seller', lazy=True)
+    is_active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -50,36 +41,18 @@ class User(db.Model):
 
 class Record(db.Model):
     __tablename__ = 'records'
+
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    artist = db.Column(db.String, nullable=False)
-    genre = db.Column(db.String, nullable=False)
-    price = db.Column(db.Numeric, nullable=False)
-    condition = db.Column(db.Enum(ConditionEnum, name='condition_enum', create_type=False), nullable=False)
-    image_url = db.Column(db.String, nullable=True)
-    description = db.Column(db.Text, nullable=True)
+    title = db.Column(db.String(120), nullable=False)
+    cover_image = db.Column(db.String(255), nullable=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    # Relaciones
-    collections = db.relationship('Collection', backref='record', lazy=True)
-    sell_list = db.relationship('SellList', backref='record', lazy=True)
-    wish_list = db.relationship('WishList', backref='record', lazy=True)
-    comments = db.relationship('Comment', backref='record', lazy=True)
-    transactions = db.relationship('Transaction', backref='record', lazy=True)
-
-    def __repr__(self):
-        return f'<Record {self.name}>'
 
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.name,
-            "artist": self.artist,
-            "genre": self.genre,
-            "price": str(self.price),
-            "condition": self.condition,
-            "image_url": self.image_url,
-            "description": self.description,
+            "title": self.title,
+            "cover_image": self.cover_image,
+            "owner_id": self.owner_id
         }
 
 
@@ -140,7 +113,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f'<Comment {self.id}>'
@@ -161,10 +134,10 @@ class Transaction(db.Model):
     buyer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     seller_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
-    transaction_type = db.Column(db.Enum(TransactionTypeEnum, name='transaction_type_enum', create_type=False), nullable=False)
-    status = db.Column(db.Enum(StatusEnum, name='status_enum', create_type=False), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    transaction_type = db.Column(db.Enum(TransactionTypeEnum), nullable=False)
+    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.pending, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f'<Transaction {self.id}>'
@@ -175,8 +148,8 @@ class Transaction(db.Model):
             "buyer_id": self.buyer_id,
             "seller_id": self.seller_id,
             "record_id": self.record_id,
-            "transaction_type": self.transaction_type,
-            "status": self.status,
+            "transaction_type": self.transaction_type.value,
+            "status": self.status.value,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
         }

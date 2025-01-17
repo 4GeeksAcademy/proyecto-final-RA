@@ -1,8 +1,9 @@
-import React from "react";
+import React  from "react";
 import { Link } from "react-router-dom";
 import "../../styles/navbar.css"
 
 export const Navbar = () => {
+
 	return (
 		<nav className="main-content navbar navbar-expand-lg navbar-custom shadow">
 			<div className="container-fluid d-flex">
@@ -22,6 +23,11 @@ export const Navbar = () => {
 				</button>
 				<div className="collapse navbar-collapse" id="navbarNav">
 					<ul className="navbar-nav ml-auto">
+					<li className="nav-item">
+							<Link className="nav-link" to={"/private"}>
+								Mi perfil
+							</Link>
+						</li>
 						<li className="nav-item">
 							<Link className="nav-link" to={"/"}>
 								Users Collections
