@@ -1,7 +1,11 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+
 import { SearchMusic } from '../component/searchMusic.jsx';
+
+
+import { UserProfile } from "./UserProfile.jsx"
 
 
 export const Private = () => {
@@ -36,7 +40,11 @@ export const Private = () => {
         <div className="private-view">
             <h2>Perfil</h2>
             <h3>del usuario</h3>
+
             <SearchMusic />
+
+            <UserProfile /> 
+
             <p>{store.user?.email || "No disponible"}</p>
             <button className="logout" onClick={handleLogout}>Cerrar Sesión</button>
 
