@@ -14,6 +14,7 @@ body {
     overflow: hidden; /* Oculta cualquier contenido que exceda la pantalla */
 }
 
+
 /* Fondo de video */
 .video-background {
     position: absolute;

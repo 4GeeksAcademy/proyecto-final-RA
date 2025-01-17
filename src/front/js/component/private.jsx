@@ -6,6 +6,7 @@ import { SearchMusic } from '../component/searchMusic.jsx';
 
 
 import { UserProfile } from "./UserProfile.jsx"
+import { RecordCarousel } from "./RecordCarousel.jsx";
 
 
 export const Private = () => {
@@ -44,6 +45,8 @@ export const Private = () => {
             <SearchMusic />
 
             <UserProfile /> 
+
+            <RecordCarousel />
 
             <p>{store.user?.email || "No disponible"}</p>
             <button className="logout" onClick={handleLogout}>Cerrar Sesión</button>
