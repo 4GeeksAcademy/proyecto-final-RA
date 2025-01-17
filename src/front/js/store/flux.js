@@ -9,7 +9,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         actions: {
             register: async (formData) => {
                 try {
-                    const resp = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/register', {
+                    const resp = await fetch(process.env.BACKEND_URL+"/api/register", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             login: async (formData) => {
                 try {
-                    const resp = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/login', {
+                    const resp = await fetch(process.env.BACKEND_URL+"/api/login", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             checkUser: async () => {
                 try {
-                    const resp = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/protected', {
+                    const resp = await fetch(process.env.BACKEND_URL+"/api/protected", {
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
@@ -134,27 +134,27 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
 
         // Nueva acción para agregar un disco a la tabla record
-        addRecord: async (record) => {
-            const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:5000/api/records", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(record),
-            });
+        // addRecord: async (record) => {
+        //     const token = localStorage.getItem("token");
+        //     const response = await fetch("http://localhost:5000/api/records", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             Authorization: `Bearer ${token}`,
+        //         },
+        //         body: JSON.stringify(record),
+        //     });
         
-            if (!response.ok) {
-                const error = await response.json();
-                console.error("Error al agregar el registro:", error);
-                return false;
-            }
+        //     if (!response.ok) {
+        //         const error = await response.json();
+        //         console.error("Error al agregar el registro:", error);
+        //         return false;
+        //     }
         
-            const data = await response.json();
-            console.log("Registro agregado:", data);
-            return true;
-        },
+        //     const data = await response.json();
+        //     console.log("Registro agregado:", data);
+        //     return true;
+        // },
         
        
         
