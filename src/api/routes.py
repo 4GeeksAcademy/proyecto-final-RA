@@ -156,5 +156,60 @@ def add_to_collection():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@api.route('/editUser', methods=['PUT'])
+def edit_user():
+    data = request.json  # Obtener los datos enviados desde el cliente
 
+    # Validar datos entrantes
+    if 'id' not in data:
+        return jsonify({"error": "El ID del usuario es obligatorio"}), 400
+
+    # Buscar al usuario por ID
+    user = User.query.get(data['id'])
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    # Actualizar los campos del usuario
+    if 'name' in data:
+        user.name = data['name']
+    if 'email' in data:
+        user.email = data['email']
+    if 'password' in data:
+        user.password = data['password']
+
+    try:
+        db.session.commit()  # Guardar cambios en la base de datos
+        return jsonify({"message": "Usuario actualizado exitosamente"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Error al actualizar el usuario", "details": str(e)}), 500
+
+@api.route('/editUser', methods=['PUT'])
+def editUser():
+    data = request.json  # Obtener los datos enviados desde el cliente
+
+    # Validar datos entrantes
+    if 'id' not in data:
+        return jsonify({"error": "El ID del usuario es obligatorio"}), 400
+
+    # Buscar al usuario por ID
+    user = User.query.get(data['id'])
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    # Actualizar los campos del usuario
+    if 'name' in data:
+        user.name = data['name']
+    if 'email' in data:
+        user.email = data['email']
+    if 'password' in data:
+        user.password = data['password']
+
+    try:
+        db.session.commit()  # Guardar cambios en la base de datos
+        return jsonify({"message": "Usuario actualizado exitosamente"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Error al actualizar el usuario", "details": str(e)}), 500
 

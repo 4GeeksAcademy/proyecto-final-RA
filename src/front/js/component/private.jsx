@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-
+import { UserProfile } from "./UserProfile.jsx"
 
 export const Private = () => {
     const { store, actions } = useContext(Context);
@@ -33,6 +33,7 @@ export const Private = () => {
         <div className="private-view">
             <h2>Perfil</h2>
             <h3>del usuario</h3>
+            <UserProfile /> 
             <p>{store.user?.email || "No disponible"}</p>
             <button className="logout" onClick={handleLogout}>Cerrar Sesión</button>
 
