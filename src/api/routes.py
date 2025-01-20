@@ -15,6 +15,47 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
+
+from requests_oauthlib import OAuth1
+
+
+# Claves y URL de la API de Discogs
+DISCOGS_CONSUMER_KEY = 'kmEbvrXuklqaKnWubyqy'
+DISCOGS_CONSUMER_SECRET = 'LWhxEIMhJHQrPQTIqhpOZhzCRJeccZAV'
+ACCESS_TOKEN = 'ALJYHaInXueBuAgvKlnOnLojhaUPxgdsTJqzeOJv'
+TOKEN_SECRET = 'XEGBwLwVNBQQqbXNxZxeLcgABTBqGGyDcaYYNFBM'
+BASE_URL = 'https://api.discogs.com/'
+
+@api.route('/search', methods=['GET'])
+def search_discogs():
+    query = request.args.get('q')  # Término de búsqueda enviado desde el frontend
+    oauth = OAuth1(
+        DISCOGS_CONSUMER_KEY,
+        DISCOGS_CONSUMER_SECRET,
+        ACCESS_TOKEN,
+        TOKEN_SECRET
+    )
+
+    url = f"{BASE_URL}/database/search"
+    params = {'q': query, 'type': 'release'}
+
+    try:
+        response = requests.get(url, auth=oauth, params=params)
+        response.raise_for_status()
+        return jsonify(response.json())
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+
+
+
+# /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
 
@@ -98,78 +139,10 @@ def protected():
 
 
 
-@api.route('/search', methods=['GET'])
-def search_discogs():
-    query = requests.args.get('q', '')
-    if not query:
-        return jsonify({"error": "Search query is required"}), 400
 
-    try:
-        url = "https://api.discogs.com/database/search"
-        params = {
-            'q': query,
-            'token': 'IbGAToUBoydGMQjHpMQIlzJbNkIfiywWVYlFmsgY',
-            'type': 'release',
-            'per_page': 10,
-        }
-
-        response = request.get(url, params=params)
-        response.raise_for_status()
-
-        data = response.json()
-
-        # Guardar discos en la tabla `records`
-        for release in data['results']:
-            record = Record.query.filter_by(id=release['id']).first()
-            if not record:
-                new_record = Record(
-                    id=release['id'],  # Suponiendo que el ID es único en Discogs
-                    title=release['title'],
-                    artist=release['artist'],  # Campos personalizados según API
-                    year=release.get('year', None)
-                )
-                db.session.add(new_record)
-        db.session.commit()
-
-        return jsonify(data['results'])
-
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": str(e)}), 500
     
 # -----------------------------------------------------------------------------------------------
 
-@api.route('/add-record', methods=['POST'])
-@jwt_required()  # Requiere que el usuario esté autenticado
-def add_record():
-    data = request.json
-    try:
-        # Obtener el ID del usuario logueado desde el token JWT
-        owner_id = get_jwt_identity()
-
-        title = data.get('title')
-        cover_image = data.get('image_url')
-
-        if not title or not cover_image:
-            return jsonify({"error": "Faltan datos requeridos: title y cover_image"}), 400
-
-        # Crear un nuevo registro asociado al usuario logueado
-        new_record = Record(
-            title=title,
-            cover_image=cover_image,
-            owner_id=owner_id  # Asignar el usuario logueado como propietario
-        )
-
-        db.session.add(new_record)
-        db.session.commit()
-
-        return jsonify({
-            "message": "Record added successfully",
-            "record": new_record.serialize()
-        }), 201
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
 
 
 

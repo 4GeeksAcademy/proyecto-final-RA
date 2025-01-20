@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1a6b2a90568b
+Revision ID: 834940190562
 Revises: 
-Create Date: 2025-01-17 18:45:27.405251
+Create Date: 2025-01-20 19:44:05.569391
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1a6b2a90568b'
+revision = '834940190562'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,7 +29,11 @@ def upgrade():
     )
     op.create_table('records',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=120), nullable=False),
+    sa.Column('title', sa.String(length=120), nullable=True),
+    sa.Column('label', sa.String(length=255), nullable=True),
+    sa.Column('year', sa.String(length=255), nullable=True),
+    sa.Column('genre', sa.String(length=255), nullable=True),
+    sa.Column('style', sa.String(length=255), nullable=True),
     sa.Column('cover_image', sa.String(length=255), nullable=True),
     sa.Column('owner_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['owner_id'], ['users.id'], ),
@@ -66,8 +70,6 @@ def upgrade():
     sa.Column('buyer_id', sa.Integer(), nullable=False),
     sa.Column('seller_id', sa.Integer(), nullable=False),
     sa.Column('record_id', sa.Integer(), nullable=False),
-    sa.Column('transaction_type', sa.Enum('purchase', 'trade', name='transactiontypeenum'), nullable=False),
-    sa.Column('status', sa.Enum('pending', 'completed', 'canceled', name='statusenum'), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['buyer_id'], ['users.id'], ),

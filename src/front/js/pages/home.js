@@ -3,12 +3,14 @@ import { Context } from "../store/appContext";
 import "../../styles/index.css";
 import Test from "../component/test.jsx";
 import { Register } from "../component/register.jsx";
+import  DiscogsSearch  from "../component/discogsSearch.jsx"
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
 		<div className="container-fluid text-center cuerpo">
+            <DiscogsSearch />
 			            {/* <video
                 className="video-background"
                 autoPlay

@@ -41,9 +41,12 @@ class User(db.Model):
 
 class Record(db.Model):
     __tablename__ = 'records'
-
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
+    title = db.Column(db.String(120), nullable=True)
+    label = db.Column(db.String(255), nullable=True)
+    year = db.Column(db.String(255), nullable=True)
+    genre = db.Column(db.String(255), nullable=True)
+    style = db.Column(db.String(255), nullable=True)
     cover_image = db.Column(db.String(255), nullable=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
@@ -51,6 +54,10 @@ class Record(db.Model):
         return {
             "id": self.id,
             "title": self.title,
+            "label": self.title,
+            "year": self.title,
+            "genre": self.title,
+            "style": self.title,
             "cover_image": self.cover_image,
             "owner_id": self.owner_id
         }
@@ -134,8 +141,6 @@ class Transaction(db.Model):
     buyer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     seller_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
-    transaction_type = db.Column(db.Enum(TransactionTypeEnum), nullable=False)
-    status = db.Column(db.Enum(StatusEnum), default=StatusEnum.pending, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

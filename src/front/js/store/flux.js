@@ -1,12 +1,35 @@
+
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
-            records: [],   // Aquí almacenaremos los registros obtenidos de la API
-            loading: false, // Indicador de carga
-            error: null,    // Almacenará posibles errores
+            records: [],  
+            loading: false, 
+            error: null,   
             user: null,
+            results: [],
         },
         actions: {
+             
+             searchDiscogs: async (query) => {
+                setStore({ loading: true, error: null }); 
+
+                try {
+                    const resp = await fetch(`https://api.discogs.com/database/search?q=${query}&key=kmEbvrXuklqaKnWubyqy&secret=LWhxEIMhJHQrPQTIqhpOZhzCRJeccZAV`);
+                    
+                    if (!resp.ok) {
+                        throw new Error("Error al obtener los resultados de Discogs");
+                    }
+
+                    const data = await resp.json();
+                    setStore({ results: data.results, loading: false }); 
+
+                    console.log(data);
+                } catch (error) {
+                    setStore({ loading: false, error: error.message }); 
+                    console.error(error);
+                }
+            },
+
             register: async (formData) => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL+"/api/register", {
@@ -65,102 +88,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // Acción para cambiar el estado a cargando
-            setLoading: () => {
-                const store = getStore();
-                setStore({ ...store, loading: true });
-            },
-
-            // Acción para actualizar el estado con los registros obtenidos
-            setRecords: (records) => {
-                const store = getStore();
-                setStore({ ...store, records, loading: false });
-            },
-
-            // Acción para manejar errores
-            setError: (error) => {
-                const store = getStore();
-                setStore({ ...store, error, loading: false });
-            },
-
-            // Acción para hacer el fetch de los registros desde Discogs
-            fetchDiscogsRecords: async (searchType, query) => {
-                if (!query) return; // Evitar consultas vacías
-                const store = getStore();
-                const token = "KICgBsOUcAETzwuzpfafDmhRVgkEwPmxpPIzsxmK"; // Tu token Discogs
-
-                // Configuración de la URL dependiendo del tipo de búsqueda
-                let url;
-                switch (searchType) {
-                    case 'artist':
-                        url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=artist&token=${token}`;
-                        break;
-                    case 'genre':
-                        url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=genre&token=${token}`;
-                        break;
-                    case 'song':
-                        url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&token=${token}`;
-                        break;
-                    case 'label':
-                        url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=label&token=${token}`;
-                        break;
-                    default:
-                        return; // Si el tipo no es válido, no hacer nada
-                }
-
-                console.log("------>",`https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=artist&token=${token}`);
-
-                setStore({ ...store, loading: true });
-
-                try {
-                    const response = await fetch(url);
-                    if (!response.ok) throw new Error("Error fetching records");
-
-                    const data = await response.json();
-                    const records = data.results.map(item => ({
-                        title: item.title,
-                        artist: item.artist,
-                        image_url: item.cover_image,  // Suponiendo que el campo sea 'cover_image'
-                        price: item.price || "N/A",   // Suponiendo que el campo sea 'price', si no existe usamos "N/A"
-                    }));
-                    const actions = getActions();
-                    actions.setRecords(records);
-                } catch (error) {
-                    const actions = getActions();
-                    actions.setError(error.message || "An error occurred");
-                }
-            },
-
         },
 
-        // Nueva acción para agregar un disco a la tabla record
-        // addRecord: async (record) => {
-        //     const token = localStorage.getItem("token");
-        //     const response = await fetch("http://localhost:5000/api/records", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             Authorization: `Bearer ${token}`,
-        //         },
-        //         body: JSON.stringify(record),
-        //     });
-        
-        //     if (!response.ok) {
-        //         const error = await response.json();
-        //         console.error("Error al agregar el registro:", error);
-        //         return false;
-        //     }
-        
-        //     const data = await response.json();
-        //     console.log("Registro agregado:", data);
-        //     return true;
-        // },
-        
-       
-        
-        
-        
-        
         // -------------------------------------------------------------------------------------
 
         editUser: async (userId, formData) => {
@@ -185,25 +114,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             }
         },
         // ------------------------------------------------------------------------------------------------------------------------
-
-        searchDiscogs: async (query) => {
-            try {
-                const response = await fetch(`https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/search?q=${query}`, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (!response.ok) throw new Error("Error al buscar discos");
-                const results = await response.json();
-                console.log(results); // Mostrar resultados para seleccionarlos en el frontend
-                return results; // Devolver la lista de discos al componente
-            } catch (error) {
-                console.error("Error al buscar discos:", error);
-                return [];
-            }
-        },
-
-
-
     };
 };
 
