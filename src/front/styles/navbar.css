@@ -5,11 +5,12 @@
     background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente oscuro */
     backdrop-filter: blur(5px); /* Desenfoque sutil */
     padding: 1rem 3rem;
-    position: relative;
+    position:static;
     top: 0;
     left: 0;
     width: 100%;
-    /* z-index: 1050; Asegura que el navbar se quede encima de otros elementos */
+    z-index: 1050;
+    margin-top: 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil para profundidad */
     /* display: flex; */
     justify-content: space-between;

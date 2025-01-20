@@ -1,7 +1,7 @@
 /* Estilos generales para el footer */
 footer {
   position: relative;
-  bottom: 0;
+  margin-bottom: 0px;
   left: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semi-transparente */
