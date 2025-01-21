@@ -42,7 +42,7 @@ export const Private = () => {
                 <nav className="nav flex-column text-warning">
                     {/* <Link className="nav-link active text-warning" to="#">Inicio</Link> */}
                     <Link className="nav-link text-warning" to="#">Perfil</Link>
-                    <Link className="nav-link text-warning" to="#">Mis discos</Link>
+                    <Link className="nav-link text-warning" to="/mis-discos">Mis discos</Link>
                     <Link className="nav-link text-warning" to="#">Configuración</Link>
                     <Link className="nav-link text-warning" to="#">Ayuda</Link>
                     <Link className="nav-link text-warning" to="#" onClick={handleLogout}>Cerrar sesión</Link>

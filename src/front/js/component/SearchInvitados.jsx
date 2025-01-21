@@ -24,12 +24,57 @@ const SearchInvitados = () => {
 
   const handleShowModal = (record) => {
     setSelectedRecord(record);
-    setShowModal(true); // Muestra el modal
+    setShowModal(true);
   };
 
   const handleCloseModal = () => {
+
+    setShowModal(false);
+    setSelectedRecord(null);
+  };
+
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddRecord = async () => {
+    if (isAdding) return;
+    setIsAdding(true);
+  
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: selectedRecord.title,
+          year: selectedRecord.year,
+          genre: selectedRecord.genre,
+          label: selectedRecord.label,
+          style: selectedRecord.style,
+          cover_image: selectedRecord.cover_image,
+        }),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Disco agregado:', result);
+        actions.addRecordToDatabase(selectedRecord);
+        handleCloseModal();
+      } else {
+        const errorResult = await response.json();
+        console.error('Error al agregar disco:', errorResult.error);
+      }
+    } catch (error) {
+      console.error('Error al hacer la solicitud:', error);
+    } finally {
+      setIsAdding(false); 
+    }
+
     setShowModal(false); // Cierra el modal
     setSelectedRecord(null); // Limpia el disco seleccionado
+
   };
 
   // Dividir los resultados en bloques de 5
