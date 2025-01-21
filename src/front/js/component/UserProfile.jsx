@@ -17,9 +17,9 @@ export const UserProfile = () => {
 
   // Obtener los datos del usuario al cargar el componente
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (id) => {
       try {
-        const response = await fetch("http://localhost:5000/users/1"); // Reemplazar con el endpoint correcto para obtener un usuario por ID
+        const response = await fetch(`https://legendary-space-robot-x594x66jxgrg2pv4-3000.app.github.dev/users/${id}`); // Usamos comillas invertidas para la plantilla
         if (!response.ok) throw new Error("Error al cargar los datos del usuario.");
         const data = await response.json();
         setUserData(data);
@@ -29,8 +29,11 @@ export const UserProfile = () => {
         setLoading(false);
       }
     };
-    fetchUserData();
-  }, []);
+
+    // Asegúrate de pasar el 'id' a la función fetchUserData
+    const userId = "some_user_id"; // Aquí deberías obtener el ID dinámicamente de tu estado o props
+    fetchUserData(userId);
+}, []);  // Si necesitas que 'id' cambie y haga una nueva petición, añádelo a las dependencias
 
   // Manejar cambios en los inputs
   const handleInputChange = (e) => {

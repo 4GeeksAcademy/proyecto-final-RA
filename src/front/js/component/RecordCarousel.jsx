@@ -1,37 +1,7 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
 
-// Lista de datos
-const records = [
-  {
-    id: 1,
-    name: "Abbey Road",
-    artist: "The Beatles",
-    price: "$19.99",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 2,
-    name: "Thriller",
-    artist: "Michael Jackson",
-    price: "$24.99",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 3,
-    name: "Dark Side of the Moon",
-    artist: "Pink Floyd",
-    price: "$22.99",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 4,
-    name: "Back in Black",
-    artist: "AC/DC",
-    price: "$21.99",
-    image: "https://via.placeholder.com/150",
-  },
-];
+
 
 export const RecordCarousel = () => {
   return (
