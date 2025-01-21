@@ -1,21 +1,17 @@
-/* Estilo del body */
+
 body {
     font-family: 'Arial', sans-serif;
     background-image: url("https://images.freeimages.com/images/large-previews/bd3/mischpult-serie2-1565695.jpg");
     color: #ffffff;
-
     justify-content: center;
     align-items: center;
-    height: 400rem; /* Asegura que ocupe todo el alto */
-    width: 100vw; /* Asegura que ocupe todo el ancho */
+    height: 400rem; 
+    width: 100vw; 
     margin: 0;
     padding: 0;
     position: absolute;
-    overflow: hidden; /* Oculta cualquier contenido que exceda la pantalla */
+    overflow: hidden; 
 }
-
-
-/* Fondo de video */
 .video-background {
     position: absolute;
     top: 0;
@@ -25,35 +21,32 @@ body {
     object-fit: cover; 
     z-index: -1; 
 }
-/* Contenedor del formulario */
+
 .form-container {
-    background-color: rgba(30, 30, 47, 0.8); /* Fondo oscuro translúcido */
+    background-color: rgba(30, 30, 47, 0.104);
     border-radius: 10px;
     padding: 20px 30px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-    max-width: 600px; /* Ancho máximo */
-    width: 90%; /* Se ajusta al tamaño de la pantalla */
+    max-width: 600px; 
+    width: 90%;
     position: relative;
 }
 
-/* Títulos */
-h2, h3 {
+h1, h2, h3 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
-    color: #f7df1e; /* Amarillo */
+    color: #d3be25;
 }
 
-/* Ajuste del contenido principal */
 .main-content {
-    width: 100%; /* Asegura que ocupe todo el ancho */
-    height: 100%; /* Asegura que ocupe todo el alto */
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-
 
 .cuerpo {
     height: 570px;

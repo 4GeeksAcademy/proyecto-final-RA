@@ -5,7 +5,6 @@ const Test = () => {
     const { store, actions } = useContext(Context);
     const [query, setQuery] = useState('');
 
-    // Función para manejar la búsqueda
     const handleSearch = () => {
         if (query.trim()) {
             actions.fetchDiscogsRecords(query);

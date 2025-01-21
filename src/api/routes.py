@@ -7,11 +7,12 @@ from api.models import db, User, Record, Collection
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_login import current_user
+
 
 
 api = Blueprint('api', __name__)
 
-# Allow CORS requests to this API
 CORS(api)
 
 
@@ -28,16 +29,26 @@ BASE_URL = 'https://api.discogs.com/'
 
 @api.route('/search', methods=['GET'])
 def search_discogs():
-    query = request.args.get('q')  # Término de búsqueda enviado desde el frontend
+    query = request.args.get('q')
+    search_type = request.args.get('type', 'release')  # 'release', 'artist', 'label', 'genre'
+    
     oauth = OAuth1(
         DISCOGS_CONSUMER_KEY,
         DISCOGS_CONSUMER_SECRET,
         ACCESS_TOKEN,
         TOKEN_SECRET
     )
-
+    
     url = f"{BASE_URL}/database/search"
-    params = {'q': query, 'type': 'release'}
+    
+    # Ajustamos los parámetros de la búsqueda según el tipo
+    params = {'q': query, 'type': search_type}  # Cambiamos 'release' por search_type
+    if search_type == 'artist':
+        params['artist'] = query  # Si es búsqueda por artista
+    elif search_type == 'label':
+        params['label'] = query  # Si es búsqueda por sello
+    elif search_type == 'genre':
+        params['genre'] = query  # Si es búsqueda por género
 
     try:
         response = requests.get(url, auth=oauth, params=params)
@@ -46,8 +57,60 @@ def search_discogs():
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
 
+# -------------------------------------------------------------------------------------------------------
 
 
+# Ruta para agregar un disco a la tabla records
+@api.route('/add_record', methods=['POST'])
+@jwt_required()  # Protege la ruta con JWT
+def add_record():
+    try:
+        # Obtener los datos del disco desde la solicitud JSON
+        data = request.get_json()
+
+        # Validar que los datos esenciales estén presentes
+        required_fields = ['title', 'label', 'year', 'genre', 'style', 'cover_image']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({"error": f"Falta el campo: {field}"}), 400
+
+        # Obtener el ID del usuario autenticado a través del JWT
+        user_id = get_jwt_identity()  # Obtén el ID del usuario autenticado a través del token
+
+
+        # Crear una nueva instancia del modelo Record con los datos proporcionados
+        new_record = Record(
+            title=data.get('title'),
+            label=data.get('label'),
+            year=data.get('year'),
+            genre=data.get('genre'),
+            style=data.get('style'),
+            cover_image=data.get('cover_image'),
+            owner_id=user_id  # Asocia el ID del usuario autenticado
+        )
+
+        # Agregar el nuevo disco a la base de datos
+        db.session.add(new_record)
+        db.session.commit()
+
+        # Devolver la información del disco recién creado
+        return jsonify({
+            "message": "Disco agregado exitosamente",
+            "record": {
+                "id": new_record.id,
+                "title": new_record.title,
+                "label": new_record.label,
+                "year": new_record.year,
+                "genre": new_record.genre,
+                "style": new_record.style,
+                "cover_image": new_record.cover_image,
+                "owner_id": new_record.owner_id
+            }
+        }), 201
+
+    except Exception as e:
+        db.session.rollback()  # Asegúrate de hacer rollback si ocurre un error
+        return jsonify({"error": f"Error al agregar disco: {str(e)}"}), 500
 
 
 

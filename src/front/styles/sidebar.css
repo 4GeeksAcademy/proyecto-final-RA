@@ -1,0 +1,52 @@
+/* styles/sidebar.css */
+
+.sidebar {
+    background-color: #343a4029; /* Fondo oscuro para el menú lateral */
+    padding-top: 20px;
+    color: #fff; /* Color blanco para los textos */
+}
+
+.sidebar .nav-link {
+    color: #fff; /* Enlaces blancos */
+    padding: 10px;
+    text-decoration: none;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #49505726; /* Hover oscuro para los enlaces */
+}
+
+.content {
+    padding: 20px;
+    margin-left: 250px; /* Deja espacio para el menú lateral */
+    min-height: 100vh;
+    background-color: #343a4041; /* Fondo oscuro igual al del sidebar */
+    color: #fff; /* Color blanco para el contenido */
+}
+
+.content h2, .content h3, .content p {
+    color: #fff; /* Texto blanco en el contenido */
+}
+
+.content .text-warning {
+    color: #ffc107; /* Texto en color amarillo (warning) */
+}
+
+/* Hacer que el menú lateral se esconda en pantallas pequeñas */
+@media (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        background-color: #343a40;
+    }
+
+    .content {
+        margin-left: 0; /* El contenido ocupará toda la pantalla */
+    }
+
+    .sidebar .nav-link {
+        text-align: center;
+        padding: 10px;
+    }
+}

@@ -1,55 +1,50 @@
-/* navbar.css */
 
-/* Estilo general para el navbar */
 .navbar-custom {
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente oscuro */
-    backdrop-filter: blur(5px); /* Desenfoque sutil */
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
     padding: 1rem 3rem;
-    position:static;
+    position:fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1050;
     margin-top: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil para profundidad */
-    /* display: flex; */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     justify-content: space-between;
     align-items: center;
   }
   
-  /* Estilo del logo de la marca */
   .navbar-brand h3 {
     font-size: 20px;
-    color: #f7f7f7; /* Color claro para el texto */
+    color: #f7f7f7;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: color 0.3s ease;
   }
   
-  /* Hover en el logo */
+ 
   .navbar-brand h3:hover {
-    color: #ffbb33; /* Cambio de color al hacer hover */
+    color: #ffbb33;
   }
   
-  /* Estilo de los enlaces del navbar */
+
   .nav-link {
-    color: #f7f7f7 !important; /* Blanco suave para el texto */
+    color: #f7f7f7 !important;
     font-size: 15px;
     padding: 3px 2rem;
     transition: color 0.3s ease, background-color 0.3s ease;
     border-radius: 25px;
-    /* text-transform: uppercase; */
     font-weight: 500;
   }
   
-  /* Hover en los enlaces */
+
   .nav-link:hover {
-    background-color: rgba(255, 187, 51, 0.2); /* Fondo suave en hover */
-    color: #ffbb33; /* Color amarillo en hover */
+    background-color: rgba(255, 187, 51, 0.2);
+    color: #ffbb33;
   }
   
-  /* Estilo del botón de Login/Register */
+
   .btn-login {
     background-color: #ffbb33;
     color: #343a40;
@@ -60,14 +55,12 @@
     border: none;
   }
   
-  /* Hover en el botón */
   .btn-login:hover {
     background-color: #343a40;
     color: #ffbb33;
-    transform: scale(1.05); /* Sutil animación de agrandamiento */
+    transform: scale(1.05);
   }
   
-  /* Estilo del botón en móviles */
   .navbar-toggler {
     border: none;
     background-color: #ffbb33;
@@ -77,7 +70,6 @@
     background-color: #343a40;
   }
   
-  /* Responsividad: ajustar cuando el navbar esté colapsado */
   @media (max-width: 992px) {
     .navbar-custom {
       padding: 1rem 2rem;
@@ -107,23 +99,20 @@
     }
   }
   
-  /* Eliminar espacio superior */
   body {
     margin: 0;
     width: 100%;
-    padding-top: 0; /* Eliminar padding superior que crea espacio innecesario */
-    font-family: 'Arial', sans-serif; /* Asegurar que el texto sea claro */
+    padding-top: 0;
+    font-family: 'Arial', sans-serif;
   }
   
-  /* Contenedor principal para centrar el contenido */
   .main-content {
-    /* display: flex; */
+    display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
-    /* width: 100%; */
+    width: 100%;
     text-align: center;
     padding: 2rem;
-    /* margin-top: 70px;  */
+    margin-top: 0px; 
   }
   

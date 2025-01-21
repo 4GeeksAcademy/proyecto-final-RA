@@ -10,7 +10,10 @@ export const Home = () => {
 
 	return (
 		<div className="container-fluid text-center cuerpo">
-            <DiscogsSearch />
+            <h1>Bienvenido a la plataforma</h1>
+            <p>Explora los discos, encuentra tus favoritos y más.</p>
+
+            {/* <DiscogsSearch /> */}
 			            {/* <video
                 className="video-background"
                 autoPlay

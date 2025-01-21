@@ -7,15 +7,15 @@ export const Register = () => {
     const { actions } = useContext(Context);
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [isRegister, setIsRegister] = useState(true);
-    const [error, setError] = useState(null); 
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const success = isRegister 
-            ? await actions.register(formData) 
+        const success = isRegister
+            ? await actions.register(formData)
             : await actions.login(formData);
 
         if (success) {

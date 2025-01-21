@@ -1,8 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import enum
+from flask_login import UserMixin
 
 db = SQLAlchemy()
+
+
+
 
 # ENUMs
 class ConditionEnum(enum.Enum):
@@ -19,7 +23,7 @@ class StatusEnum(enum.Enum):
     canceled = 'canceled'
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=True)
@@ -52,15 +56,15 @@ class Record(db.Model):
 
     def serialize(self):
         return {
-            "id": self.id,
-            "title": self.title,
-            "label": self.title,
-            "year": self.title,
-            "genre": self.title,
-            "style": self.title,
-            "cover_image": self.cover_image,
-            "owner_id": self.owner_id
-        }
+        "id": self.id,
+        "title": self.title,
+        "label": self.label,  # Cambiar de self.title a self.label
+        "year": self.year,    # Cambiar de self.title a self.year
+        "genre": self.genre,  
+        "style": self.style,  
+        "cover_image": self.cover_image,
+        "owner_id": self.owner_id
+    }
 
 
 class Collection(db.Model):
