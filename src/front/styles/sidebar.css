@@ -1,38 +1,37 @@
-/* styles/sidebar.css */
 
 .sidebar {
-    background-color: #343a4029; /* Fondo oscuro para el menú lateral */
+    background-color: #343a4029; 
     padding-top: 20px;
-    color: #fff; /* Color blanco para los textos */
+    color: #fff;
 }
 
 .sidebar .nav-link {
-    color: #fff; /* Enlaces blancos */
+    color: #fff;
     padding: 10px;
     text-decoration: none;
 }
 
 .sidebar .nav-link:hover {
-    background-color: #49505726; /* Hover oscuro para los enlaces */
+    background-color: #49505726;
 }
 
 .content {
     padding: 20px;
-    margin-left: 250px; /* Deja espacio para el menú lateral */
+    margin-left: 250px;
     min-height: 100vh;
-    background-color: #343a4041; /* Fondo oscuro igual al del sidebar */
-    color: #fff; /* Color blanco para el contenido */
+    background-color: #343a4041;
+    color: #fff;
 }
 
 .content h2, .content h3, .content p {
-    color: #fff; /* Texto blanco en el contenido */
+    color: #fff;
 }
 
 .content .text-warning {
-    color: #ffc107; /* Texto en color amarillo (warning) */
+    color: #ffc107;
 }
 
-/* Hacer que el menú lateral se esconda en pantallas pequeñas */
+
 @media (max-width: 768px) {
     .sidebar {
         position: relative;
@@ -42,7 +41,7 @@
     }
 
     .content {
-        margin-left: 0; /* El contenido ocupará toda la pantalla */
+        margin-left: 0;
     }
 
     .sidebar .nav-link {

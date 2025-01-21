@@ -6,10 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Search = () => {
   const { store, actions } = useContext(Context);
   const [query, setQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("artist"); //
+  const [searchBy, setSearchBy] = useState("artist");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false); 
+  const [showModal, setShowModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState("null");
 
   const handleSearch = (e) => {
@@ -23,18 +23,18 @@ const Search = () => {
 
   const handleShowModal = (record) => {
     setSelectedRecord(record);
-    setShowModal(true); // Muestra el modal
+    setShowModal(true);
   };
 
   const handleCloseModal = () => {
-    setShowModal(false); // Cierra el modal
-    setSelectedRecord(null); // Resetea el registro seleccionado
+    setShowModal(false);
+    setSelectedRecord(null);
   };
 
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddRecord = async () => {
-    if (isAdding) return; // Previene solicitudes duplicadas
+    if (isAdding) return;
     setIsAdding(true);
   
     try {
@@ -58,8 +58,8 @@ const Search = () => {
       if (response.ok) {
         const result = await response.json();
         console.log('Disco agregado:', result);
-        actions.addRecordToDatabase(selectedRecord); // Actualiza el estado global si es necesario
-        handleCloseModal(); // Cierra el modal después de agregar el disco
+        actions.addRecordToDatabase(selectedRecord);
+        handleCloseModal();
       } else {
         const errorResult = await response.json();
         console.error('Error al agregar disco:', errorResult.error);

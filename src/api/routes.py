@@ -255,6 +255,13 @@ def edit_user(user_id):
 
     # ----------------------------------------------------------------------------------------------------------
 
-
+@api.route('/records', methods=['GET'])
+def get_records():
+    try:
+        records = Record.query.all()  # Obtener todos los registros de la tabla
+        serialized_records = [record.serialize() for record in records]  # Serializar los datos
+        return jsonify(serialized_records), 200  # Devolver la lista de registros
+    except Exception as e:
+        return jsonify({"error": "Error al obtener los registros", "message": str(e)}), 500
 
 

@@ -12,6 +12,7 @@ import { Navbar } from "./component/navbar";
 import { Register } from "./component/register.jsx";
 import { Footer } from "./component/footer";
 import { Private } from "./component/private.jsx";
+import { MisDiscos } from "./component/misDiscos.jsx";
 import { SearchMusic } from "./component/searchMusic.jsx";
 import { SearchWorldWide } from "./component/searchWorldWide.jsx";
 import { AboutUs } from "./component/aboutUs.jsx"
@@ -31,6 +32,7 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/" />
+                        <Route element={<MisDiscos />} path="/mis-discos" />
                         <Route element={<SearchMusic />} path="/searchmusic" />
                         <Route element={<SearchWorldWide />} path="/searchworldwide" />
                         <Route element={<Register />} path="/register" />

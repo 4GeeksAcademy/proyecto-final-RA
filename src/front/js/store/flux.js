@@ -102,17 +102,17 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            addRecordToDatabase:async (recordData) => {
+            addRecordToDatabase: async (recordData) => {
                 const token = localStorage.getItem("token");
                 if (!token) {
                     alert("No se encontró un token. Por favor, inicie sesión.");
                     return;
                 }
-                
+
                 // Deshabilitar el botón mientras se procesa
                 const button = document.getElementById("addRecordButton");
                 button.disabled = true;
-            
+
                 try {
                     const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
                         method: 'POST',
@@ -137,7 +137,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                     button.disabled = false;
                 }
             },
-            
+
+
+            getRecords: async () => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + "/api/records");
+                    if (!response.ok) {
+                        throw new Error("Error al obtener los registros");
+                    }
+                    const data = await response.json();
+                    setStore({ records: data }); // Guardar los registros en el store
+                } catch (error) {
+                    console.error("Error en getRecords:", error);
+                    setStore({ error: "No se pudieron cargar los registros" });
+                }
+            }
+
 
             // addRecordToCollection: (record) => {
             //     const store = getStore();
