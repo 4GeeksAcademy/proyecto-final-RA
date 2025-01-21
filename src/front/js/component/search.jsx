@@ -6,37 +6,34 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Search = () => {
   const { store, actions } = useContext(Context);
   const [query, setQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("artist"); //
+  const [searchBy, setSearchBy] = useState("artist");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false); 
-  const [selectedRecord, setSelectedRecord] = useState("null");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    actions.searchDiscogs(query);
+    setLoading(true);  // Cambia el estado de carga a verdadero
+    actions.searchDiscogs(query, searchBy);
   };
-
-  // useEffect(() => {
-    
-  // }, [store.results, store.loading, store.error]);
 
   const handleShowModal = (record) => {
     setSelectedRecord(record);
-    setShowModal(true); // Muestra el modal
+    setShowModal(true);
   };
 
   const handleCloseModal = () => {
-    setShowModal(false); // Cierra el modal
-    setSelectedRecord(null); // Resetea el registro seleccionado
+    setShowModal(false);
+    setSelectedRecord(null);
   };
 
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddRecord = async () => {
-    if (isAdding) return; // Previene solicitudes duplicadas
+    if (isAdding) return; 
     setIsAdding(true);
-  
+
     try {
       const token = localStorage.getItem("token");
       const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
@@ -54,12 +51,12 @@ const Search = () => {
           cover_image: selectedRecord.cover_image,
         }),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         console.log('Disco agregado:', result);
-        actions.addRecordToDatabase(selectedRecord); // Actualiza el estado global si es necesario
-        handleCloseModal(); // Cierra el modal después de agregar el disco
+        actions.addRecordToDatabase(selectedRecord);
+        handleCloseModal();
       } else {
         const errorResult = await response.json();
         console.error('Error al agregar disco:', errorResult.error);
@@ -67,9 +64,17 @@ const Search = () => {
     } catch (error) {
       console.error('Error al hacer la solicitud:', error);
     } finally {
-      setIsAdding(false); 
+      setIsAdding(false);
     }
   };
+
+  useEffect(() => {
+    if (store.searchResults.length > 0) {
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  }, [store.searchResults]);  // Reacciona cuando store.searchResults cambie
 
   return (
     <div className="container d-flex flex-column align-items-center my-4">
@@ -79,7 +84,7 @@ const Search = () => {
           <select
             className="form-control"
             value={searchBy}
-            onChange={(e) => setSearchBy(e.target.value)} // Cambia el valor de searchBy
+            onChange={(e) => setSearchBy(e.target.value)}
           >
             <option value="artist">Artista</option>
             <option value="label">Sello</option>
@@ -104,11 +109,11 @@ const Search = () => {
 
       {error && <p className="text-danger mt-3">{error}</p>}
 
-      {store.results.length > 0 && (
+      {store.searchResults && store.searchResults.length > 0 ? (
         <div className="container my-4">
           <h2 className="text-center mb-4">Resultados</h2>
           <Carousel>
-            {store.results.map((record, index) => (
+            {store.searchResults.map((record, index) => (
               <Carousel.Item key={index} onClick={() => handleShowModal(record)}>
                 <div className="d-flex justify-content-center">
                   <div
@@ -123,7 +128,6 @@ const Search = () => {
                     />
                     <div className="card-body">
                       <h5 className="card-title">{record.title}</h5>
-                      {/* Solo se muestra el título en el carousel */}
                     </div>
                   </div>
                 </div>
@@ -131,6 +135,8 @@ const Search = () => {
             ))}
           </Carousel>
         </div>
+      ) : (
+        <p>No se encontraron resultados</p>
       )}
 
       {/* Modal para mostrar detalles del registro */}
@@ -138,7 +144,7 @@ const Search = () => {
         <Modal
           show={showModal}
           onHide={handleCloseModal}
-          size="sm" // Modal más compacto
+          size="sm"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="custom-modal"
@@ -186,3 +192,4 @@ const Search = () => {
 };
 
 export default Search;
+

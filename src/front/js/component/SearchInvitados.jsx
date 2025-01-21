@@ -1,25 +1,28 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Carousel, Modal, Button } from "react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const Search = () => {
+const SearchInvitados = () => {
   const { store, actions } = useContext(Context);
-  const [query, setQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("artist");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState("null");
+  const [query, setQuery] = useState(""); // Término de búsqueda
+  const [searchBy, setSearchBy] = useState("artist"); // Tipo de búsqueda
+  const [showModal, setShowModal] = useState(false); // Estado del modal
+  const [selectedRecord, setSelectedRecord] = useState(null); // Disco seleccionado
+
+  useEffect(() => {
+    // Realizar búsqueda aleatoria solo si no se han obtenido resultados aleatorios antes
+    if (!store.randomFetched) {
+      actions.FetchRandomRecords();  // Llamar FetchRandomRecords una sola vez
+    }
+  }, [store.randomFetched, actions]);  // Ejecutar solo si no se han obtenido resultados aleatorios
 
   const handleSearch = (e) => {
     e.preventDefault();
-    actions.searchDiscogs(query);
-  };
+    if (query.trim() === "") return; // No realizar búsqueda si el query está vacío
 
-  // useEffect(() => {
-    
-  // }, [store.results, store.loading, store.error]);
+    actions.searchDiscogs(query, searchBy); // Llamar a la acción de búsqueda
+  };
 
   const handleShowModal = (record) => {
     setSelectedRecord(record);
@@ -27,6 +30,7 @@ const Search = () => {
   };
 
   const handleCloseModal = () => {
+
     setShowModal(false);
     setSelectedRecord(null);
   };
@@ -69,61 +73,60 @@ const Search = () => {
     } finally {
       setIsAdding(false); 
     }
+
+    setShowModal(false); // Cierra el modal
+    setSelectedRecord(null); // Limpia el disco seleccionado
+
   };
 
   return (
-    <div className="container d-flex flex-column align-items-center my-4">
+    <div className="container my-4">
       <h1 className="text-center mb-4">Buscar en Discogs</h1>
-      <div className="w-50 d-flex flex-column align-items-center">
-        <div className="w-100 d-flex justify-content-between mb-3">
+
+      <form onSubmit={handleSearch} className="mb-4">
+        <div className="d-flex justify-content-center align-items-center">
           <select
-            className="form-control"
+            className="form-control w-auto me-3"
             value={searchBy}
-            onChange={(e) => setSearchBy(e.target.value)} // Cambia el valor de searchBy
+            onChange={(e) => setSearchBy(e.target.value)}
           >
             <option value="artist">Artista</option>
             <option value="label">Sello</option>
             <option value="genre">Género</option>
           </select>
+          <input
+            type="text"
+            className="form-control w-auto me-3"
+            placeholder="Ingresa un término"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button type="submit" className="btn btn-primary" disabled={store.loading || store.isSearching}>
+            {store.loading || store.isSearching ? "Buscando..." : "Buscar"}
+          </button>
         </div>
-        <input
-          type="text"
-          className="form-control mb-3"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ingresa un término de búsqueda"
-        />
-        <button
-          className="btn btn-primary"
-          onClick={handleSearch}
-          disabled={loading}
-        >
-          {loading ? "Buscando..." : "Buscar"}
-        </button>
-      </div>
+      </form>
 
-      {error && <p className="text-danger mt-3">{error}</p>}
+      {store.error && <p className="text-danger text-center">{store.error}</p>}
 
-      {store.results.length > 0 && (
-        <div className="container my-4">
+      {store.searchResults.length > 0 && (
+        <div className="mt-4">
           <h2 className="text-center mb-4">Resultados</h2>
           <Carousel>
-            {store.results.map((record, index) => (
+            {store.searchResults.map((record, index) => (
               <Carousel.Item key={index} onClick={() => handleShowModal(record)}>
                 <div className="d-flex justify-content-center">
                   <div
-                    className="card text-white bg-dark mb-5"
-                    style={{ width: "18rem", textAlign: "center", cursor: "pointer" }}
+                    className="card bg-dark text-white"
+                    style={{ width: "18rem", cursor: "pointer" }}
                   >
                     <img
                       src={record.cover_image || "placeholder.jpg"}
                       className="card-img-top"
-                      alt={record.title}
-                      style={{ borderRadius: "8px" }}
+                      alt={record.title || "Sin título"}
                     />
                     <div className="card-body">
-                      <h5 className="card-title">{record.title}</h5>
-                      {/* Solo se muestra el título en el carousel */}
+                      <h5 className="card-title">{record.title || "Sin título"}</h5>
                     </div>
                   </div>
                 </div>
@@ -133,45 +136,37 @@ const Search = () => {
         </div>
       )}
 
-      {/* Modal para mostrar detalles del registro */}
       {selectedRecord && (
-        <Modal
-          show={showModal}
-          onHide={handleCloseModal}
-          size="sm" // Modal más compacto
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          className="custom-modal"
-        >
-          <Modal.Header closeButton className="bg-dark text-white">
-            <Modal.Title id="contained-modal-title-vcenter">{selectedRecord.title}</Modal.Title>
+        <Modal show={showModal} onHide={handleCloseModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>{selectedRecord.title || "Sin título"}</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="bg-dark text-white">
-            <div className="d-flex justify-content-center">
-              <div
-                className="card text-white bg-dark mb-5"
-                style={{ width: "18rem", textAlign: "center" }}
-              >
-                <img
-                  src={selectedRecord.cover_image || "placeholder.jpg"}
-                  className="card-img-top"
-                  alt={selectedRecord.title}
-                  style={{ borderRadius: "8px" }}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{selectedRecord.title}</h5>
-                  <p className="card-text">Artista: {selectedRecord.artist || "Desconocido"}</p>
-                  <p className="card-text">
-                    Género: {selectedRecord.genre ? selectedRecord.genre.join(", ") : "N/A"}
-                  </p>
-                  <p className="card-text">Año: {selectedRecord.year || "Desconocido"}</p>
-                  <p className="card-text">Sello: {selectedRecord.label || "Desconocido"}</p>
-                  <p className="card-text">Estilo: {selectedRecord.style || "N/A"}</p>
-                </div>
-              </div>
-            </div>
+          <Modal.Body>
+            <img
+              src={selectedRecord.cover_image || "placeholder.jpg"}
+              className="img-fluid rounded mb-3"
+              alt={selectedRecord.title || "Sin título"}
+            />
+            <p>
+              <strong>Artista:</strong> {selectedRecord.artist || "Desconocido"}
+            </p>
+            <p>
+              <strong>Género:</strong>{" "}
+              {selectedRecord.genre ? selectedRecord.genre.join(", ") : "N/A"}
+            </p>
+            <p>
+              <strong>Año:</strong> {selectedRecord.year || "Desconocido"}
+            </p>
+            <p>
+              <strong>Sello:</strong>{" "}
+              {selectedRecord.label ? selectedRecord.label.join(", ") : "N/A"}
+            </p>
+            <p>
+              <strong>Estilo:</strong>{" "}
+              {selectedRecord.style ? selectedRecord.style.join(", ") : "N/A"}
+            </p>
           </Modal.Body>
-          <Modal.Footer className="bg-dark">
+          <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>
               Cerrar
             </Button>
@@ -182,4 +177,12 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchInvitados;
+
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@ import Test from "../component/test.jsx";
 import { Register } from "../component/register.jsx";
 import  DiscogsSearch  from "../component/discogsSearch.jsx"
 import SearchInvitados from "../component/SearchInvitados.jsx";
-
+import RandomRecordsCarousel from "../component/RandomRecordsCarousel.jsx"
 
 
 export const Home = () => {
@@ -14,10 +14,13 @@ export const Home = () => {
 	return (
 		<div className="container-fluid text-center cuerpo">
             <h1>Bienvenido a la plataforma</h1>
-            <p>Explora los discos, encuentra tus favoritos y más.</p>
+            <p>¡Explora, encuentra tus discos favoritos y más!</p>
 
 
             <SearchInvitados />
+
+            <RandomRecordsCarousel />
+
             {/* <DiscogsSearch /> */}
 			            {/* <video
                 className="video-background"
