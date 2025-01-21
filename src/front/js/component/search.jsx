@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Carousel, Modal, Button } from "react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Search = () => {
   const { store, actions } = useContext(Context);
@@ -14,7 +14,7 @@ const Search = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setLoading(true);  // Cambia el estado de carga a verdadero
+    setLoading(true); // Cambia el estado de carga a verdadero
     actions.searchDiscogs(query, searchBy);
   };
 
@@ -31,16 +31,16 @@ const Search = () => {
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddRecord = async () => {
-    if (isAdding) return; 
+    if (isAdding) return;
     setIsAdding(true);
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
-        method: 'POST',
+      const response = await fetch("https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: selectedRecord.title,
@@ -54,27 +54,29 @@ const Search = () => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Disco agregado:', result);
+        console.log("Disco agregado:", result);
         actions.addRecordToDatabase(selectedRecord);
         handleCloseModal();
       } else {
         const errorResult = await response.json();
-        console.error('Error al agregar disco:', errorResult.error);
+        console.error("Error al agregar disco:", errorResult.error);
       }
     } catch (error) {
-      console.error('Error al hacer la solicitud:', error);
+      console.error("Error al hacer la solicitud:", error);
     } finally {
       setIsAdding(false);
     }
   };
 
   useEffect(() => {
-    if (store.searchResults.length > 0) {
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  }, [store.searchResults]);  // Reacciona cuando store.searchResults cambie
+    setLoading(false);
+  }, [store.searchResults]); // Reacciona cuando store.searchResults cambie
+
+  // Dividir resultados en bloques de 5
+  const chunkedResults = [];
+  for (let i = 0; i < store.searchResults.length; i += 5) {
+    chunkedResults.push(store.searchResults.slice(i, i + 5));
+  }
 
   return (
     <div className="container d-flex flex-column align-items-center my-4">
@@ -109,27 +111,31 @@ const Search = () => {
 
       {error && <p className="text-danger mt-3">{error}</p>}
 
-      {store.searchResults && store.searchResults.length > 0 ? (
+      {chunkedResults.length > 0 ? (
         <div className="container my-4">
           <h2 className="text-center mb-4">Resultados</h2>
           <Carousel>
-            {store.searchResults.map((record, index) => (
-              <Carousel.Item key={index} onClick={() => handleShowModal(record)}>
+            {chunkedResults.map((chunk, index) => (
+              <Carousel.Item key={index}>
                 <div className="d-flex justify-content-center">
-                  <div
-                    className="card text-white bg-dark mb-5"
-                    style={{ width: "18rem", textAlign: "center", cursor: "pointer" }}
-                  >
-                    <img
-                      src={record.cover_image || "placeholder.jpg"}
-                      className="card-img-top"
-                      alt={record.title}
-                      style={{ borderRadius: "8px" }}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">{record.title}</h5>
+                  {chunk.map((record) => (
+                    <div
+                      key={record.id}
+                      className="card text-white bg-dark mx-2"
+                      style={{ width: "18rem", textAlign: "center", cursor: "pointer" }}
+                      onClick={() => handleShowModal(record)}
+                    >
+                      <img
+                        src={record.cover_image || "placeholder.jpg"}
+                        className="card-img-top"
+                        alt={record.title}
+                        style={{ borderRadius: "8px" }}
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title">{record.title}</h5>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </Carousel.Item>
             ))}
@@ -192,4 +198,5 @@ const Search = () => {
 };
 
 export default Search;
+
 
