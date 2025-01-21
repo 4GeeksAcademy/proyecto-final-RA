@@ -40,7 +40,7 @@ export const Private = () => {
             <div className="sidebar bg-dark p-3 d-flex flex-column" style={{ width: '250px', position: 'fixed', height: '100vh' }}>
                 <h4 className="text-warning">Menú</h4>
                 <nav className="nav flex-column text-warning">
-                    <Link className="nav-link active text-warning" to="#">Inicio</Link>
+                    {/* <Link className="nav-link active text-warning" to="#">Inicio</Link> */}
                     <Link className="nav-link text-warning" to="#">Perfil</Link>
                     <Link className="nav-link text-warning" to="#">Mis discos</Link>
                     <Link className="nav-link text-warning" to="#">Configuración</Link>

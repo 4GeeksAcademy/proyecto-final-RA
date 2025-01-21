@@ -1,118 +1,117 @@
+/* .navbar-custom {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  padding: 1rem 3rem;
+  position:fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1050;
+  margin-top: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  justify-content: space-between;
+  align-items: center;
+}
 
-.navbar-custom {
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    padding: 1rem 3rem;
-    position:fixed;
-    top: 0;
-    left: 0;
+.navbar-brand h3 {
+  font-size: 20px;
+  color: #f7f7f7;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+
+.navbar-brand h3:hover {
+  color: #ffbb33;
+}
+
+
+.nav-link {
+  color: #f7f7f7 !important;
+  font-size: 15px;
+  padding: 3px 2rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 25px;
+  font-weight: 500;
+}
+
+
+.nav-link:hover {
+  background-color: rgba(255, 187, 51, 0.2);
+  color: #ffbb33;
+}
+
+
+.btn-login {
+  background-color: #ffbb33;
+  color: #343a40;
+  border-radius: 25px;
+  padding: 0.5rem 2rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: none;
+}
+
+.btn-login:hover {
+  background-color: #343a40;
+  color: #ffbb33;
+  transform: scale(1.05);
+}
+
+.navbar-toggler {
+  border: none;
+  background-color: #ffbb33;
+}
+
+.navbar-toggler-icon {
+  background-color: #343a40;
+}
+
+@media (max-width: 992px) {
+  .navbar-custom {
+    padding: 1rem 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
-    z-index: 1050;
-    margin-top: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    justify-content: space-between;
-    align-items: center;
+    padding: 0;
   }
-  
-  .navbar-brand h3 {
-    font-size: 20px;
-    color: #f7f7f7;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.3s ease;
-  }
-  
- 
-  .navbar-brand h3:hover {
-    color: #ffbb33;
-  }
-  
 
-  .nav-link {
-    color: #f7f7f7 !important;
-    font-size: 15px;
-    padding: 3px 2rem;
-    transition: color 0.3s ease, background-color 0.3s ease;
-    border-radius: 25px;
-    font-weight: 500;
+  .navbar-nav .nav-item {
+    padding: 0.5rem 0;
+    width: 100%;
   }
-  
 
-  .nav-link:hover {
-    background-color: rgba(255, 187, 51, 0.2);
-    color: #ffbb33;
-  }
-  
-
-  .btn-login {
-    background-color: #ffbb33;
-    color: #343a40;
-    border-radius: 25px;
-    padding: 0.5rem 2rem;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    border: none;
-  }
-  
-  .btn-login:hover {
-    background-color: #343a40;
-    color: #ffbb33;
-    transform: scale(1.05);
-  }
-  
   .navbar-toggler {
-    border: none;
     background-color: #ffbb33;
   }
-  
+
   .navbar-toggler-icon {
     background-color: #343a40;
   }
-  
-  @media (max-width: 992px) {
-    .navbar-custom {
-      padding: 1rem 2rem;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .navbar-nav {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-      padding: 0;
-    }
-  
-    .navbar-nav .nav-item {
-      padding: 0.5rem 0;
-      width: 100%;
-    }
-  
-    .navbar-toggler {
-      background-color: #ffbb33;
-    }
-  
-    .navbar-toggler-icon {
-      background-color: #343a40;
-    }
-  }
-  
-  body {
-    margin: 0;
-    width: 100%;
-    padding-top: 0;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .main-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    text-align: center;
-    padding: 2rem;
-    margin-top: 0px; 
-  }
-  
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  padding-top: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
+  margin-top: 0px; 
+}
+   */
