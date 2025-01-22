@@ -1,11 +1,14 @@
 import React from "react";
-import MisDiscosComponent from "./miListaDeDiscos.jsx"; // Cambiamos el nombre de importación para evitar colisiones
+import MisDiscosComponent from "./misDiscosComponent.jsx";
+import { Link } from "react-router-dom";
 
 export const MisDiscos = () => {
     return (
         <div>
-            <h1>Mi lista de discos</h1>
-            <MisDiscosComponent /> {/* Usamos el nombre actualizado */}
+            <Link to={"/private"}>
+            <h1>Back</h1>
+            </Link>
+            <MisDiscosComponent /> 
         </div>
     );
 };

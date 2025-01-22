@@ -1,4 +1,4 @@
-const getState = ({ getStore, setStore }) => {
+const getState = ({ getStore, setStore, getActions }) => {
   return {
     store: {
       records: [],
@@ -242,6 +242,37 @@ const getState = ({ getStore, setStore }) => {
           button.disabled = false;
         }
       },
+      getRecords: async () => {
+        try {
+          const response = await fetch(process.env.BACKEND_URL + "/api/records");
+          if (!response.ok) throw new Error("Error al obtener los registros");
+          const data = await response.json();
+
+          setStore({ records: data });
+        } catch (error) {
+          console.error("Error en getRecords:", error);
+          setStore({ error: "No se pudieron cargar los registros" });
+        }
+      },
+
+      getUserData: async (userId) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/users/${userId}`);
+          if (!response.ok) throw new Error("Error al cargar los datos del usuario.");
+          const data = await response.json();
+          setStore({ user: data });  // Guardar los datos del usuario en el store
+        } catch (err) {
+          console.error("Error al obtener los datos del usuario:", err);
+        }
+      },
+
+      setStore: (updatedStore) => {
+        setStore(updatedStore);
+      },
+
+
+
+
     },
   };
 };
@@ -251,9 +282,9 @@ export default getState;
 
 
 
-  
-  
-  
-  
 
-  
+
+
+
+
+
