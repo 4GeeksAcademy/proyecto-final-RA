@@ -1,0 +1,6 @@
+.image-fixed {
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    height: 200px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Recorta la imagen proporcionalmente para que se ajuste al contenedor */
+    border-radius: 5px; /* Opcional: esquinas redondeadas */
+}

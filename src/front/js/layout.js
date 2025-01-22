@@ -16,6 +16,8 @@ import { MisDiscos } from "./component/misDiscos.jsx";
 import { SearchMusic } from "./component/searchMusic.jsx";
 import { SearchWorldWide } from "./component/searchWorldWide.jsx";
 import { AboutUs } from "./component/aboutUs.jsx"
+import { MiPerfil } from "./component/miPerfil.jsx"
+
 
 //create your first component
 const Layout = () => {
@@ -33,6 +35,7 @@ const Layout = () => {
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<MisDiscos />} path="/mis-discos" />
+                        <Route element={<MiPerfil />} path="/mi-perfil" />
                         <Route element={<SearchMusic />} path="/searchmusic" />
                         <Route element={<SearchWorldWide />} path="/searchworldwide" />
                         <Route element={<Register />} path="/register" />

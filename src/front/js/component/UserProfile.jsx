@@ -1,61 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext"; // Importar el contexto global
+import { Link } from"react-router-dom";
 
-export const UserProfile = () => {
-  // Estado inicial con los datos del usuario
-  const [userData, setUserData] = useState({
-    id: "", // Agregado para incluir ID del usuario
-    name: "",
-    email: "",
-    password: "", // Mostrar solo como placeholder
-  });
+export const UserProfile = ({ userId }) => {
+  const { store, actions } = useContext(Context); // Obtener el store y las acciones desde el contexto
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  const [isEditing, setIsEditing] = useState(false); // Estado para manejar si estamos en modo edición
-  const [loading, setLoading] = useState(true); // Estado para controlar la carga
-  const [error, setError] = useState(null); // Estado para manejar errores
-
-  const endpoint = "https://legendary-space-robot-x594x66jxgrg2pv4-3001.app.github.dev/edituser"; // URL del endpoint PUT
-
-  // Obtener los datos del usuario al cargar el componente
   useEffect(() => {
-    const fetchUserData = async (id) => {
-      try {
-        const response = await fetch(`https://legendary-space-robot-x594x66jxgrg2pv4-3000.app.github.dev/users/${id}`); // Usamos comillas invertidas para la plantilla
-        if (!response.ok) throw new Error("Error al cargar los datos del usuario.");
-        const data = await response.json();
-        setUserData(data);
-      } catch (err) {
-        setError("Error al cargar los datos del usuario.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (userId) {
+      actions.getUserData(userId); // Llamar a la acción para obtener los datos del usuario
+    }
+  }, [userId, actions]);
 
-    // Asegúrate de pasar el 'id' a la función fetchUserData
-    const userId = "some_user_id"; // Aquí deberías obtener el ID dinámicamente de tu estado o props
-    fetchUserData(userId);
-}, []);  // Si necesitas que 'id' cambie y haga una nueva petición, añádelo a las dependencias
+  useEffect(() => {
+    if (store.user) {
+      setLoading(false);
+    }
+  }, [store.user]);
 
-  // Manejar cambios en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prevData) => ({ ...prevData, [name]: value }));
+    actions.setStore({ [name]: value }); // Asegúrate de pasar el store correctamente
   };
 
-  // Guardar los cambios
   const handleSave = async () => {
+    if (!store.user || !store.user.id) {
+      setError("No se encontraron datos del usuario para guardar.");
+      return;
+    }
+
     try {
       setLoading(true);
-      const response = await fetch(endpoint, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `${process.env.BACKEND_URL}/edit_user/${store.user.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(store.user),
+        }
+      );
+
       if (!response.ok) throw new Error("Error al guardar los cambios.");
+
+      const data = await response.json();
+      setSuccessMessage(data.msg); // Mostrar mensaje de éxito
       setIsEditing(false);
       alert("Datos guardados correctamente.");
     } catch (err) {
+      console.error("Error al guardar los cambios:", err);
       setError("Error al guardar los cambios.");
     } finally {
       setLoading(false);
@@ -66,8 +63,24 @@ export const UserProfile = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div style={{ maxWidth: "400px", margin: "0 auto", padding: "1rem", border: "1px solid #ccc", borderRadius: "8px" }}>
-      <h2>Perfil de Usuario</h2>
+    <div>
+      <Link to={"/private"}>
+        <h1>Back</h1>
+      </Link>
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "0 auto",
+        padding: "1rem",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+      }}
+    >
+
+      <h2>Mis Datos de Usuario</h2>
+
+      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}{" "}
+      {/* Mostrar mensaje de éxito */}
 
       {isEditing ? (
         <div>
@@ -76,7 +89,7 @@ export const UserProfile = () => {
             <input
               type="text"
               name="name"
-              value={userData.name}
+              value={store.user.name || ""}
               onChange={handleInputChange}
               style={{ width: "100%", marginBottom: "0.5rem" }}
             />
@@ -86,7 +99,7 @@ export const UserProfile = () => {
             <input
               type="email"
               name="email"
-              value={userData.email}
+              value={store.user.email || ""}
               onChange={handleInputChange}
               style={{ width: "100%", marginBottom: "0.5rem" }}
             />
@@ -96,24 +109,33 @@ export const UserProfile = () => {
             <input
               type="password"
               name="password"
-              value={userData.password}
+              value={store.user.password || ""}
               onChange={handleInputChange}
               style={{ width: "100%", marginBottom: "0.5rem" }}
             />
           </div>
-          <button onClick={handleSave} style={{ marginRight: "0.5rem" }}>Guardar</button>
+          <button onClick={handleSave} style={{ marginRight: "0.5rem" }}>
+            Guardar
+          </button>
           <button onClick={() => setIsEditing(false)}>Cancelar</button>
         </div>
       ) : (
         <div>
-          <p><strong>Nombre:</strong> {userData.name}</p>
-          <p><strong>Email:</strong> {userData.email}</p>
-          <p><strong>Contraseña:</strong> ******</p>
-
-          <button onClick={() => setIsEditing(true)} style={{ marginRight: "0.5rem" }}>Editar</button>
+          <p>
+            <strong>Nombre:</strong> {store.user.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {store.user.email}
+          </p>
+          <p>
+            <strong>Contraseña:</strong> ******
+          </p>
+          <button onClick={() => setIsEditing(true)} style={{ marginRight: "0.5rem" }}>
+            Editar
+          </button>
         </div>
       )}
     </div>
+    </div>
   );
 };
-
