@@ -41,8 +41,9 @@ export const Private = () => {
                 <h4 className="text-warning">Menú</h4>
                 <nav className="nav flex-column text-warning">
                     <Link className="nav-link text-warning" to="/mi-perfil">Mis datos</Link>
-                    <Link className="nav-link text-warning" to="/mis-discos">Mis discos</Link>
-                    <Link className="nav-link text-warning" to="/">Mis discos en venta</Link>
+                    <Link className="nav-link text-warning" to="/mis-discos">Coleccion</Link>
+                    <Link className="nav-link text-warning" to="#">Lista de deseos</Link>
+                    <Link className="nav-link text-warning" to="/">Discos en venta</Link>
                     <Link className="nav-link text-warning" to="#">Configuración</Link>
                     <Link className="nav-link text-warning" to="#">Ayuda</Link>
                     <Link className="nav-link text-warning" to="#" onClick={handleLogout}>Cerrar sesión</Link>

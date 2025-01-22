@@ -83,7 +83,7 @@ const Search = () => {
 
   return (
     <div className="container d-flex flex-column align-items-center my-4">
-      <h1 className="text-center mb-4">Buscar en Discogs</h1>
+      <h1 className="text-center mb-4">Buscar en la Plataforma</h1>
       <div className="w-50 d-flex flex-column align-items-center">
         <div className="w-100 d-flex justify-content-between mb-3">
           <select

@@ -50,12 +50,6 @@ const MisDiscosComponent = () => {
                                         >
                                             Agregar a Sell List
                                         </button>
-                                        <button
-                                            className="btn btn-success btn-sm"
-                                            onClick={() => actions.addToMyCollection(record.id)}
-                                        >
-                                            Agregar a My Collection
-                                        </button>
                                     </div>
                                 </div>
                             </div>
