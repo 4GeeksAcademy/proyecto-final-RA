@@ -1,5 +1,6 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
+import "../../styles/carousel.css"
 
 export const RecordCarousel = () => {
   // Dividir los elementos en bloques de 5

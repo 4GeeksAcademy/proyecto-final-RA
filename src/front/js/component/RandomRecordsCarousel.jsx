@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Context } from "../store/appContext";
+import "../../styles/carousel.css"
 
 const RandomRecordsCarousel = () => {
   const { store, actions } = useContext(Context);

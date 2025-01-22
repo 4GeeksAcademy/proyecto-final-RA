@@ -1,0 +1,18 @@
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%; 
+}
+
+.carousel-control-prev {
+  left: -30px; /
+}
+
+.carousel-control-next {
+  right: -30px; /
+}
