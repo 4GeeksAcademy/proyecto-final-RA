@@ -1,0 +1,18 @@
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%; /* Aumenta el área de clic a los lados */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5); /* Agrega un fondo semitransparente para mejor visibilidad */
+  border-radius: 50%; /* Hace que las flechas tengan un borde redondeado */
+}
+
+.carousel-control-prev {
+  left: -30px; /* Ajusta la posición hacia la izquierda */
+}
+
+.carousel-control-next {
+  right: -30px; /* Ajusta la posición hacia la derecha */
+}

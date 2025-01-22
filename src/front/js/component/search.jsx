@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Carousel, Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/carousel.css"
+
+
 
 const Search = () => {
   const { store, actions } = useContext(Context);
