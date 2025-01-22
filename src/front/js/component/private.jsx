@@ -43,7 +43,7 @@ export const Private = () => {
                     <Link className="nav-link text-warning" to="/mi-perfil">Mis datos</Link>
                     <Link className="nav-link text-warning" to="/mis-discos">Coleccion</Link>
                     <Link className="nav-link text-warning" to="#">Lista de deseos</Link>
-                    <Link className="nav-link text-warning" to="/">Discos en venta</Link>
+                    <Link className="nav-link text-warning" to="/sell-list">Discos en venta</Link>
                     <Link className="nav-link text-warning" to="#">Configuración</Link>
                     <Link className="nav-link text-warning" to="#">Ayuda</Link>
                     <Link className="nav-link text-warning" to="#" onClick={handleLogout}>Cerrar sesión</Link>

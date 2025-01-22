@@ -45,11 +45,12 @@ const MisDiscosComponent = () => {
                                     {/* Botones para agregar a listas */}
                                     <div className="d-flex justify-content-between mt-3">
                                         <button
-                                            className="btn btn-primary btn-sm"
+                                            id={`addRecordButton-${record.id}`} // Hacer el ID único
                                             onClick={() => actions.addToSellList(record.id)}
                                         >
-                                            Agregar a Sell List
+                                            Agregar a la lista de ventas
                                         </button>
+
                                     </div>
                                 </div>
                             </div>

@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import requests
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Record, Collection
+from api.models import db, User, Record, SellList
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -265,3 +265,52 @@ def get_records():
         return jsonify({"error": "Error al obtener los registros", "message": str(e)}), 500
 
 
+@api.route('/sell_list', methods=['POST'])
+@jwt_required()  # Protege la ruta con JWT
+def add_to_sell_list():
+    try:
+        # Obtener los datos enviados en el cuerpo de la solicitud
+        data = request.get_json()
+
+        # Validar que los campos necesarios estén presentes
+        record_id = data.get('record_id')
+        user_id = get_jwt_identity()  # Obtener el ID del usuario autenticado desde el token JWT
+
+        if not record_id:
+            return jsonify({"error": "El campo 'record_id' es obligatorio"}), 400
+
+        # Verificar si el disco existe en la tabla records
+        record = Record.query.get(record_id)
+        if not record:
+            return jsonify({"error": "El disco no existe"}), 404
+
+        # Verificar si ya está en la lista de ventas para el usuario
+        existing_entry = SellList.query.filter_by(user_id=user_id, record_id=record_id).first()
+        if existing_entry:
+            return jsonify({"error": "El disco ya está en la lista de ventas"}), 400
+
+        # Crear una nueva entrada en la tabla sell_list
+        new_sell_entry = SellList(user_id=user_id, record_id=record_id)
+        db.session.add(new_sell_entry)
+        db.session.commit()
+
+        return jsonify({
+            "message": "El disco se agregó correctamente a la lista de ventas",
+            "sell_list_entry": new_sell_entry.serialize()
+        }), 201
+
+    except Exception as e:
+        db.session.rollback()  # Hacer rollback si ocurre un error
+        return jsonify({"error": f"Error al agregar el disco a la lista de ventas: {str(e)}"}), 500
+
+
+
+@api.route('/sell_list', methods=['GET'])
+def get_sell_list():
+    # Obtener todos los discos en venta desde la base de datos
+    sell_list = SellList.query.all()
+
+    # Convertir los resultados en un formato JSON
+    records = [record.serialize() for record in sell_list]  # Usar el método 'serialize' para obtener los datos
+
+    return jsonify(records)

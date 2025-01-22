@@ -2,14 +2,15 @@ const getState = ({ getStore, setStore, getActions }) => {
   return {
     store: {
       records: [],
+      onSale: [],
       loading: false,
       error: null,
       user: null,
       searchResults: [],
       randomResults: [],
-      isSearching: false, // Indicador para saber si está buscando
-      isFetchingRandom: false, // Indicador para los resultados aleatorios
-      randomFetched: false, // Indicador para saber si ya se han obtenido resultados aleatorios
+      isSearching: false,
+      isFetchingRandom: false,
+      randomFetched: false,
     },
     actions: {
       // Acción para buscar discos en Discogs
@@ -42,7 +43,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           const data = await resp.json();
           console.log("Respuesta de la API:", data);
 
-          // Verificamos si hay resultados y los asignamos
           if (data.results && data.results.length > 0) {
             setStore({
               searchResults: data.results,
@@ -73,14 +73,13 @@ const getState = ({ getStore, setStore, getActions }) => {
       FetchRandomRecords: async (q = "Drum & Bass") => {
         const store = getStore();
 
-        // Si ya estamos buscando o tenemos resultados aleatorios, no hacer nada
         if (store.isSearching || store.isFetchingRandom || store.randomFetched) {
           console.log("Ya estamos buscando o ya tenemos resultados aleatorios.");
           return;
         }
 
         setStore({
-          isFetchingRandom: true, // Indicador de que se está buscando resultados aleatorios
+          isFetchingRandom: true,
           loading: true,
           error: null,
         });
@@ -97,7 +96,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           const data = await resp.json();
           console.log("Respuesta de la API (resultados aleatorios):", data);
 
-          // Verificamos si hay resultados y los asignamos
           if (data.results && data.results.length > 0) {
             setStore({
               randomResults: data.results,
@@ -242,12 +240,12 @@ const getState = ({ getStore, setStore, getActions }) => {
           button.disabled = false;
         }
       },
+
       getRecords: async () => {
         try {
           const response = await fetch(process.env.BACKEND_URL + "/api/records");
           if (!response.ok) throw new Error("Error al obtener los registros");
           const data = await response.json();
-
           setStore({ records: data });
         } catch (error) {
           console.error("Error en getRecords:", error);
@@ -260,7 +258,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           const response = await fetch(`${process.env.BACKEND_URL}/users/${userId}`);
           if (!response.ok) throw new Error("Error al cargar los datos del usuario.");
           const data = await response.json();
-          setStore({ user: data });  // Guardar los datos del usuario en el store
+          setStore({ user: data });
         } catch (err) {
           console.error("Error al obtener los datos del usuario:", err);
         }
@@ -270,21 +268,82 @@ const getState = ({ getStore, setStore, getActions }) => {
         setStore(updatedStore);
       },
 
+      setError: (errorMessage) => {
+        setStore({ error: errorMessage });
+      },
 
+      addToSellList: async (recordId) => {
+        const store = getStore();
+        const userId = store.user?.id;  // Obtener el user_id desde el store
+    
+        // Verificar si el usuario está autenticado
+        if (!userId) {
+            setStore({ error: "Usuario no autenticado" });
+            console.error("Usuario no autenticado");
+            return;
+        }
+    
+        // Configuración de la solicitud
+        const token = localStorage.getItem("token");
+        const button = document.getElementById(`addRecordButton-${recordId}`); // Usar el ID dinámico
+        if (button) {
+            button.disabled = true;  // Deshabilitar el botón mientras se realiza la solicitud
+        }
+    
+        try {
+            const response = await fetch(`${process.env.BACKEND_URL}/api/sell_list`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Enviar el token JWT en la cabecera
+                },
+                body: JSON.stringify({
+                    record_id: recordId,  // Enviar el record_id y el user_id
+                }),
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                console.log("Disco agregado correctamente a la lista de ventas:", data);
+                setStore({
+                  onSale: [...store.onSale, { ...data.sell_list_entry, cover_image: data.sell_list_entry.cover_image }],
+                });
+            } else {
+                setStore({ error: data.error || "Error al agregar el disco a la lista de ventas" });
+                console.error("Error al agregar disco a la lista de ventas:", data.error);
+            }
+        } catch (error) {
+            setStore({ error: "Hubo un error al intentar agregar el disco." });
+            console.error("Error al realizar la solicitud:", error);
+        } finally {
+            if (button) {
+                button.disabled = false;  // Habilitar el botón nuevamente
+            }
+        }
+    },
 
+      // Otros métodos de tu estado (por ejemplo, login, register, etc.)
 
+      // Función para obtener los registros de la lista de ventas
+      getSellList: async () => {
+        const store = getStore(); // Obtener el estado actual del store
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/api/sell_list`);
+          const data = await response.json();
+          
+          if (response.ok) {
+            setStore({ onSale: data });  // Actualizar la lista de discos en el estado
+          } else {
+            setStore({ error: "Error al obtener la lista de ventas." });
+          }
+        } catch (error) {
+          console.error("Error al obtener la lista de ventas:", error);
+          setStore({ error: "Hubo un error al obtener la lista de ventas." });
+        }
+      },
     },
   };
 };
 
 export default getState;
-
-
-
-
-
-
-
-
-
-
