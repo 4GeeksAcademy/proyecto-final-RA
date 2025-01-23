@@ -1,12 +1,15 @@
+// src/js/component/MiPerfil.jsx
 import React from "react";
-import { UserProfile } from "./UserProfile.jsx";
+import UserProfile from "./UserProfile.jsx";
+import "../../styles/miPerfil.css";
 
-export const MiPerfil = () => {
+const MiPerfil = () => {
+  return (
+    <div className="mi-perfil-container"> 
+      <UserProfile />
+    </div>
+  );
+};
 
-    return (
+export default MiPerfil;
 
-        <div>
-            <UserProfile />
-        </div>
-    )
-}

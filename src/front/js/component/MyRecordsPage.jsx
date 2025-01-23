@@ -1,11 +1,12 @@
 // src/js/pages/MyRecordsPage.jsx
 import React, { useState, useEffect } from 'react';
-import AddRecordModal from '../component/AddRecordModal'; // Importa el modal
+import AddRecordModal from '../component/AddRecordModal'; // Importación con nombre
+import "../../styles/myRecordsPage.css";
 
 const MyRecordsPage = () => {
   const [showModal, setShowModal] = useState(false);
-  const [records, setRecords] = useState([]); // Lista de discos en tu base de datos
-  const [apiData, setApiData] = useState([]); // Discos obtenidos de la API
+  const [records, setRecords] = useState([]);
+  const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
     // Obtener discos de la API externa (por ejemplo, Discogs)
@@ -27,26 +28,25 @@ const MyRecordsPage = () => {
   };
 
   return (
-    <div>
+    <div className="my-records-container">
       <h1>Mis Discos</h1>
       <button onClick={() => setShowModal(true)}>Agregar Disco desde API</button>
 
-      {/* Mostrar la lista de discos en la base de datos */}
-      <ul>
+      <ul className="record-list">
         {records.map((record) => (
           <li key={record.id}>{record.title}</li>
         ))}
       </ul>
 
-      {/* Mostrar el modal */}
       <AddRecordModal
         show={showModal}
-        onHide={() => setShowModal(false)} // Cerrar el modal
-        onAddRecord={handleAddRecord} // Actualizar la lista de discos
-        apiData={apiData} // Pasar los discos de la API al modal
+        onHide={() => setShowModal(false)}
+        onAddRecord={handleAddRecord}
+        apiData={apiData}
       />
     </div>
   );
 };
+
 
 export default MyRecordsPage;

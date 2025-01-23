@@ -1,0 +1,47 @@
+/* Estilos generales para la página About Us */
+.about-us {
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
+    color: white;
+    padding: 40px;
+    min-height: 100vh;
+  }
+  
+  .about-us h1 {
+    color: red; /* Título en rojo, como en el navbar */
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .about-us p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #f8f9fa; /* Texto blanco con un tono más suave */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+  
+  .about-us p a {
+    color: #ff4500; /* Color especial para enlaces, similar al rojo */
+    text-decoration: underline;
+  }
+  
+  .about-us p a:hover {
+    color: #ff6347; /* Cambio de color en hover */
+  }
+  
+  /* Ajustes responsivos */
+  @media (max-width: 768px) {
+    .about-us {
+      padding: 20px;
+    }
+  
+    .about-us h1 {
+      font-size: 30px;
+    }
+  
+    .about-us p {
+      font-size: 16px;
+    }
+  }
+  

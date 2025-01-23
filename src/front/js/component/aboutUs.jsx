@@ -1,11 +1,11 @@
 import React from "react";
-import "../../styles/worldwide.css"
+import "../../styles/aboutUs.css"
 
-export const AboutUs = () => {
+const AboutUs = () => {
 
 
-    return (
-        <div className="search-music">
+   return (
+     <div className="about-us">
         <h1>About Us</h1>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione sapiente quae blanditiis itaque adipisci possimus eius totam, 
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione sapiente quae blanditiis itaque adipisci possimus eius totam, 
@@ -16,3 +16,5 @@ export const AboutUs = () => {
         </div>
     )
 }
+
+export default AboutUs;

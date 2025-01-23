@@ -1,7 +1,8 @@
+// src/js/component/RandomRecordsCarousel.jsx
 import React, { useContext, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Context } from "../store/appContext";
-import "../../styles/carousel.css"
+import "../../styles/randomRecordsCarousel.css";
 
 const RandomRecordsCarousel = () => {
   const { store, actions } = useContext(Context);
@@ -40,8 +41,8 @@ const RandomRecordsCarousel = () => {
   }
 
   return (
-    <div className="container my-4">
-      <h2 className="text-center mb-4">Populares Entre Los Usuarios</h2>
+    <div className="random-records-carousel">  {/* Added class */}
+      <h2 className="text-center mb-4">Popular Entre Otros Usuarios</h2>
       <Carousel>
         {chunkedResults.map((chunk, index) => (
           <Carousel.Item key={index}>
@@ -76,6 +77,7 @@ const RandomRecordsCarousel = () => {
 };
 
 export default RandomRecordsCarousel;
+
 
 
 

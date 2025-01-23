@@ -1,6 +1,7 @@
 // src/js/component/AddRecordModal.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, ListGroup } from 'react-bootstrap';
+import "../../styles/addRecordModal.css";
 
 const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -49,16 +50,27 @@ const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
       <Modal.Body>
         {/* Mostrar los discos obtenidos de la API */}
         <ListGroup>
-          {apiData && apiData.map((record) => (
-            <ListGroup.Item
-              key={record.id}
-              onClick={() => setSelectedRecord(record)}
-              style={{ cursor: 'pointer', backgroundColor: selectedRecord?.id === record.id ? '#f0f0f0' : '' }}
-            >
-              <img src={record.cover_image} alt={record.title} style={{ width: '50px', marginRight: '10px' }} />
-              {record.title} - {record.year}
-            </ListGroup.Item>
-          ))}
+          {apiData &&
+            apiData.map((record) => (
+              <ListGroup.Item
+                key={record.id}
+                onClick={() => setSelectedRecord(record)}
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: selectedRecord?.id === record.id
+                    ? '#f0f0f0'
+                    : '',
+                }}
+                className="record-list-item"
+              >
+                <img
+                  src={record.cover_image}
+                  alt={record.title}
+                  style={{ width: '50px', marginRight: '10px' }}
+                />
+                {record.title} - {record.year}
+              </ListGroup.Item>
+            ))}
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>
@@ -74,3 +86,4 @@ const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
 };
 
 export default AddRecordModal;
+

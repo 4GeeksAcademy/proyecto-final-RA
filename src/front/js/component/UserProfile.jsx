@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext"; // Importar el contexto global
-import { Link } from"react-router-dom";
+import { Link } from "react-router-dom";
+import "../../styles/userProfile.css"
 
-export const UserProfile = ({ userId }) => {
+const UserProfile = ({ userId }) => {
   const { store, actions } = useContext(Context); // Obtener el store y las acciones desde el contexto
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -60,82 +61,68 @@ export const UserProfile = ({ userId }) => {
   };
 
   if (loading) return <p>Cargando datos...</p>;
-  if (error) return <p>{error}</p>;
+  if (error) return <p className="error-message">{error}</p>;
 
   return (
-    <div>
-      <Link to={"/private"}>
+    <div className="user-profile-container">
+      <Link to={"/private"} className="back-button">
         <h1>Back</h1>
       </Link>
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "0 auto",
-        padding: "1rem",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-      }}
-    >
+      <div className="user-profile-card">
+        <h2>Mis Datos de Usuario</h2>
 
-      <h2>Mis Datos de Usuario</h2>
+        {successMessage && <p className="success-message">{successMessage}</p>}{" "}
+        {/* Mostrar mensaje de éxito */}
 
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}{" "}
-      {/* Mostrar mensaje de éxito */}
-
-      {isEditing ? (
-        <div>
+        {isEditing ? (
           <div>
-            <label>Nombre:</label>
-            <input
-              type="text"
-              name="name"
-              value={store.user.name || ""}
-              onChange={handleInputChange}
-              style={{ width: "100%", marginBottom: "0.5rem" }}
-            />
+            <div>
+              <label>Nombre:</label>
+              <input
+                type="text"
+                name="name"
+                value={store.user.name || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                value={store.user.email || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>Contraseña:</label>
+              <input
+                type="password"
+                name="password"
+                value={store.user.password || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button onClick={handleSave}>Guardar</button>
+            <button onClick={() => setIsEditing(false)}>Cancelar</button>
           </div>
+        ) : (
           <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={store.user.email || ""}
-              onChange={handleInputChange}
-              style={{ width: "100%", marginBottom: "0.5rem" }}
-            />
+            <p>
+              <strong>Nombre:</strong> {store.user.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {store.user.email}
+            </p>
+            <p>
+              <strong>Contraseña:</strong> ****** {/* Ocultamos la contraseña */}
+            </p>
+            <button onClick={() => setIsEditing(true)}>Editar</button>
           </div>
-          <div>
-            <label>Contraseña:</label>
-            <input
-              type="password"
-              name="password"
-              value={store.user.password || ""}
-              onChange={handleInputChange}
-              style={{ width: "100%", marginBottom: "0.5rem" }}
-            />
-          </div>
-          <button onClick={handleSave} style={{ marginRight: "0.5rem" }}>
-            Guardar
-          </button>
-          <button onClick={() => setIsEditing(false)}>Cancelar</button>
-        </div>
-      ) : (
-        <div>
-          <p>
-            <strong>Nombre:</strong> {store.user.name}
-          </p>
-          <p>
-            <strong>Email:</strong> {store.user.email}
-          </p>
-          <p>
-            <strong>Contraseña:</strong> ******
-          </p>
-          <button onClick={() => setIsEditing(true)} style={{ marginRight: "0.5rem" }}>
-            Editar
-          </button>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </div>
   );
 };
+
+export default UserProfile;

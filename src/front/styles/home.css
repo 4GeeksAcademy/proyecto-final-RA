@@ -1,7 +1,80 @@
-/*
-    home.css: This website contains selectors only used in home.css
-
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+/* Contenedor principal de la página de inicio */
+.home-layout {
+    display: flex;
+    justify-content: space-between;
+    min-height: 100vh;
+    background-color: #121212; /* Fondo oscuro */
+    color: white;
+  }
+  
+  /* Barra lateral izquierda y derecha */
+  .home-layout__sidebar {
+    width: 250px;
+    background-color: #1c1c1c; /* Fondo oscuro para las barras laterales */
+  }
+  
+  .home-layout__sidebar.left-sidebar {
+    border-right: 1px solid #333;
+  }
+  
+  .home-layout__sidebar.right-sidebar {
+    border-left: 1px solid #333;
+  }
+  
+  /* Contenedor principal de contenido */
+  .home-layout__content-wrapper {
+    flex: 1;
+    padding: 40px;
+    background-color: #1c1c1c; /* Fondo oscuro para el contenido */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .home-layout__content-wrapper__welcome-title {
+    color: #ff4500; /* Título en naranja brillante */
+    font-size: 2.5rem;
+    text-align: center;
+  }
+  
+  .home-layout__content-wrapper__welcome-subtitle {
+    color: #ccc; /* Subtítulo en gris claro */
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  /* Estilos de los componentes */
+  .search-invitados,
+  .discogs-search,
+  .random-records-carousel {
+    margin-bottom: 40px;
+  }
+  
+  button {
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #ff7f50;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    background-color: #333; /* Fondo oscuro para inputs */
+    color: white;
+    border: 1px solid #444;
+    border-radius: 5px;
+  }
+  
+  input:focus {
+    border-color: #ff4500;
+    outline: none;
+  }
+  

@@ -1,8 +1,9 @@
+// src/js/component/RecordCarousel.jsx
 import React from "react";
 import { Carousel } from "react-bootstrap";
-import "../../styles/carousel.css"
+import "../../styles/recordCarousel.css";
 
-export const RecordCarousel = () => {
+const RecordCarousel = ({ records }) => {
   // Dividir los elementos en bloques de 5
   const chunkedRecords = [];
   for (let i = 0; i < records.length; i += 5) {
@@ -10,14 +11,18 @@ export const RecordCarousel = () => {
   }
 
   return (
-    <div className="container my-4">
+    <div className="record-carousel-container"> {/* Added class */}
       <h2 className="text-center mb-4">Lista de Discos</h2>
       <Carousel>
         {chunkedRecords.map((chunk, index) => (
           <Carousel.Item key={index}>
             <div className="d-flex justify-content-center">
               {chunk.map((record) => (
-                <div key={record.id} className="card mx-2" style={{ width: "18rem", textAlign: "center" }}>
+                <div
+                  key={record.id}
+                  className="card mx-2"
+                  style={{ width: "18rem", textAlign: "center" }}
+                >
                   <img
                     src={record.image}
                     className="card-img-top"
@@ -38,3 +43,5 @@ export const RecordCarousel = () => {
     </div>
   );
 };
+
+export default RecordCarousel;

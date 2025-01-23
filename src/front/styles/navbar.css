@@ -1,117 +1,55 @@
-.navbar-custom {
-  background-color: #343a4029; 
-  padding: 1rem 3rem;
-  position:relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1050;
-  margin-top: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar-brand h3 {
-  font-size: 20px;
-  color: #f7f7f7;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-}
-
-
-.navbar-brand h3:hover {
-  color: #ffbb33;
-}
-
-
-.nav-link {
-  color: #f7f7f7 !important;
-  font-size: 15px;
-  padding: 3px 2rem;
-  transition: color 0.3s ease, background-color 0.3s ease;
-  border-radius: 25px;
-  font-weight: 500;
-}
-
-
-.nav-link:hover {
-  background-color: rgba(255, 187, 51, 0.2);
-  color: #ffbb33;
-}
-
-
-.btn-login {
-  background-color: #ffbb33;
-  color: #343a40;
-  border-radius: 25px;
-  padding: 0.5rem 2rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border: none;
-}
-
-.btn-login:hover {
-  background-color: #343a40;
-  color: #ffbb33;
-  transform: scale(1.05);
-}
-
-.navbar-toggler {
-  border: none;
-  background-color: #ffbb33;
-}
-
-.navbar-toggler-icon {
-  background-color: #343a40;
-}
-
-@media (max-width: 992px) {
-  .navbar-custom {
-    padding: 1rem 2rem;
-    flex-direction: column;
-    align-items: flex-start;
+/* Navbar styles */
+.navbar-container {
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro translúcido */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
   }
-
-  .navbar-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    padding: 0;
+  
+  /* Estilo para los links */
+  .navbar-nav .nav-link {
+    color: white !important; /* Links blancos */
+    font-weight: 600;
+    transition: color 0.3s ease;
   }
-
-  .navbar-nav .nav-item {
-    padding: 0.5rem 0;
-    width: 100%;
+  
+  .navbar-nav .nav-link:hover {
+    color: #f8f9fa !important; /* Color blanco más brillante en hover */
   }
-
-  .navbar-toggler {
-    background-color: #ffbb33;
+  
+  /* Estilo para el "Home" */
+  .navbar-brand h3 {
+    color: red !important; /* "Home" en rojo */
   }
-
-  .navbar-toggler-icon {
-    background-color: #343a40;
+  
+  /* Estilo para el botón de Login/Register */
+  .btn-login {
+    background-color: #333 !important; /* Fondo oscuro para el botón */
+    color: white !important; /* Texto blanco */
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
   }
-}
-
-body {
-  margin: 0;
-  width: 100%;
-  padding-top: 0;
-  font-family: 'Arial', sans-serif;
-}
-
-.main-content {
-  background-color: #343a4029; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  text-align: center;
-  padding: 2rem;
-  margin-top: 0px; 
-}
-
+  
+  .btn-login:hover {
+    background-color: #555 !important; /* Color más claro en hover */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .navbar-container {
+      padding: 10px;
+    }
+  
+    .navbar-nav {
+      text-align: center;
+    }
+  
+    .navbar-nav .nav-link {
+      font-size: 18px;
+    }
+  }
+  

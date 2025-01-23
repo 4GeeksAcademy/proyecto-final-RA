@@ -1,15 +1,15 @@
-import React  from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/navbar.css"
 
-export const Navbar = () => {
+const Navbar = () => {
 
-	return (
-		<nav className="main-content navbar navbar-expand-lg navbar-custom shadow">
-			<div className="container-fluid d-flex">
-				<Link to="/" className="navbar-brand">
-					<h3 className="mb-0 text-warning p-2 flex-grow-1">Home</h3>
-				</Link>
+  return (
+    <nav className="navbar-container"> 
+      <div className="container-fluid d-flex">
+        <Link to="/" className="navbar-brand">
+          <h3 className="mb-0 text-warning p-2 flex-grow-1">Home</h3>
+        </Link>
 				<button
 					className="navbar-toggler"
 					type="button"
@@ -50,6 +50,8 @@ export const Navbar = () => {
 				</Link>
 			</div>
 		</nav>
-
 	);
 };
+
+
+export default Navbar;

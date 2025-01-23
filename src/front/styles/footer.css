@@ -1,51 +1,65 @@
-/* Estilos generales para el footer */
-footer {
-  position: relative;
-  margin-bottom: 0px;
-  left: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semi-transparente */
-  color: #f7f7f7; /* Texto claro */
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-  /* z-index: 1;  */
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave en la parte superior del footer */
-}
-
-/* Contenedor dentro del footer */
-.footer-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Estilo para el texto del footer */
-footer p {
-  margin: 0;
-  font-weight: bold;
-}
-
-/* Estilo para los enlaces en el footer */
-.footer-nav {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 1rem;
-}
-
-/* Estilo para los enlaces del footer */
-.footer-nav li a {
-  color: #f7f7f7;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-/* Hover en los enlaces */
-.footer-nav li a:hover {
-  color: #ffbb33;
-}
+/* Estilos generales para el Footer */
+.footer {
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro translúcido */
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+  
+  .footer p {
+    font-size: 16px;
+    color: #f8f9fa; /* Color blanco suave para el texto */
+    margin-bottom: 20px;
+  }
+  
+  .footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .footer-nav li {
+    margin: 0 15px;
+  }
+  
+  .footer-nav a {
+    color: #f8f9fa;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-nav a:hover {
+    color: #ff4500; /* Cambio de color al pasar el ratón */
+  }
+  
+  /* Responsividad para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 20px 0;
+    }
+  
+    .footer p {
+      font-size: 14px;
+    }
+  
+    .footer-nav {
+      flex-direction: column;
+    }
+  
+    .footer-nav li {
+      margin: 5px 0;
+    }
+  }
+  

@@ -1,0 +1,156 @@
+/* Estilo para la contenedor principal de la página de búsqueda */
+.container {
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+    color: white;
+    min-height: 100vh;
+    padding: 40px 0;
+  }
+  
+  /* Título principal */
+  h1 {
+    color: #ff4500; /* Tono naranja para el título */
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+  
+  /* Contenedor del formulario de búsqueda */
+  .w-50 {
+    width: 50%;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para el campo de búsqueda (input) */
+  .form-control {
+    background-color: #444;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    transition: border 0.3s;
+  }
+  
+  .form-control:focus {
+    border-color: #ff4500; /* Cambio de color al enfocar */
+    outline: none;
+  }
+  
+  /* Botón de búsqueda */
+  .btn-primary {
+    background-color: #ff4500; /* Rojo anaranjado para el botón */
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #e63946; /* Rojo más intenso al pasar el cursor */
+  }
+  
+  /* Mensaje de error */
+  .text-danger {
+    color: red;
+    font-size: 14px;
+    margin-top: 15px;
+  }
+  
+  /* Estilo para los resultados de la búsqueda */
+  .card {
+    background-color: #333; /* Fondo oscuro */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.05); /* Efecto de hover */
+  }
+  
+  .card-body {
+    padding: 10px;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+    color: #ff4500;
+  }
+  
+  /* Modal personalizado */
+  .custom-modal .modal-content {
+    background-color: #222; /* Fondo oscuro para el modal */
+    color: white;
+    border-radius: 8px;
+  }
+  
+  .custom-modal .modal-header,
+  .custom-modal .modal-footer {
+    background-color: #333; /* Fondo oscuro para los encabezados y pie de modal */
+  }
+  
+  .custom-modal .modal-title {
+    color: #ff4500; /* Título del modal con color distintivo */
+  }
+  
+  .card-img-top {
+    border-radius: 8px;
+  }
+  
+  /* Estilo para los botones del modal */
+  button {
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 8px 15px;
+  }
+  
+  /* Botón de cierre del modal */
+  .modal-footer .btn-secondary {
+    background-color: #555; /* Fondo gris oscuro */
+    border: none;
+  }
+  
+  .modal-footer .btn-primary {
+    background-color: #ff4500;
+    border: none;
+  }
+  
+  .modal-footer .btn-primary:hover {
+    background-color: #e63946; /* Cambio de color al pasar el cursor */
+  }
+  
+  /* Estilo del carousel */
+  .carousel-item {
+    background-color: #222; /* Fondo oscuro en las diapositivas */
+  }
+  
+  .d-flex {
+    display: flex;
+    justify-content: center;
+  }
+  
+  @media (max-width: 768px) {
+    /* Ajuste en pantallas más pequeñas */
+    .w-50 {
+      width: 100%;
+    }
+  
+    .btn-primary {
+      width: 100%;
+    }
+  
+    .form-control {
+      font-size: 14px;
+    }
+  
+    .card {
+      width: 80%;
+      margin-bottom: 15px;
+    }
+  
+    .card-body {
+      font-size: 14px;
+    }
+  }
+  

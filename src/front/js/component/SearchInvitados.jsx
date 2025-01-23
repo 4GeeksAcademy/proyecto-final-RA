@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Carousel, Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/searchInvitados.css";
+
 
 const SearchInvitados = () => {
   const { store, actions } = useContext(Context);
@@ -28,7 +30,6 @@ const SearchInvitados = () => {
   };
 
   const handleCloseModal = () => {
-
     setShowModal(false);
     setSelectedRecord(null);
   };
@@ -38,7 +39,7 @@ const SearchInvitados = () => {
   const handleAddRecord = async () => {
     if (isAdding) return;
     setIsAdding(true);
-  
+
     try {
       const token = localStorage.getItem("token");
       const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
@@ -56,7 +57,7 @@ const SearchInvitados = () => {
           cover_image: selectedRecord.cover_image,
         }),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         console.log('Disco agregado:', result);
@@ -69,12 +70,11 @@ const SearchInvitados = () => {
     } catch (error) {
       console.error('Error al hacer la solicitud:', error);
     } finally {
-      setIsAdding(false); 
+      setIsAdding(false);
     }
 
     setShowModal(false); // Cierra el modal
     setSelectedRecord(null); // Limpia el disco seleccionado
-
   };
 
   // Dividir los resultados en bloques de 5
@@ -85,7 +85,7 @@ const SearchInvitados = () => {
 
   return (
     <div className="container my-4">
-      <h1 className="text-center mb-4">Buscar en Discogs</h1>
+      <h1 className="text-center mb-4">Buscar en la Plataforma</h1>
 
       <form onSubmit={handleSearch} className="mb-4">
         <div className="d-flex justify-content-center align-items-center">
@@ -185,7 +185,9 @@ const SearchInvitados = () => {
   );
 };
 
+
 export default SearchInvitados;
+
 
 
 
