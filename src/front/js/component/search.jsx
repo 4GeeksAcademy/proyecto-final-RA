@@ -1,101 +1,88 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Carousel, Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../styles/carousel.css"
-
-
+import "../../styles/carousel.css";
 
 const Search = () => {
   const { store, actions } = useContext(Context);
   const [query, setQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("artist");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [addLoading, setAddLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setLoading(true); // Cambia el estado de carga a verdadero
-    actions.searchDiscogs(query, searchBy);
-  };
-
-  const handleShowModal = (record) => {
-    setSelectedRecord(record);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedRecord(null);
-  };
-
-  const [isAdding, setIsAdding] = useState(false);
-
-  const handleAddRecord = async () => {
-    if (isAdding) return;
-    setIsAdding(true);
-
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title: selectedRecord.title,
-          year: selectedRecord.year,
-          genre: selectedRecord.genre,
-          label: selectedRecord.label,
-          style: selectedRecord.style,
-          cover_image: selectedRecord.cover_image,
-        }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Disco agregado:", result);
-        actions.addRecordToDatabase(selectedRecord);
-        handleCloseModal();
-      } else {
-        const errorResult = await response.json();
-        console.error("Error al agregar disco:", errorResult.error);
-      }
-    } catch (error) {
-      console.error("Error al hacer la solicitud:", error);
-    } finally {
-      setIsAdding(false);
-    }
+    setLoading(true);
+    actions.searchDiscogs(query);
   };
 
   useEffect(() => {
     setLoading(false);
-  }, [store.searchResults]); // Reacciona cuando store.searchResults cambie
+  }, [store.searchResults]);
 
-  // Dividir resultados en bloques de 5
-  const chunkedResults = [];
-  for (let i = 0; i < store.searchResults.length; i += 5) {
-    chunkedResults.push(store.searchResults.slice(i, i + 5));
-  }
+  const chunkArray = (array, size) => {
+    const result = [];
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size));
+    }
+    return result;
+  };
+
+  const slides = chunkArray(store.searchResults, 5);
+
+  // Función para agregar el disco
+  const handleAddRecord = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("No se encontró el token. Asegúrate de haber iniciado sesión.");
+      return;
+    }
+
+    setAddLoading(true);
+
+    try {
+      const response = await fetch(process.env.BACKEND_URL + 'api/add_record', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: selectedRecord.title,
+          label: selectedRecord.label,
+          year: selectedRecord.year,
+          genre: selectedRecord.genre,
+          style: selectedRecord.style,
+          cover_image: selectedRecord.cover_image,
+          owner_id: store.user.id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al agregar el disco");
+      }
+
+      const data = await response.json();
+      console.log("Disco agregado:", data);
+
+      setMessage("Disco agregado exitosamente!");
+      setAddLoading(false);
+      setSelectedRecord(null);
+
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Error al agregar el disco: " + error.message);
+      setAddLoading(false);
+    }
+  };
 
   return (
     <div className="container d-flex flex-column align-items-center my-4">
       <h1 className="text-center mb-4">Buscar en la Plataforma</h1>
       <div className="w-50 d-flex flex-column align-items-center">
-        <div className="w-100 d-flex justify-content-between mb-3">
-          <select
-            className="form-control"
-            value={searchBy}
-            onChange={(e) => setSearchBy(e.target.value)}
-          >
-            <option value="artist">Artista</option>
-            <option value="label">Sello</option>
-            <option value="genre">Género</option>
-          </select>
-        </div>
         <input
           type="text"
           className="form-control mb-3"
@@ -112,94 +99,110 @@ const Search = () => {
         </button>
       </div>
 
-      {error && <p className="text-danger mt-3">{error}</p>}
+      {store.error && (
+        <div className="alert alert-danger mt-3">{store.error}</div>
+      )}
 
-      {chunkedResults.length > 0 ? (
-        <div className="container my-4">
-          <h2 className="text-center mb-4">Resultados</h2>
-          <Carousel>
-            {chunkedResults.map((chunk, index) => (
-              <Carousel.Item key={index}>
-                <div className="d-flex justify-content-center">
-                  {chunk.map((record) => (
+      <div id="carouselExample" className="carousel slide mt-4" data-bs-ride="carousel">
+        <div className="carousel-inner">
+          {slides.map((group, index) => (
+            <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+              <div className="row justify-content-center">
+                {group.map((record, idx) => (
+                  <div key={idx} className="col-md-2">
                     <div
-                      key={record.id}
-                      className="card text-white bg-dark mx-2"
-                      style={{ width: "18rem", textAlign: "center", cursor: "pointer" }}
-                      onClick={() => handleShowModal(record)}
+                      className="card"
+                      onClick={() => setSelectedRecord(record)}
+                      style={{ cursor: "pointer" }}
                     >
                       <img
-                        src={record.cover_image || "placeholder.jpg"}
+                        src={record.cover_image}
                         className="card-img-top"
                         alt={record.title}
-                        style={{ borderRadius: "8px" }}
                       />
                       <div className="card-body">
                         <h5 className="card-title">{record.title}</h5>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </div>
-      ) : (
-        <p>No se encontraron resultados</p>
-      )}
-
-      {/* Modal para mostrar detalles del registro */}
-      {selectedRecord && (
-        <Modal
-          show={showModal}
-          onHide={handleCloseModal}
-          size="sm"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          className="custom-modal"
-        >
-          <Modal.Header closeButton className="bg-dark text-white">
-            <Modal.Title id="contained-modal-title-vcenter">{selectedRecord.title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="bg-dark text-white">
-            <div className="d-flex justify-content-center">
-              <div
-                className="card text-white bg-dark mb-5"
-                style={{ width: "18rem", textAlign: "center" }}
-              >
-                <img
-                  src={selectedRecord.cover_image || "placeholder.jpg"}
-                  className="card-img-top"
-                  alt={selectedRecord.title}
-                  style={{ borderRadius: "8px" }}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{selectedRecord.title}</h5>
-                  <p className="card-text">Artista: {selectedRecord.artist || "Desconocido"}</p>
-                  <p className="card-text">
-                    Género: {selectedRecord.genre ? selectedRecord.genre.join(", ") : "N/A"}
-                  </p>
-                  <p className="card-text">Año: {selectedRecord.year || "Desconocido"}</p>
-                  <p className="card-text">Sello: {selectedRecord.label || "Desconocido"}</p>
-                  <p className="card-text">Estilo: {selectedRecord.style || "N/A"}</p>
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="bg-dark">
-            <Button variant="secondary" onClick={handleCloseModal}>
-              Cerrar
-            </Button>
-            <Button variant="primary" onClick={handleAddRecord}>
-              Agregar Disco
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          ))}
+        </div>
+        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      {selectedRecord && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          onClick={() => setSelectedRecord(null)}
+        >
+          <div
+            className="modal-dialog modal-dialog-centered"
+            role="document"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-content text-dark">
+              <div className="modal-header">
+                <h5 className="modal-title text-dark">{selectedRecord.title}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setSelectedRecord(null)}
+                ></button>
+              </div>
+              <div className="modal-body text-dark">
+                <img
+                  src={selectedRecord.cover_image}
+                  alt={selectedRecord.title}
+                  className="img-fluid mb-3"
+                />
+                <p className="text-dark"><strong>Artista:</strong> {selectedRecord.title || "Desconocido"}</p>
+                <p className="text-dark"><strong>Género:</strong> {selectedRecord.genre ? selectedRecord.genre.join(", ") : "Sin género"}</p>
+                <p className="text-dark"><strong>Sello:</strong> {selectedRecord.label || "Desconocido"}</p>
+                <p className="text-dark"><strong>Año:</strong> {selectedRecord.year || "Desconocido"}</p>
+                <p className="text-dark"><strong>País:</strong> {selectedRecord.country || "Desconocido"}</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setSelectedRecord(null)}
+                >
+                  Cerrar
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleAddRecord}
+                  disabled={addLoading}
+                >
+                  {addLoading ? "Agregando..." : "Agregar Disco"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {message && (
+        <div className="alert alert-info mt-3">
+          {message}
+        </div>
       )}
     </div>
   );
 };
 
 export default Search;
-
-

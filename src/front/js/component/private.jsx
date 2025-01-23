@@ -9,34 +9,33 @@ import { Link } from "react-router-dom";
 import "../../styles/sidebar.css";
 
 export const Private = () => {
-    const { store, actions } = useContext(Context); // Acceso al contexto global
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuthentication = async () => {
             const token = localStorage.getItem("token");
             if (!token) {
-                navigate("/"); // Si no hay token, redirige a la página de inicio
+                navigate("/");
             } else {
-                const isValidUser = await actions.checkUser(); // Verifica al usuario
+                const isValidUser = await actions.checkUser();
                 if (!isValidUser) {
-                    localStorage.removeItem("token"); // Elimina el token si no es válido
-                    navigate("/"); // Redirige a la página de inicio
+                    localStorage.removeItem("token");
+                    navigate("/");
                 }
             }
         };
 
         checkAuthentication();
-    }, [navigate]); // Dependencias del useEffect
+    }, [navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        navigate("/"); // Redirige al inicio tras cerrar sesión
+        navigate("/");
     };
 
     return (
         <div className="d-flex flex-wrap">
-            {/* Menú lateral */}
             <div className="sidebar bg-dark p-3 d-flex flex-column" style={{ width: '250px', position: 'fixed', height: '100vh' }}>
                 <h4 className="text-warning">Menú</h4>
                 <nav className="nav flex-column text-warning">
@@ -53,7 +52,7 @@ export const Private = () => {
                 <h2>Perfil</h2>
                 <h3>del usuario</h3>
                 <Search />
-                
+
                 <p>{store.user?.email || "No disponible"}</p>
                 <button onClick={() => handleLogout()}>Log out</button>
             </div>

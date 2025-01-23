@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Context } from "../store/appContext"; // Usamos el contexto de 'appContext'
+import { Context } from "../store/appContext";
 import "../../styles/worldwide.css";
 
 export const SearchMusic = () => {
-    const { store, actions } = useContext(Context); // Usamos 'store' y 'actions' del contexto
+    const { store, actions } = useContext(Context);
     const [query, setQuery] = useState('');
     const [searchType, setSearchType] = useState('artist');
-    const { loading, error, records } = store; // Accedemos al estado 'store'
+    const { loading, error, records } = store;
 
     const handleInputChange = (e) => {
         setQuery(e.target.value);
@@ -17,12 +17,8 @@ export const SearchMusic = () => {
     };
 
     const handleSearch = () => {
-        actions.fetchDiscogsRecords(searchType, query); // Llamada a la acción directamente
+        actions.fetchDiscogsRecords(searchType, query);
     };
-
-    console.log("====>", store)
-
-    
 
     return (
         <div className="app">
@@ -59,15 +55,12 @@ export const SearchMusic = () => {
                             {records.map((item, index) => (
                                 <li key={index} style={{ borderBottom: '1px solid #ddd', padding: '10px 0' }}>
                                     <div>
-                                        {/* Mostramos la imagen del álbum */}
                                         {item.image_url && <img src={item.image_url} alt={item.title} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />}
                                     </div>
                                     <div>
                                         <p><strong>Título:</strong> {item.title}</p>
                                         <p><strong>Artista:</strong> {item.artist}</p>
-                                        {/* Mostramos el precio si está disponible */}
                                         {item.price && <p><strong>Precio:</strong> {item.price}</p>}
-                                        {/* Botón para agregar la música a la colección */}
                                         <button onClick={() => (item)}>Agregar a mi colección</button>
                                     </div>
                                 </li>

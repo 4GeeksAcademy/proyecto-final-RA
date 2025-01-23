@@ -2,7 +2,6 @@ const getState = ({ getStore, setStore, getActions }) => {
   return {
     store: {
       records: [],
-      onSale: [],
       loading: false,
       error: null,
       user: null,
@@ -11,13 +10,12 @@ const getState = ({ getStore, setStore, getActions }) => {
       isSearching: false,
       isFetchingRandom: false,
       randomFetched: false,
+      onSale: [],
     },
     actions: {
-      // Acción para buscar discos en Discogs
       searchDiscogs: async (query, searchBy) => {
         const store = getStore();
 
-        // Si ya estamos buscando o cargando, no hacer nada
         if (store.loading || store.isSearching) {
           console.log("Ya estamos buscando o cargando. Espera un momento.");
           return;
@@ -33,7 +31,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
         try {
           const resp = await fetch(
-            `https://api.discogs.com/database/search?q=${query}&type=${searchBy}&key=kmEbvrXuklqaKnWubyqy&secret=LWhxEIMhJHQrPQTIqhpOZhzCRJeccZAV`
+            `https://api.discogs.com/database/search?q=${query}&key=kmEbvrXuklqaKnWubyqy&secret=LWhxEIMhJHQrPQTIqhpOZhzCRJeccZAV`
           );
 
           if (!resp.ok) {
@@ -69,7 +67,7 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-      // Acción para obtener resultados aleatorios de Discogs
+
       FetchRandomRecords: async (q = "Drum & Bass") => {
         const store = getStore();
 
@@ -95,6 +93,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           const data = await resp.json();
           console.log("Respuesta de la API (resultados aleatorios):", data);
+
 
           if (data.results && data.results.length > 0) {
             setStore({
@@ -125,7 +124,6 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-      // Función para registrar un nuevo usuario
       register: async (formData) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "/api/register", {
@@ -146,7 +144,6 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-      // Función para login de un usuario
       login: async (formData) => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
@@ -167,7 +164,6 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-      // Verificar el usuario logueado
       checkUser: async () => {
         try {
           const resp = await fetch(process.env.BACKEND_URL + "/api/protected", {
@@ -186,10 +182,10 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-      // Función para editar un usuario
+
       editUser: async (userId, formData) => {
         try {
-          const resp = await fetch(`https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/edit_user/${userId}`, {
+          const resp = await fetch(`${process.env.BACKEND_URL}/api/edit_user/${userId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -206,38 +202,41 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-      // Función para añadir un registro al backend
-      addRecordToDatabase: async (recordData) => {
+      addRecord: async (record) => {
         const token = localStorage.getItem("token");
+        
         if (!token) {
-          alert("No se encontró un token. Por favor, inicie sesión.");
-          return;
+          throw new Error("No se encontró el token. Asegúrate de haber iniciado sesión.");
         }
-
-        const button = document.getElementById("addRecordButton");
-        button.disabled = true;
-
+      
         try {
-          const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
+          const response = await fetch(process.env.BACKEND_URL + '/api/add_record', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(recordData),
+            body: JSON.stringify({
+              title: record.title,
+              label: record.label,
+              year: record.year,
+              genre: record.genre,
+              style: record.style,
+              cover_image: record.cover_image,
+            }),
           });
-          const result = await response.json();
-          if (response.ok) {
-            console.log("Disco agregado correctamente:", result);
-          } else {
-            console.error("Error al agregar disco:", result.error);
-            alert("Error al agregar disco: " + result.error);
+      
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Error al agregar el disco");
           }
+      
+          const data = await response.json();
+          return data;
+      
         } catch (error) {
-          console.error("Error de conexión:", error);
-          alert("Hubo un error al intentar conectar con el servidor.");
-        } finally {
-          button.disabled = false;
+          console.error("Error al agregar el disco:", error);
+          throw error;
         }
       },
 
@@ -246,6 +245,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           const response = await fetch(process.env.BACKEND_URL + "/api/records");
           if (!response.ok) throw new Error("Error al obtener los registros");
           const data = await response.json();
+
           setStore({ records: data });
         } catch (error) {
           console.error("Error en getRecords:", error);
@@ -268,82 +268,85 @@ const getState = ({ getStore, setStore, getActions }) => {
         setStore(updatedStore);
       },
 
-      setError: (errorMessage) => {
-        setStore({ error: errorMessage });
-      },
 
-      addToSellList: async (recordId) => {
-        const store = getStore();
-        const userId = store.user?.id;  // Obtener el user_id desde el store
-    
-        // Verificar si el usuario está autenticado
-        if (!userId) {
-            setStore({ error: "Usuario no autenticado" });
-            console.error("Usuario no autenticado");
-            return;
-        }
-    
-        // Configuración de la solicitud
-        const token = localStorage.getItem("token");
-        const button = document.getElementById(`addRecordButton-${recordId}`); // Usar el ID dinámico
-        if (button) {
-            button.disabled = true;  // Deshabilitar el botón mientras se realiza la solicitud
-        }
-    
-        try {
-            const response = await fetch(`${process.env.BACKEND_URL}/api/sell_list`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Enviar el token JWT en la cabecera
-                },
-                body: JSON.stringify({
-                    record_id: recordId,  // Enviar el record_id y el user_id
-                }),
-            });
-    
-            const data = await response.json();
-    
-            if (response.ok) {
-                console.log("Disco agregado correctamente a la lista de ventas:", data);
-                setStore({
-                  onSale: [...store.onSale, { ...data.sell_list_entry, cover_image: data.sell_list_entry.cover_image }],
-                });
-            } else {
-                setStore({ error: data.error || "Error al agregar el disco a la lista de ventas" });
-                console.error("Error al agregar disco a la lista de ventas:", data.error);
-            }
-        } catch (error) {
-            setStore({ error: "Hubo un error al intentar agregar el disco." });
-            console.error("Error al realizar la solicitud:", error);
-        } finally {
-            if (button) {
-                button.disabled = false;  // Habilitar el botón nuevamente
-            }
-        }
-    },
-
-      // Otros métodos de tu estado (por ejemplo, login, register, etc.)
-
-      // Función para obtener los registros de la lista de ventas
       getSellList: async () => {
-        const store = getStore(); // Obtener el estado actual del store
         try {
-          const response = await fetch(`${process.env.BACKEND_URL}/api/sell_list`);
-          const data = await response.json();
-          
+          const response = await fetch(process.env.BACKEND_URL + '/api/sell_lista', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
           if (response.ok) {
-            setStore({ onSale: data });  // Actualizar la lista de discos en el estado
+            const data = await response.json();
+            getActions().setSellList(data.sellList);
           } else {
-            setStore({ error: "Error al obtener la lista de ventas." });
+            throw new Error('Error al cargar la lista de discos');
           }
         } catch (error) {
-          console.error("Error al obtener la lista de ventas:", error);
-          setStore({ error: "Hubo un error al obtener la lista de ventas." });
+          setStore({ error: error.message });
         }
       },
+
+      addToSellList: async (userId, recordId) => {
+        try {
+
+          if (!userId || !recordId) {
+            throw new Error('userId y record.id son requeridos');
+          }
+
+          const response = await fetch(process.env.BACKEND_URL + '/api/sell_list', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ user_id: userId, record_id: recordId }),
+          });
+
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Disco agregado a la lista de ventas", data);
+
+          } else {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al agregar el disco');
+          }
+        } catch (err) {
+          console.error("Error al agregar el disco:", err);
+          setStore({ error: err.message });
+        }
+      },
+
+      setErrorMessage: (message) => {
+        return {
+          type: "SET_ERROR_MESSAGE",
+          payload: message,
+        };
+      },
+
+      setSellList: (onSale) => {
+        setStore({ onSale });
+      },
+
+
+
+
+
+
+
     },
   };
 };
 
 export default getState;
+
+
+
+
+
+
+
+
+
+

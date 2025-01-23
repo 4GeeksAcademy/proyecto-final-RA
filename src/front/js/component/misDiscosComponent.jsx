@@ -1,27 +1,73 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 
 const MisDiscosComponent = () => {
     const { store, actions } = useContext(Context);
+    const [successMessage, setSuccessMessage] = useState("");
 
-    // Cargar los datos al montar el componente
+   
     useEffect(() => {
         if (!store.records || store.records.length === 0) {
             actions.getRecords();
         }
     }, [store.records, actions]);
 
+   
+    const userId = store.user?.id || localStorage.getItem("userId");
+
+   
+    if (!userId) {
+        return (
+            <div className="container py-4">
+                <p className="text-warning text-center">
+                    No se ha encontrado el ID del usuario. Por favor, inicie sesión.
+                </p>
+            </div>
+        );
+    }
+
+    
+    const handleAddToSellList = async (recordId) => {
+        try {
+            await actions.addToSellList(userId, recordId);
+            setSuccessMessage("¡Disco agregado correctamente a la lista de ventas!");
+
+            setTimeout(() => {
+                setSuccessMessage("");
+            }, 3000);
+        } catch (error) {
+            console.error("Error al agregar el disco a la lista de ventas:", error);
+        }
+    };
+
     return (
         <div className="container py-4">
             <h1 className="text-warning text-center mb-4">Mi Lista de Discos</h1>
 
-            {/* Mostrar error si existe */}
+            {successMessage && (
+                <div
+                    className="alert alert-success text-center position-fixed top-50 start-50 translate-middle z-index-1050"
+                    style={{
+                        maxWidth: '800px',
+                        width: '100%',
+                        zIndex: 1050,
+                        marginTop: '-50px',
+                    }}
+                >
+                    {successMessage}
+                </div>
+            )}
+
+        
             {store.error && <p className="text-danger text-center">{store.error}</p>}
 
-            <div className="row g-3">
-                {/* Mostrar los registros si están disponibles */}
-                {store.records && store.records.length > 0 ? (
-                    store.records.map((record) => (
+            {store.records === null ? (
+                <p className="text-center">Cargando registros...</p>
+            ) : store.records.length === 0 ? (
+                <p className="text-center">No hay registros disponibles.</p>
+            ) : (
+                <div className="row g-3">
+                    {store.records.map((record) => (
                         <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={record.id}>
                             <div className="card h-100">
                                 {record.cover_image && (
@@ -32,7 +78,9 @@ const MisDiscosComponent = () => {
                                     />
                                 )}
                                 <div className="card-body">
-                                    <h5 className="card-title text-truncate">{record.title || "Título desconocido"}</h5>
+                                    <h5 className="card-title text-truncate">
+                                        {record.title || "Título desconocido"}
+                                    </h5>
                                     <p className="card-text mb-1">
                                         <strong>Sello:</strong> {record.label || "Sin información"}
                                     </p>
@@ -42,24 +90,20 @@ const MisDiscosComponent = () => {
                                     <p className="card-text">
                                         <strong>Género:</strong> {record.genre || "Sin género"}
                                     </p>
-                                    {/* Botones para agregar a listas */}
                                     <div className="d-flex justify-content-between mt-3">
                                         <button
-                                            id={`addRecordButton-${record.id}`} // Hacer el ID único
-                                            onClick={() => actions.addToSellList(record.id)}
+                                            id={`addRecordButton-${record.id}`}
+                                            onClick={() => handleAddToSellList(record.id)}
                                         >
                                             Agregar a la lista de ventas
                                         </button>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    ))
-                ) : (
-                    <p className="text-center">No hay registros disponibles.</p>
-                )}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

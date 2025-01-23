@@ -9,18 +9,12 @@ from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_login import current_user
 
-
-
 api = Blueprint('api', __name__)
 
 CORS(api)
 
-
-
 from requests_oauthlib import OAuth1
 
-
-# Claves y URL de la API de Discogs
 DISCOGS_CONSUMER_KEY = 'kmEbvrXuklqaKnWubyqy'
 DISCOGS_CONSUMER_SECRET = 'LWhxEIMhJHQrPQTIqhpOZhzCRJeccZAV'
 ACCESS_TOKEN = 'ALJYHaInXueBuAgvKlnOnLojhaUPxgdsTJqzeOJv'
@@ -30,7 +24,7 @@ BASE_URL = 'https://api.discogs.com/'
 @api.route('/search', methods=['GET'])
 def search_discogs():
     query = request.args.get('q')
-    search_type = request.args.get('type', 'release')  # 'release', 'artist', 'label', 'genre'
+    search_type = request.args.get('type', 'release')
     
     oauth = OAuth1(
         DISCOGS_CONSUMER_KEY,
@@ -40,15 +34,13 @@ def search_discogs():
     )
     
     url = f"{BASE_URL}/database/search"
-    
-    # Ajustamos los parámetros de la búsqueda según el tipo
-    params = {'q': query, 'type': search_type}  # Cambiamos 'release' por search_type
+    params = {'q': query, 'type': search_type} 
     if search_type == 'artist':
-        params['artist'] = query  # Si es búsqueda por artista
+        params['artist'] = query 
     elif search_type == 'label':
-        params['label'] = query  # Si es búsqueda por sello
+        params['label'] = query 
     elif search_type == 'genre':
-        params['genre'] = query  # Si es búsqueda por género
+        params['genre'] = query
 
     try:
         response = requests.get(url, auth=oauth, params=params)
@@ -59,26 +51,22 @@ def search_discogs():
 
 # -------------------------------------------------------------------------------------------------------
 
-
-# Ruta para agregar un disco a la tabla records
 @api.route('/add_record', methods=['POST'])
-@jwt_required()  # Protege la ruta con JWT
+@jwt_required()
 def add_record():
     try:
-        # Obtener los datos del disco desde la solicitud JSON
         data = request.get_json()
 
-        # Validar que los datos esenciales estén presentes
+     
         required_fields = ['title', 'label', 'year', 'genre', 'style', 'cover_image']
         for field in required_fields:
             if not data.get(field):
                 return jsonify({"error": f"Falta el campo: {field}"}), 400
 
-        # Obtener el ID del usuario autenticado a través del JWT
-        user_id = get_jwt_identity()  # Obtén el ID del usuario autenticado a través del token
+      
+        user_id = get_jwt_identity()
 
-
-        # Crear una nueva instancia del modelo Record con los datos proporcionados
+      
         new_record = Record(
             title=data.get('title'),
             label=data.get('label'),
@@ -86,31 +74,22 @@ def add_record():
             genre=data.get('genre'),
             style=data.get('style'),
             cover_image=data.get('cover_image'),
-            owner_id=user_id  # Asocia el ID del usuario autenticado
+            owner_id=user_id 
         )
 
-        # Agregar el nuevo disco a la base de datos
+       
         db.session.add(new_record)
         db.session.commit()
 
-        # Devolver la información del disco recién creado
         return jsonify({
             "message": "Disco agregado exitosamente",
-            "record": {
-                "id": new_record.id,
-                "title": new_record.title,
-                "label": new_record.label,
-                "year": new_record.year,
-                "genre": new_record.genre,
-                "style": new_record.style,
-                "cover_image": new_record.cover_image,
-                "owner_id": new_record.owner_id
-            }
+            "record": new_record.serialize()
         }), 201
 
     except Exception as e:
-        db.session.rollback()  # Asegúrate de hacer rollback si ocurre un error
+        db.session.rollback()
         return jsonify({"error": f"Error al agregar disco: {str(e)}"}), 500
+
 
 
 
@@ -214,24 +193,19 @@ def protected():
 @api.route('/edit_user/<int:user_id>', methods=['PUT'])
 def edit_user(user_id):
     try:
-        # Obtener los datos enviados en el cuerpo de la solicitud
         data = request.get_json()
 
-        # Validar que los campos necesarios estén presentes
         if not data:
             return jsonify({"msg": "No se han proporcionado datos para actualizar"}), 400
 
-        # Buscar el usuario en la base de datos
         user = User.query.get(user_id)
         if not user:
             return jsonify({"msg": "Usuario no encontrado"}), 404
 
-        # Actualizar los datos del usuario según los valores proporcionados
         if "name" in data:
             user.name = data["name"]
 
         if "email" in data:
-            # Verificar si el nuevo correo ya existe en la base de datos
             existing_user = User.query.filter_by(email=data["email"]).first()
             if existing_user and existing_user.id != user_id:
                 return jsonify({"msg": "El correo electrónico ya está en uso"}), 400
@@ -241,10 +215,9 @@ def edit_user(user_id):
             user.is_active = data["is_active"]
 
         if "password" in data:
-            # Actualizar la contraseña sin encriptar
             user.password = data["password"]
 
-        # Guardar los cambios en la base de datos
+    
         db.session.commit()
 
         return jsonify({"msg": "Usuario actualizado con éxito"}), 200
@@ -258,59 +231,60 @@ def edit_user(user_id):
 @api.route('/records', methods=['GET'])
 def get_records():
     try:
-        records = Record.query.all()  # Obtener todos los registros de la tabla
+        records = Record.query.all()
         serialized_records = [record.serialize() for record in records]  # Serializar los datos
-        return jsonify(serialized_records), 200  # Devolver la lista de registros
+        return jsonify(serialized_records), 200
     except Exception as e:
         return jsonify({"error": "Error al obtener los registros", "message": str(e)}), 500
 
 
 @api.route('/sell_list', methods=['POST'])
-@jwt_required()  # Protege la ruta con JWT
 def add_to_sell_list():
     try:
-        # Obtener los datos enviados en el cuerpo de la solicitud
         data = request.get_json()
-
-        # Validar que los campos necesarios estén presentes
+        user_id = data.get('user_id')
         record_id = data.get('record_id')
-        user_id = get_jwt_identity()  # Obtener el ID del usuario autenticado desde el token JWT
-
-        if not record_id:
-            return jsonify({"error": "El campo 'record_id' es obligatorio"}), 400
-
-        # Verificar si el disco existe en la tabla records
+        
+        if not user_id or not record_id:
+            return jsonify({'error': 'user_id y record_id son requeridos'}), 400
+        
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': 'El usuario no existe'}), 404
+        
         record = Record.query.get(record_id)
         if not record:
-            return jsonify({"error": "El disco no existe"}), 404
+            return jsonify({'error': 'El disco no existe'}), 404
+        
 
-        # Verificar si ya está en la lista de ventas para el usuario
-        existing_entry = SellList.query.filter_by(user_id=user_id, record_id=record_id).first()
-        if existing_entry:
-            return jsonify({"error": "El disco ya está en la lista de ventas"}), 400
+        new_sell_list_item = SellList(user_id=user_id, record_id=record_id)
+        
 
-        # Crear una nueva entrada en la tabla sell_list
-        new_sell_entry = SellList(user_id=user_id, record_id=record_id)
-        db.session.add(new_sell_entry)
+        db.session.add(new_sell_list_item)
         db.session.commit()
+        
 
-        return jsonify({
-            "message": "El disco se agregó correctamente a la lista de ventas",
-            "sell_list_entry": new_sell_entry.serialize()
-        }), 201
-
+        return jsonify({'message': 'Disco agregado a la lista de venta', 'id': new_sell_list_item.id}), 201
+        
     except Exception as e:
-        db.session.rollback()  # Hacer rollback si ocurre un error
-        return jsonify({"error": f"Error al agregar el disco a la lista de ventas: {str(e)}"}), 500
+
+        db.session.rollback()
+        return jsonify({'error': f'Error al agregar el disco: {str(e)}'}), 500
 
 
-
-@api.route('/sell_list', methods=['GET'])
+@api.route('/sell_lista', methods=['GET'])
 def get_sell_list():
-    # Obtener todos los discos en venta desde la base de datos
-    sell_list = SellList.query.all()
+    try:
 
-    # Convertir los resultados en un formato JSON
-    records = [record.serialize() for record in sell_list]  # Usar el método 'serialize' para obtener los datos
+        sell_list_discs = SellList.query.all()
+        
 
-    return jsonify(records)
+        sell_list = [disc.serialize() for disc in sell_list_discs]
+        
+        return jsonify({'sellList': sell_list}), 200
+    except Exception as e:
+
+        return jsonify({'error': str(e)}), 500
+
+
+
