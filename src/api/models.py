@@ -67,7 +67,7 @@ class SellList(db.Model):
     __tablename__ = 'sell_list'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
+    record_id = db.Column(db.Integer, db.ForeignKey('records.id',), nullable=False)
 
     __table_args__ = (
         db.UniqueConstraint('user_id', 'record_id', name='unique_sell_list'),  # Evita duplicados

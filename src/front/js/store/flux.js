@@ -183,32 +183,51 @@ const getState = ({ getStore, setStore, getActions }) => {
       },
 
 
-      editUser: async (userId, formData) => {
+      editUser: async (id, updatedData) => {
         try {
-          const resp = await fetch(`${process.env.BACKEND_URL}/api/edit_user/${userId}`, {
-            method: 'PUT',
+          // Verifica que se pase un ID válido
+          if (!id) {
+            console.error("El ID del usuario no se proporcionó.");
+            return { success: false, error: "ID del usuario no proporcionado" };
+          }
+
+          // Construye la URL y realiza la solicitud
+          const response = await fetch(`${process.env.BACKEND_URL}/api/edit_user/${id}`, {
+            method: "PUT",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Si usas autenticación
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(updatedData), // Datos actualizados que se enviarán al backend
           });
-          if (!resp.ok) throw new Error("Error al actualizar el usuario");
-          const data = await resp.json();
-          console.log(data.msg);
-          return true;
+
+          // Manejo de errores en la respuesta
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error al editar usuario:", errorData);
+            return { success: false, error: errorData.msg || "Error desconocido al actualizar el usuario" };
+          }
+
+          // Manejo exitoso
+          const data = await response.json();
+          console.log("Usuario actualizado con éxito:", data);
+
+          return { success: true, data }; // Devuelve los datos de éxito
+
         } catch (error) {
-          console.error("Error al editar el usuario:", error);
-          return false;
+          // Manejo de errores de conexión o problemas generales
+          console.error("Error al conectar con el backend:", error);
+          return { success: false, error: "Error de conexión con el servidor" };
         }
       },
 
       addRecord: async (record) => {
         const token = localStorage.getItem("token");
-        
+
         if (!token) {
           throw new Error("No se encontró el token. Asegúrate de haber iniciado sesión.");
         }
-      
+
         try {
           const response = await fetch(process.env.BACKEND_URL + '/api/add_record', {
             method: 'POST',
@@ -225,15 +244,15 @@ const getState = ({ getStore, setStore, getActions }) => {
               cover_image: record.cover_image,
             }),
           });
-      
+
           if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.error || "Error al agregar el disco");
           }
-      
+
           const data = await response.json();
           return data;
-      
+
         } catch (error) {
           console.error("Error al agregar el disco:", error);
           throw error;
@@ -255,18 +274,89 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       getUserData: async (userId) => {
         try {
-          const response = await fetch(`${process.env.BACKEND_URL}/users/${userId}`);
-          if (!response.ok) throw new Error("Error al cargar los datos del usuario.");
+          console.log("Fetching user data for ID:", userId);
+          console.log("Fetching user data from URL:", `${process.env.BACKEND_URL}api/users/${userId}`);
+
+          const response = await fetch(`${process.env.BACKEND_URL}api/users/${userId}`);
+          if (!response.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+          }
           const data = await response.json();
           setStore({ user: data });
         } catch (err) {
-          console.error("Error al obtener los datos del usuario:", err);
+          console.error("Error al obtener los datos del usuario:", err.message);
         }
       },
 
       setStore: (updatedStore) => {
         setStore(updatedStore);
       },
+
+      deleteRecord: async (userId, recordId) => {
+        try {
+          const response = await fetch(
+            `${process.env.BACKEND_URL}api/records/${recordId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ user_id: userId }),
+            }
+          );
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Error al eliminar el disco");
+          }
+
+          const data = await response.json();
+
+          // Actualizar los registros en el store
+          const updatedRecords = getStore().records.filter(record => record.id !== recordId);
+          setStore({ records: updatedRecords });
+
+          return { success: true, msg: data.msg };
+        } catch (error) {
+          console.error("Error al eliminar el disco:", error.message);
+          return { success: false, error: error.message };
+        }
+      },
+
+
+      deleteSellListRecord: async (userId, recordId) => {
+        try {
+          const response = await fetch(
+            `${process.env.BACKEND_URL}api/sell_lista/${recordId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ user_id: userId }),
+            }
+          );
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Error al eliminar el disco");
+          }
+
+          const data = await response.json();
+
+          // Actualizar los registros en el store
+          const updatedRecords = getStore().onSale.filter(record => record.id !== recordId);
+          setStore({ onSale: updatedRecords });
+
+          return { success: true, msg: data.msg };
+        } catch (error) {
+          console.error("Error al eliminar el disco:", error.message);
+          return { success: false, error: error.message };
+        }
+      },
+
+
+
 
 
       getSellList: async () => {
@@ -328,13 +418,6 @@ const getState = ({ getStore, setStore, getActions }) => {
       setSellList: (onSale) => {
         setStore({ onSale });
       },
-
-
-
-
-
-
-
     },
   };
 };
