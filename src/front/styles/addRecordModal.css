@@ -1,105 +1,91 @@
-/* Estilos generales para el modal */
-.record-list-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #333; /* Fondo oscuro para los elementos de la lista */
-    color: white;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+/* Contenedor principal del carrusel */
+.random-records-carousel {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  color: white;
+}
+
+/* Título del carrusel */
+.random-records-carousel h2 {
+  font-size: 36px;
+  text-align: center;
+  color: red;
+  margin-bottom: 30px;
+}
+
+/* Contenedor del carrusel */
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Contenedor interno para las tarjetas */
+.carousel-inner {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+}
+
+/* Flechas de navegación */
+.carousel-control {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 2;
+  padding: 0 20px;
+  user-select: none;
+}
+
+.carousel-control:focus {
+  outline: none;
+}
+
+.carousel-control.prev {
+  position: absolute;
+  left: 0;
+}
+
+.carousel-control.next {
+  position: absolute;
+  right: 0;
+}
+
+/* Tarjetas */
+.card {
+  background-color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Media queries para dispositivos pequeños */
+@media (max-width: 768px) {
+  .random-records-carousel h2 {
+    font-size: 28px;
   }
-  
-  .record-list-item:hover {
-    background-color: #555; /* Cambio de color al pasar el ratón */
+
+  .card {
+    width: 80%;
+    margin: 10px auto;
   }
-  
-  .record-list-item img {
-    width: 50px;
-    height: auto;
-    margin-right: 15px;
-    border-radius: 5px;
-  }
-  
-  /* Estilos para el Modal */
-  .modal-content {
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido para el modal */
-    color: white;
-    border-radius: 10px;
-    padding: 20px;
-  }
-  
-  .modal-header {
-    border-bottom: 1px solid #444;
-  }
-  
-  .modal-header .close {
-    color: white;
-    font-size: 1.5rem;
-  }
-  
-  .modal-header .modal-title {
-    color: red; /* Título en rojo, consistente con otros componentes */
-  }
-  
-  .modal-body {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  
-  .modal-footer {
-    background-color: #444;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .modal-footer .btn {
-    font-weight: bold;
-    padding: 10px 20px;
-  }
-  
-  .modal-footer .btn-secondary {
-    background-color: #555;
-    color: white;
-    border: none;
-    transition: background-color 0.3s ease;
-  }
-  
-  .modal-footer .btn-secondary:hover {
-    background-color: #666;
-  }
-  
-  .modal-footer .btn-primary {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    transition: background-color 0.3s ease;
-  }
-  
-  .modal-footer .btn-primary:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Estilo para el botón deshabilitado */
-  .modal-footer .btn:disabled {
-    background-color: #777;
-    cursor: not-allowed;
-  }
-  
-  @media (max-width: 768px) {
-    .modal-body {
-      padding: 10px;
-    }
-  
-    .record-list-item {
-      font-size: 14px;
-      padding: 8px;
-    }
-  
-    .modal-footer .btn {
-      font-size: 14px;
-      padding: 8px 16px;
-    }
-  }
+}
+
+
   

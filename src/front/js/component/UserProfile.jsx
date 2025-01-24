@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../store/appContext"; // Importar el contexto global
+import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
-import "../../styles/userProfile.css"
 
-const UserProfile = ({ userId }) => {
-  const { store, actions } = useContext(Context); // Obtener el store y las acciones desde el contexto
+export const UserProfile = ({ userId }) => {
+  const { store, actions } = useContext(Context);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,7 +11,7 @@ const UserProfile = ({ userId }) => {
 
   useEffect(() => {
     if (userId) {
-      actions.getUserData(userId); // Llamar a la acción para obtener los datos del usuario
+      actions.getUserData(userId);
     }
   }, [userId, actions]);
 
@@ -24,7 +23,7 @@ const UserProfile = ({ userId }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    actions.setStore({ [name]: value }); // Asegúrate de pasar el store correctamente
+    actions.setStore({ [name]: value });
   };
 
   const handleSave = async () => {
@@ -49,7 +48,7 @@ const UserProfile = ({ userId }) => {
       if (!response.ok) throw new Error("Error al guardar los cambios.");
 
       const data = await response.json();
-      setSuccessMessage(data.msg); // Mostrar mensaje de éxito
+      setSuccessMessage(data.msg);
       setIsEditing(false);
       alert("Datos guardados correctamente.");
     } catch (err) {
@@ -61,18 +60,17 @@ const UserProfile = ({ userId }) => {
   };
 
   if (loading) return <p>Cargando datos...</p>;
-  if (error) return <p className="error-message">{error}</p>;
+  if (error) return <p className="user-profile-error-message">{error}</p>;
 
   return (
-    <div className="user-profile-container">
-      <Link to={"/private"} className="back-button">
+    <div className="user-profile-component-container">
+      <Link to={"/private"} className="user-profile-back-button">
         <h1>Back</h1>
       </Link>
-      <div className="user-profile-card">
+      <div className="user-profile-component-card">
         <h2>Mis Datos de Usuario</h2>
 
-        {successMessage && <p className="success-message">{successMessage}</p>}{" "}
-        {/* Mostrar mensaje de éxito */}
+        {successMessage && <p className="user-profile-success-message">{successMessage}</p>}
 
         {isEditing ? (
           <div>

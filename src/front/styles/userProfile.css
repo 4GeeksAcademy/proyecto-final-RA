@@ -1,82 +1,81 @@
 /* Contenedor principal de la página de perfil de usuario */
-.user-profile-container {
-    background-color: #121212; /* Fondo oscuro */
-    color: white;
-    min-height: 100vh;
-    padding: 40px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .user-profile-card {
-    background-color: #1c1c1c; /* Fondo de la tarjeta */
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #333;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  h1, h2 {
-    color: #ff4500; /* Título en naranja brillante */
-    text-align: center;
-  }
-  
-  button {
-    background-color: #ff4500;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #ff7f50;
-  }
-  
-  label {
-    color: #ccc; /* Texto de las etiquetas en gris claro */
-    font-weight: bold;
-  }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    background-color: #333; /* Fondo oscuro para inputs */
-    color: white;
-    border: 1px solid #444;
-    border-radius: 5px;
-  }
-  
-  input:focus {
-    border-color: #ff4500;
-    outline: none;
-  }
-  
-  .success-message {
-    color: green;
-    font-size: 1rem;
-    text-align: center;
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 1rem;
-    text-align: center;
-  }
-  
-  .text-center {
-    text-align: center;
-  }
-  
-  .back-button {
-    color: #ff4500;
-    text-decoration: none;
-    font-size: 1.1rem;
-  }
-  
+.user-profile-component-container {
+  background-color: #121212; /* Fondo oscuro */
+  color: white;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-profile-component-card {
+  background-color: #1c1c1c; /* Fondo de la tarjeta */
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h1, h2 {
+  color: #ff4500; /* Título en naranja brillante */
+  text-align: center;
+}
+
+button {
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff7f50;
+}
+
+label {
+  color: #ccc; /* Texto de las etiquetas en gris claro */
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  background-color: #333; /* Fondo oscuro para inputs */
+  color: white;
+  border: 1px solid #444;
+  border-radius: 5px;
+}
+
+input:focus {
+  border-color: #ff4500;
+  outline: none;
+}
+
+.user-profile-success-message {
+  color: green;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.user-profile-error-message {
+  color: red;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.user-profile-back-button {
+  color: #ff4500;
+  text-decoration: none;
+  font-size: 1.1rem;
+}

@@ -1,7 +1,6 @@
-// src/js/component/AddRecordModal.jsx
 import React, { useState } from 'react';
 import { Modal, Button, ListGroup } from 'react-bootstrap';
-import "../../styles/addRecordModal.css";
+import "../../styles/addRecordModal.css"; // Asegúrate de tener este archivo con las clases adecuadas
 
 const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -23,7 +22,7 @@ const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // O token que uses
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify(recordToAdd),
       });
@@ -31,8 +30,8 @@ const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
       if (response.ok) {
         const data = await response.json();
         alert('Disco agregado exitosamente!');
-        onAddRecord(data.record); // Callback para actualizar la lista de discos
-        onHide(); // Cerrar el modal
+        onAddRecord(data.record);
+        onHide(); // Close the modal
       } else {
         const errorData = await response.json();
         alert('Error al agregar el disco: ' + errorData.error);
@@ -44,40 +43,38 @@ const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>Selecciona un Disco para Agregar</Modal.Title>
+      <Modal.Header closeButton className="modal-header">
+        <Modal.Title className="modal-title">Selecciona un Disco para Agregar</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        {/* Mostrar los discos obtenidos de la API */}
+      <Modal.Body className="modal-body">
         <ListGroup>
           {apiData &&
             apiData.map((record) => (
               <ListGroup.Item
                 key={record.id}
                 onClick={() => setSelectedRecord(record)}
-                style={{
-                  cursor: 'pointer',
-                  backgroundColor: selectedRecord?.id === record.id
-                    ? '#f0f0f0'
-                    : '',
-                }}
-                className="record-list-item"
+                className={`record-list-item ${selectedRecord?.id === record.id ? 'selected' : ''}`}
               >
                 <img
                   src={record.cover_image}
                   alt={record.title}
-                  style={{ width: '50px', marginRight: '10px' }}
+                  className="record-list-item__image"
                 />
                 {record.title} - {record.year}
               </ListGroup.Item>
             ))}
         </ListGroup>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
+      <Modal.Footer className="modal-footer">
+        <Button variant="secondary" onClick={onHide} className="btn-secondary">
           Cerrar
         </Button>
-        <Button variant="primary" onClick={handleAddRecord} disabled={!selectedRecord}>
+        <Button
+          variant="primary"
+          onClick={handleAddRecord}
+          disabled={!selectedRecord}
+          className="btn-primary"
+        >
           Agregar Disco
         </Button>
       </Modal.Footer>
@@ -86,4 +83,5 @@ const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
 };
 
 export default AddRecordModal;
+
 

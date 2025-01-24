@@ -1,87 +1,40 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Carousel, Modal, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/searchInvitados.css";
-
 
 const SearchInvitados = () => {
   const { store, actions } = useContext(Context);
-  const [query, setQuery] = useState(""); // Término de búsqueda
-  const [searchBy, setSearchBy] = useState("artist"); // Tipo de búsqueda
-  const [showModal, setShowModal] = useState(false); // Estado del modal
-  const [selectedRecord, setSelectedRecord] = useState(null); // Disco seleccionado
+  const [query, setQuery] = useState("");
+  const [searchBy, setSearchBy] = useState("artist");
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     if (!store.randomFetched) {
-      actions.FetchRandomRecords(); // Llamar FetchRandomRecords una sola vez
+      actions.FetchRandomRecords();
     }
   }, [store.randomFetched, actions]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (query.trim() === "") return; // No realizar búsqueda si el query está vacío
-    actions.searchDiscogs(query, searchBy); // Llamar a la acción de búsqueda
+    if (query.trim() === "") return;
+    actions.searchDiscogs(query, searchBy);
   };
 
-  const handleShowModal = (record) => {
-    setSelectedRecord(record);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedRecord(null);
-  };
-
-  const [isAdding, setIsAdding] = useState(false);
-
-  const handleAddRecord = async () => {
-    if (isAdding) return;
-    setIsAdding(true);
-
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title: selectedRecord.title,
-          year: selectedRecord.year,
-          genre: selectedRecord.genre,
-          label: selectedRecord.label,
-          style: selectedRecord.style,
-          cover_image: selectedRecord.cover_image,
-        }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Disco agregado:', result);
-        actions.addRecordToDatabase(selectedRecord);
-        handleCloseModal();
-      } else {
-        const errorResult = await response.json();
-        console.error('Error al agregar disco:', errorResult.error);
-      }
-    } catch (error) {
-      console.error('Error al hacer la solicitud:', error);
-    } finally {
-      setIsAdding(false);
-    }
-
-    setShowModal(false); // Cierra el modal
-    setSelectedRecord(null); // Limpia el disco seleccionado
-  };
-
-  // Dividir los resultados en bloques de 5
   const chunkedResults = [];
-  for (let i = 0; i < store.searchResults.length; i += 5) {
-    chunkedResults.push(store.searchResults.slice(i, i + 5));
+  const limitedResults = store.searchResults.slice(0, 50);
+  for (let i = 0; i < limitedResults.length; i += 5) {
+    chunkedResults.push(limitedResults.slice(i, i + 5));
   }
+
+  const handlePageChange = (direction) => {
+    if (direction === "next") {
+      setCurrentPage((prevPage) => (prevPage + 1) % chunkedResults.length); // Circular hacia adelante
+    } else if (direction === "prev") {
+      setCurrentPage((prevPage) =>
+        prevPage === 0 ? chunkedResults.length - 1 : prevPage - 1
+      ); // Circular hacia atrás
+    }
+  };
 
   return (
     <div className="container my-4">
@@ -115,78 +68,58 @@ const SearchInvitados = () => {
 
       {chunkedResults.length > 0 && (
         <div className="mt-4">
+          <div className="decorative-bar top-bar"></div>
           <h2 className="text-center mb-4">Resultados</h2>
-          <Carousel>
-            {chunkedResults.map((chunk, index) => (
-              <Carousel.Item key={index}>
-                <div className="d-flex justify-content-center">
-                  {chunk.map((record, idx) => (
-                    <div
-                      key={idx}
-                      className="card bg-dark text-white mx-2"
-                      style={{ width: "18rem", cursor: "pointer" }}
-                      onClick={() => handleShowModal(record)}
-                    >
-                      <img
-                        src={record.cover_image || "placeholder.jpg"}
-                        className="card-img-top"
-                        alt={record.title || "Sin título"}
-                      />
-                      <div className="card-body">
-                        <h5 className="card-title">{record.title || "Sin título"}</h5>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </div>
-      )}
 
-      {selectedRecord && (
-        <Modal show={showModal} onHide={handleCloseModal} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>{selectedRecord.title || "Sin título"}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <img
-              src={selectedRecord.cover_image || "placeholder.jpg"}
-              className="img-fluid rounded mb-3"
-              alt={selectedRecord.title || "Sin título"}
-            />
-            <p>
-              <strong>Artista:</strong> {selectedRecord.artist || "Desconocido"}
-            </p>
-            <p>
-              <strong>Género:</strong>{" "}
-              {selectedRecord.genre ? selectedRecord.genre.join(", ") : "N/A"}
-            </p>
-            <p>
-              <strong>Año:</strong> {selectedRecord.year || "Desconocido"}
-            </p>
-            <p>
-              <strong>Sello:</strong>{" "}
-              {selectedRecord.label ? selectedRecord.label.join(", ") : "N/A"}
-            </p>
-            <p>
-              <strong>Estilo:</strong>{" "}
-              {selectedRecord.style ? selectedRecord.style.join(", ") : "N/A"}
-            </p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
-              Cerrar
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          <div className="carousel-wrapper">
+            <button
+              className="carousel-control prev"
+              onClick={() => handlePageChange("prev")}
+            >
+              &#8249;
+            </button>
+
+            <div className="carousel-inner">
+              <div className="d-flex justify-content-center">
+                {chunkedResults[currentPage].map((record, idx) => (
+                  <div
+                    key={idx}
+                    className="card bg-dark text-white mx-2"
+                    style={{ width: "18rem", cursor: "pointer" }}
+                    onClick={() => handleShowModal(record)}
+                  >
+                    <img
+                      src={record.cover_image || "placeholder.jpg"}
+                      className="card-img-top"
+                      alt={record.title || "Sin título"}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{record.title || "Sin título"}</h5>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              className="carousel-control next"
+              onClick={() => handlePageChange("next")}
+            >
+              &#8250;
+            </button>
+          </div>
+
+          <div className="decorative-bar bottom-bar"></div>
+        </div>
       )}
     </div>
   );
 };
 
-
 export default SearchInvitados;
+
+
+
 
 
 

@@ -36,7 +36,7 @@ class Record(db.Model):
     __tablename__ = 'records'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=True)
-    label = db.Column(db.String(255), nullable=True)
+    label = db.Column(db.String(500), nullable=True)
     year = db.Column(db.String(255), nullable=True)
     genre = db.Column(db.String(255), nullable=True)
     style = db.Column(db.String(255), nullable=True)

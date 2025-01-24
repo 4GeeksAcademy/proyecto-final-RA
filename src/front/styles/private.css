@@ -1,88 +1,89 @@
 /* Estilos generales para la página privada */
 .private-page-container {
-    display: flex;
-    height: 100vh;
-    background-color: #f8f9fa;
-  }
-  
-  /* Estilo del sidebar */
-  .sidebar {
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro y translúcido */
-    color: white;
-    padding: 20px;
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    z-index: 1000;
-  }
-  
-  .sidebar h4 {
-    color: #f8f9fa; /* Título en blanco */
-    margin-bottom: 20px;
-  }
-  
-  /* Enlaces en el sidebar */
-  .sidebar .nav-link {
-    color: white !important; /* Enlaces blancos */
-    margin-bottom: 10px;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-  
-  .sidebar .nav-link:hover {
-    color: #f8f9fa !important; /* Blanco brillante en hover */
-    text-decoration: underline;
-  }
-  
-  /* Estilo del contenido */
-  .content {
-    margin-left: 250px; /* Espacio para el sidebar */
-    padding: 20px;
-    flex: 1;
-    background-color: white;
-    min-height: 100vh;
-  }
-  
-  .content h2,
-  .content h3 {
-    color: #333;
-  }
-  
-  .content button {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .content button:hover {
-    background-color: #555; /* Fondo más claro en hover */
-  }
-  
-  /* Ajustes responsivos */
-  @media (max-width: 768px) {
-    .sidebar {
+  display: flex;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Estilo del sidebar */
+.private-sidebar {
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro y translúcido */
+  color: white;
+  padding: 20px;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  z-index: 1000;
+}
+
+.private-sidebar-title {
+  color: #f8f9fa; /* Título en blanco */
+  margin-bottom: 20px;
+}
+
+/* Enlaces en el sidebar */
+.private-sidebar-nav .private-sidebar-link {
+  color: white !important; /* Enlaces blancos */
+  margin-bottom: 10px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.private-sidebar-nav .private-sidebar-link:hover {
+  color: #f8f9fa !important; /* Blanco brillante en hover */
+  text-decoration: underline;
+}
+
+/* Estilo del contenido */
+.private-content {
+  margin-left: 250px; /* Espacio para el sidebar */
+  padding: 20px;
+  flex: 1;
+  background-color: white;
+  min-height: 100vh;
+}
+
+.private-content-title,
+.private-content-subtitle {
+  color: #333;
+}
+
+.private-content-btn {
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.private-content-btn:hover {
+  background-color: #555; /* Fondo más claro en hover */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .private-sidebar {
       position: static;
       width: 100%;
       height: auto;
       padding: 15px;
-    }
-  
-    .content {
+  }
+
+  .private-content {
       margin-left: 0;
       padding: 15px;
-    }
-  
-    .sidebar .nav-link {
+  }
+
+  .private-sidebar-nav .private-sidebar-link {
       font-size: 14px;
-    }
-  
-    .content button {
+  }
+
+  .private-content-btn {
       width: 100%;
       font-size: 14px;
-    }
   }
+}
+
   

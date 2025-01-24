@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Context } from "../store/appContext"; // Usamos el contexto de 'appContext'
+import { Context } from "../store/appContext";
 import "../../styles/searchMusic.css";
 
-const SearchMusic = () => {
-  const { store, actions } = useContext(Context); // Usamos 'store' y 'actions' del contexto
-  const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState("artist");
-  const { loading, error, records } = store; // Accedemos al estado 'store'
+export const SearchMusic = () => {
+    const { store, actions } = useContext(Context);
+    const [query, setQuery] = useState('');
+    const [searchType, setSearchType] = useState('artist');
+    const { loading, error, records } = store;
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
@@ -16,11 +16,9 @@ const SearchMusic = () => {
     setSearchType(e.target.value);
   };
 
-  const handleSearch = () => {
-    actions.fetchDiscogsRecords(searchType, query); // Llamada a la acción directamente
-  };
-
-  console.log("====>", store);
+    const handleSearch = () => {
+        actions.fetchDiscogsRecords(searchType, query);
+    };
 
   return (
     <div className="app">
@@ -54,37 +52,28 @@ const SearchMusic = () => {
         {loading && <p>Cargando...</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {records.length > 0 && (
-          <ul>
-            {records.map((item, index) => (
-              <li key={index} className="record-item"> {/* Use record-item class */}
                 <div>
-                  {/* Mostramos la imagen del álbum */}
-                  {item.image_url && (
-                    <img
-                      src={item.image_url}
-                      alt={item.title}
-                      style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                    />
-                  )}
+                    {records.length > 0 && (
+                        <ul>
+                            {records.map((item, index) => (
+                                <li key={index} style={{ borderBottom: '1px solid #ddd', padding: '10px 0' }}>
+                                    <div>
+                                        {item.image_url && <img src={item.image_url} alt={item.title} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />}
+                                    </div>
+                                    <div>
+                                        <p><strong>Título:</strong> {item.title}</p>
+                                        <p><strong>Artista:</strong> {item.artist}</p>
+                                        {item.price && <p><strong>Precio:</strong> {item.price}</p>}
+                                        <button onClick={() => (item)}>Agregar a mi colección</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
-                <div>
-                  <p className="record-title"><strong>Título:</strong> {item.title}</p>
-                  <p className="record-artist"><strong>Artista:</strong> {item.artist}</p>
-                  {/* Mostramos el precio si está disponible */}
-                  {item.price && <p className="record-price"><strong>Precio:</strong> {item.price}</p>}
-                  {/* Botón para agregar la música a la colección */}
-                  <button onClick={() => (item)} className="btn btn-secondary">
-                    Agregar a mi colección
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
+            </div>
+        </div>
+    );
 };
 
 export default SearchMusic;

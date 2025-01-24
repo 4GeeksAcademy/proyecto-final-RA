@@ -1,68 +1,69 @@
 /* Contenedor principal para la lista de discos en venta */
-.sell-list-container {
-    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro */
-    color: white;
-    min-height: 100vh;
-    padding: 40px 0;
+.sell-list-component-container {
+  background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro */
+  color: white;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+.sell-list-component-title {
+  color: #ff4500; /* Tono naranja brillante para el título */
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.sell-list-component-error {
+  color: red; /* Rojo para errores */
+  font-size: 1.2rem;
+}
+
+.sell-list-component-empty {
+  color: white; /* Mensaje en blanco si no hay discos */
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.sell-list-component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Diseño de cuadrícula */
+  gap: 20px;
+}
+
+.sell-list-component-card {
+  background-color: #333; /* Fondo oscuro para cada elemento de la lista */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.sell-list-component-card-img-top {
+  object-fit: cover;
+  height: 200px;
+}
+
+.sell-list-component-card-body {
+  padding: 15px;
+}
+
+.sell-list-component-card-title {
+  color: #ff4500; /* Título del disco en naranja */
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.sell-list-component-card-text {
+  color: white; /* Texto en blanco */
+}
+
+.sell-list-component-record-detail {
+  font-size: 0.9rem;
+  color: #ddd; /* Detalles con color gris claro */
+}
+
+@media (max-width: 768px) {
+  .sell-list-component-title {
+    font-size: 1.5rem;
   }
-  
-  .sell-list-title {
-    color: #ff4500; /* Tono naranja brillante para el título */
-    font-size: 2rem;
-    margin-bottom: 30px;
-  }
-  
-  .sell-list-error {
-    color: red; /* Rojo para errores */
-    font-size: 1.2rem;
-  }
-  
-  .sell-list-empty {
-    color: white; /* Mensaje en blanco si no hay discos */
-    font-size: 1.2rem;
-    text-align: center;
-  }
-  
-  .sell-list-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Diseño de cuadrícula */
-    gap: 20px;
-  }
-  
-  .sell-list-item {
-    background-color: #333; /* Fondo oscuro para cada elemento de la lista */
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  }
-  
-  .card-img-top {
-    object-fit: cover;
-    height: 200px;
-  }
-  
-  .card-body {
-    padding: 15px;
-  }
-  
-  .card-title {
-    color: #ff4500; /* Título del disco en naranja */
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-  }
-  
-  .card-text {
-    color: white; /* Texto en blanco */
-  }
-  
-  .sell-list-record-detail {
-    font-size: 0.9rem;
-    color: #ddd; /* Detalles con color gris claro */
-  }
-  
-  @media (max-width: 768px) {
-    .sell-list-title {
-      font-size: 1.5rem;
-    }
-  }
+}
+
   
