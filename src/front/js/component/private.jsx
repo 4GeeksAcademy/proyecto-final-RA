@@ -34,22 +34,24 @@ export const Private = () => {
 
     return (
         <div className="private-page-container d-flex flex-wrap">
-            {/* <div className="private-sidebar bg-dark p-3 d-flex flex-column">
-                <h4 className="private-sidebar-title text-warning">Menú</h4>
-                <nav className="private-sidebar-nav nav flex-column text-warning">
-                    <Link className="private-sidebar-link nav-link text-warning" to="/mi-perfil">Mis datos</Link>
-                    <Link className="private-sidebar-link nav-link text-warning" to="/mis-discos">Colección</Link>
-                    <Link className="private-sidebar-link nav-link text-warning" to="#">Lista de deseos</Link>
-                    <Link className="private-sidebar-link nav-link text-warning" to="/sell-list">Discos en venta</Link>
-                    <Link className="private-sidebar-link nav-link text-warning" to="#">Configuración</Link>
-                    <Link className="private-sidebar-link nav-link text-warning" to="#">Ayuda</Link>
-                    <Link className="private-sidebar-link nav-link text-warning" to="#" onClick={handleLogout}>Cerrar sesión</Link>
+            <div className="private-sidebar bg-dark p-3 d-flex flex-column">
+                <h4 className="private-sidebar-title">Menú</h4>
+                <nav className="private-sidebar-nav nav flex-column">
+                    <Link className="private-sidebar-link nav-link" to="/mi-perfil">Mis datos</Link>
+                    <Link className="private-sidebar-link nav-link" to="/mis-discos">Colección</Link>
+                    <Link className="private-sidebar-link nav-link" to="#">Lista de deseos</Link>
+                    <Link className="private-sidebar-link nav-link" to="/sell-list">Discos en venta</Link>
+                    <Link className="private-sidebar-link nav-link" to="#">Configuración</Link>
+                    <Link className="private-sidebar-link nav-link" to="#">Ayuda</Link>
+                    <Link className="private-sidebar-link nav-link" to="#" onClick={handleLogout}>Cerrar sesión</Link>
                 </nav>
-            </div> */}
-            <div className="private-content" style={{ marginLeft: '250px', padding: '20px', flex: 1 }}>
+            </div>
+            <div className="private-content">
                 <h2 className="private-content-title">Perfil</h2>
                 <h3 className="private-content-subtitle">del usuario</h3>
-                <Search />
+                <div className="search-container">
+                    <Search />
+                </div>
                 <p>{store.user?.email || "No disponible"}</p>
                 <button className="private-content-btn" onClick={handleLogout}>Log out</button>
             </div>

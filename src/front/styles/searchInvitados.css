@@ -1,6 +1,14 @@
-/* Botones de control del carrusel */
+/* Contenedor del carrusel */
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: visible; /* Permitir que las flechas sean visibles */
+}
+
+/* Flechas de navegación */
 .carousel-control {
-  background-color: #ff4500; /* Color de fondo */
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo translúcido */
   color: white;
   border: none;
   font-size: 1.5rem; /* Tamaño del texto */
@@ -21,22 +29,17 @@
 .carousel-control.prev {
   left: 10px; /* Separación del borde izquierdo */
 }
-
 /* Botón derecho */
 .carousel-control.next {
-  right: 10px; /* Separación del borde derecho */
+  right: 10px; /* Misma posición que SearchInvitados */
 }
 
 /* Hover en las flechas */
 .carousel-control:hover {
-  background-color: #e63946; /* Color de fondo al pasar por encima */
+  background-color: rgba(255, 255, 255, 0.8); /* Color de fondo al pasar por encima */
+  color: black;
 }
 
-/* Ajustes para evitar conflictos con otros elementos */
-.carousel-wrapper {
-  position: relative;
-  overflow: visible; /* Permitir que las flechas sean visibles */
-}
 
 
   

@@ -8,16 +8,16 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
-import { Navbar } from "./component/navbar";
-import { Register } from "./component/register.jsx";
-import { Footer } from "./component/footer";
-import { Private } from "./component/private.jsx";
-import { MisDiscos } from "./component/misDiscos.jsx";
+import Navbar from "./component/navbar";
+import Register from "./component/register.jsx";
+import Footer from "./component/footer";
+import Private from "./component/private.jsx";
+import MisDiscos from "./component/misDiscos.jsx";
 // import { SearchMusic } from "./component/searchMusic.jsx";
-import { SearchWorldWide } from "./component/searchWorldWide.jsx";
-import { AboutUs } from "./component/aboutUs.jsx"
+import SearchWorldWide from "./component/searchWorldWide.jsx";
+import AboutUs from "./component/aboutUs.jsx"
 import { MiPerfil } from "./component/miPerfil.jsx"
-import { DiscosEnVenta } from "./component/discosEnVenta.jsx";
+import DiscosEnVenta from "./component/discosEnVenta.jsx";
 
 
 //create your first component

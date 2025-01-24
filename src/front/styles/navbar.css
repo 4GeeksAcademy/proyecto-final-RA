@@ -21,6 +21,7 @@
   padding: 0;
   margin: 0;
   gap: 30px; /* Spacing between links */
+  margin-left: 50px; /* Increased space between "Home" and "Mi perfil" */
 }
 
 /* Individual link styles */
@@ -44,7 +45,6 @@
   font-weight: bold;
   color: red !important;
   text-decoration: none;
-  margin-right: 20px;
 }
 
 /* Login/Register button */
@@ -58,6 +58,7 @@
 @media (max-width: 768px) {
   .navbar-nav {
     gap: 15px; /* Reduce gap between links */
+    margin-left: 20px; /* Reduced spacing on smaller screens */
   }
 
   .navbar-nav .nav-link {
@@ -68,6 +69,9 @@
     font-size: 0.9rem;
   }
 }
+
+
+
 
 
 

@@ -1,61 +1,43 @@
-/* Contenedor principal del carrusel */
-.random-records-carousel {
-  position: relative;
-  padding: 20px;
-  color: white;
-}
-
 /* Contenedor del carrusel */
 .carousel-wrapper {
   display: flex;
   align-items: center;
   position: relative;
+  overflow: visible; /* Permitir que las flechas sean visibles */
 }
 
 /* Flechas de navegación */
 .carousel-control {
-  background: rgba(0, 0, 0, 0.6); /* Fondo translúcido para mejor visibilidad */
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo translúcido */
   color: white;
-  font-size: 2rem;
   border: none;
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
+  font-size: 1.5rem; /* Tamaño del texto */
+  width: 50px; /* Ancho del botón */
+  height: 50px; /* Alto del botón */
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
+  border-radius: 50%; /* Forma circular */
+  position: absolute; /* Posicionamiento absoluto */
+  top: 50%; /* Centrado vertical */
+  transform: translateY(-50%); /* Ajuste para centrar */
+  z-index: 10; /* Asegurarse de que esté por encima del contenido */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
 }
 
+/* Botón izquierdo */
 .carousel-control.prev {
-  left: -60px; /* Posición a la izquierda */
+  left: 10px; /* Separación del borde izquierdo */
 }
-
+/* Botón derecho */
 .carousel-control.next {
-  right: -60px; /* Posición a la derecha */
+  right: 10px; /* Misma posición que SearchInvitados */
 }
 
+/* Hover en las flechas */
 .carousel-control:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.8); /* Color de fondo al pasar por encima */
   color: black;
-}
-
-/* Barras decorativas */
-.decorative-bar {
-  height: 5px; /* Grosor de la barra */
-  background: linear-gradient(90deg, #ff4500, #ff7f50); /* Degradado */
-  margin: 10px 0; /* Espaciado entre las barras y el contenido */
-}
-
-.top-bar {
-  margin-top: 0;
-}
-
-.bottom-bar {
-  margin-bottom: 0;
 }
 
 
