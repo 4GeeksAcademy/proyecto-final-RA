@@ -1,12 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
+import { Modal, Button } from "react-bootstrap"; // Asegúrate de importar Modal y Button
 import "../../styles/searchInvitados.css";
 
 const SearchInvitados = () => {
   const { store, actions } = useContext(Context);
-  const [query, setQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("artist");
-  const [currentPage, setCurrentPage] = useState(0);
+  const [query, setQuery] = useState(""); // Término de búsqueda
+  const [searchBy, setSearchBy] = useState("artist"); // Tipo de búsqueda
+  const [showModal, setShowModal] = useState(false); // Estado del modal
+  const [selectedRecord, setSelectedRecord] = useState(null); // Disco seleccionado
+  const [addLoading, setAddLoading] = useState(false); // Estado del botón "Agregar Disco"
+  const [currentPage, setCurrentPage] = useState(0); // Estado para la página actual
 
   useEffect(() => {
     if (!store.randomFetched) {
@@ -20,8 +24,29 @@ const SearchInvitados = () => {
     actions.searchDiscogs(query, searchBy);
   };
 
+  const handleShowModal = (record) => {
+    setSelectedRecord(record);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedRecord(null);
+  };
+
+  const handleAddRecord = () => {
+    setAddLoading(true);
+    // Simulación de la lógica de agregar un disco
+    setTimeout(() => {
+      setAddLoading(false);
+      alert("¡Regístrate o inicia sesión!");
+      setSelectedRecord(null); // Cierra el modal
+    }, 1000); // Simula un retraso
+  };
+
+  // Dividir los resultados en bloques de 5 para el carrusel
   const chunkedResults = [];
-  const limitedResults = store.searchResults.slice(0, 50);
+  const limitedResults = store.searchResults.slice(0, 50); // Limitar a los primeros 50 resultados
   for (let i = 0; i < limitedResults.length; i += 5) {
     chunkedResults.push(limitedResults.slice(i, i + 5));
   }
@@ -112,19 +137,57 @@ const SearchInvitados = () => {
           <div className="decorative-bar bottom-bar"></div>
         </div>
       )}
+
+      {selectedRecord && (
+        <Modal show={showModal} onHide={handleCloseModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>{selectedRecord.title || "Sin título"}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <img
+              src={selectedRecord.cover_image || "placeholder.jpg"}
+              className="img-fluid rounded mb-3"
+              alt={selectedRecord.title || "Sin título"}
+            />
+            <p>
+              <strong>Artista:</strong> {selectedRecord.artist || "Desconocido"}
+            </p>
+            <p>
+              <strong>Género:</strong>{" "}
+              {selectedRecord.genre ? selectedRecord.genre.join(", ") : "N/A"}
+            </p>
+            <p>
+              <strong>Año:</strong> {selectedRecord.year || "Desconocido"}
+            </p>
+            <p>
+              <strong>Sello:</strong>{" "}
+              {selectedRecord.label ? selectedRecord.label.join(", ") : "N/A"}
+            </p>
+            <p>
+              <strong>Estilo:</strong>{" "}
+              {selectedRecord.style ? selectedRecord.style.join(", ") : "N/A"}
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cerrar
+            </Button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleAddRecord}
+              disabled={addLoading}
+            >
+              {addLoading ? "Agregando..." : "Agregar Disco"}
+            </button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 };
 
 export default SearchInvitados;
-
-
-
-
-
-
-
-
 
 
 
