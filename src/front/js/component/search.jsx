@@ -42,7 +42,7 @@ const Search = () => {
     setAddLoading(true);
 
     try {
-      const response = await fetch(process.env.BACKEND_URL + 'api/add_record', {
+      const response = await fetch(process.env.BACKEND_URL + '/api/add_record', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
