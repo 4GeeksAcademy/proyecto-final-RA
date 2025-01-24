@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Carousel, Modal, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Button } from "react-bootstrap"; // Asegúrate de importar Modal y Button
+import "../../styles/searchInvitados.css";
 
 const SearchInvitados = () => {
   const { store, actions } = useContext(Context);
@@ -10,17 +10,18 @@ const SearchInvitados = () => {
   const [showModal, setShowModal] = useState(false); // Estado del modal
   const [selectedRecord, setSelectedRecord] = useState(null); // Disco seleccionado
   const [addLoading, setAddLoading] = useState(false); // Estado del botón "Agregar Disco"
+  const [currentPage, setCurrentPage] = useState(0); // Estado para la página actual
 
   useEffect(() => {
     if (!store.randomFetched) {
-      actions.FetchRandomRecords(); // Llamar a FetchRandomRecords una sola vez
+      actions.FetchRandomRecords();
     }
   }, [store.randomFetched, actions]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (query.trim() === "") return; // No realizar búsqueda si el query está vacío
-    actions.searchDiscogs(query, searchBy); // Llamar a la acción de búsqueda
+    if (query.trim() === "") return;
+    actions.searchDiscogs(query, searchBy);
   };
 
   const handleShowModal = (record) => {
@@ -38,20 +39,31 @@ const SearchInvitados = () => {
     // Simulación de la lógica de agregar un disco
     setTimeout(() => {
       setAddLoading(false);
-      alert("Registrate o inicia sesion!.");
+      alert("¡Regístrate o inicia sesión!");
       setSelectedRecord(null); // Cierra el modal
     }, 1000); // Simula un retraso
   };
 
   // Dividir los resultados en bloques de 5 para el carrusel
   const chunkedResults = [];
-  for (let i = 0; i < store.searchResults.length; i += 5) {
-    chunkedResults.push(store.searchResults.slice(i, i + 5));
+  const limitedResults = store.searchResults.slice(0, 50); // Limitar a los primeros 50 resultados
+  for (let i = 0; i < limitedResults.length; i += 5) {
+    chunkedResults.push(limitedResults.slice(i, i + 5));
   }
+
+  const handlePageChange = (direction) => {
+    if (direction === "next") {
+      setCurrentPage((prevPage) => (prevPage + 1) % chunkedResults.length); // Circular hacia adelante
+    } else if (direction === "prev") {
+      setCurrentPage((prevPage) =>
+        prevPage === 0 ? chunkedResults.length - 1 : prevPage - 1
+      ); // Circular hacia atrás
+    }
+  };
 
   return (
     <div className="container my-4">
-      <h1 className="text-center mb-4">Buscar en Discogs</h1>
+      <h1 className="text-center mb-4">Buscar en la Plataforma</h1>
 
       <form onSubmit={handleSearch} className="mb-4">
         <div className="d-flex justify-content-center align-items-center">
@@ -81,32 +93,48 @@ const SearchInvitados = () => {
 
       {chunkedResults.length > 0 && (
         <div className="mt-4">
+          <div className="decorative-bar top-bar"></div>
           <h2 className="text-center mb-4">Resultados</h2>
-          <Carousel>
-            {chunkedResults.map((chunk, index) => (
-              <Carousel.Item key={index}>
-                <div className="d-flex justify-content-center">
-                  {chunk.map((record, idx) => (
-                    <div
-                      key={idx}
-                      className="card bg-dark text-white mx-2"
-                      style={{ width: "18rem", cursor: "pointer" }}
-                      onClick={() => handleShowModal(record)}
-                    >
-                      <img
-                        src={record.cover_image || "placeholder.jpg"}
-                        className="card-img-top"
-                        alt={record.title || "Sin título"}
-                      />
-                      <div className="card-body">
-                        <h5 className="card-title">{record.title || "Sin título"}</h5>
-                      </div>
+
+          <div className="carousel-wrapper">
+            <button
+              className="carousel-control prev"
+              onClick={() => handlePageChange("prev")}
+            >
+              &#8249;
+            </button>
+
+            <div className="carousel-inner">
+              <div className="d-flex justify-content-center">
+                {chunkedResults[currentPage].map((record, idx) => (
+                  <div
+                    key={idx}
+                    className="card bg-dark text-white mx-2"
+                    style={{ width: "18rem", cursor: "pointer" }}
+                    onClick={() => handleShowModal(record)}
+                  >
+                    <img
+                      src={record.cover_image || "placeholder.jpg"}
+                      className="card-img-top"
+                      alt={record.title || "Sin título"}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{record.title || "Sin título"}</h5>
                     </div>
-                  ))}
-                </div>
-              </Carousel.Item>
-            ))}
-          </Carousel>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              className="carousel-control next"
+              onClick={() => handlePageChange("next")}
+            >
+              &#8250;
+            </button>
+          </div>
+
+          <div className="decorative-bar bottom-bar"></div>
         </div>
       )}
 
@@ -160,3 +188,8 @@ const SearchInvitados = () => {
 };
 
 export default SearchInvitados;
+
+
+
+
+

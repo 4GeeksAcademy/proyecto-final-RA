@@ -1,117 +1,82 @@
-.navbar-custom {
-  background-color: #343a4029; 
-  padding: 1rem 3rem;
-  position:relative;
+/* Navbar general styles */
+.navbar-container {
+  background-color: rgba(0, 0, 0, 0.7); /* Black translucent background */
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  z-index: 1000;
   width: 100%;
-  z-index: 1050;
-  margin-top: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar-brand h3 {
-  font-size: 20px;
-  color: #f7f7f7;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-}
-
-
-.navbar-brand h3:hover {
-  color: #ffbb33;
-}
-
-
-.nav-link {
-  color: #f7f7f7 !important;
-  font-size: 15px;
-  padding: 3px 2rem;
-  transition: color 0.3s ease, background-color 0.3s ease;
-  border-radius: 25px;
-  font-weight: 500;
-}
-
-
-.nav-link:hover {
-  background-color: rgba(255, 187, 51, 0.2);
-  color: #ffbb33;
-}
-
-
-.btn-login {
-  background-color: #ffbb33;
-  color: #343a40;
-  border-radius: 25px;
-  padding: 0.5rem 2rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border: none;
-}
-
-.btn-login:hover {
-  background-color: #343a40;
-  color: #ffbb33;
-  transform: scale(1.05);
-}
-
-.navbar-toggler {
-  border: none;
-  background-color: #ffbb33;
-}
-
-.navbar-toggler-icon {
-  background-color: #343a40;
-}
-
-@media (max-width: 992px) {
-  .navbar-custom {
-    padding: 1rem 2rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    padding: 0;
-  }
-
-  .navbar-nav .nav-item {
-    padding: 0.5rem 0;
-    width: 100%;
-  }
-
-  .navbar-toggler {
-    background-color: #ffbb33;
-  }
-
-  .navbar-toggler-icon {
-    background-color: #343a40;
-  }
-}
-
-body {
-  margin: 0;
-  width: 100%;
-  padding-top: 0;
-  font-family: 'Arial', sans-serif;
-}
-
-.main-content {
-  background-color: #343a4029; 
+  padding: 10px 20px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  text-align: center;
-  padding: 2rem;
-  margin-top: 0px; 
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow effect */
 }
 
+/* Navigation links container */
+.navbar-nav {
+  display: flex; /* Flexbox to arrange links horizontally */
+  flex-direction: row; /* Ensures the links are in one row */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 30px; /* Spacing between links */
+  margin-left: 50px; /* Increased space between "Home" and "Mi perfil" */
+}
+
+/* Individual link styles */
+.navbar-nav .nav-link {
+  color: white !important;
+  font-weight: 600;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* Hover effect for links */
+.navbar-nav .nav-link:hover {
+  color: #f8f9fa !important;
+}
+
+/* Logo styles */
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: bold;
+  color: red !important;
+  text-decoration: none;
+}
+
+/* Login/Register button */
+.btn-login {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-nav {
+    gap: 15px; /* Reduce gap between links */
+    margin-left: 20px; /* Reduced spacing on smaller screens */
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 1.2rem;
+  }
+
+  .btn-login {
+    font-size: 0.9rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+  

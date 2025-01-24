@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../styles/carousel.css";
+import "../../styles/recordCarousel.css";
 
 const Search = () => {
   const { store, actions } = useContext(Context);
@@ -31,7 +31,6 @@ const Search = () => {
 
   const slides = chunkArray(store.searchResults, 5);
 
-  // Función para agregar el disco
   const handleAddRecord = async () => {
     const token = localStorage.getItem("token");
 
@@ -80,18 +79,18 @@ const Search = () => {
   };
 
   return (
-    <div className="container d-flex flex-column align-items-center my-4">
-      <h1 className="text-center mb-4">Buscar en la Plataforma</h1>
-      <div className="w-50 d-flex flex-column align-items-center">
+    <div className="search-container container d-flex flex-column align-items-center my-4">
+      <h1 className="search-title text-center mb-4">Buscar en la Plataforma</h1>
+      <div className="search-form w-50 d-flex flex-column align-items-center">
         <input
           type="text"
-          className="form-control mb-3"
+          className="search-input form-control mb-3"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Ingresa un término de búsqueda"
         />
         <button
-          className="btn btn-primary"
+          className="search-btn btn btn-primary"
           onClick={handleSearch}
           disabled={loading}
         >
@@ -100,10 +99,10 @@ const Search = () => {
       </div>
 
       {store.error && (
-        <div className="alert alert-danger mt-3">{store.error}</div>
+        <div className="search-error alert alert-danger mt-3">{store.error}</div>
       )}
 
-      <div id="carouselExample" className="carousel slide mt-4" data-bs-ride="carousel">
+      <div id="carouselExample" className="search-carousel carousel slide mt-4" data-bs-ride="carousel">
         <div className="carousel-inner">
           {slides.map((group, index) => (
             <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
@@ -111,17 +110,17 @@ const Search = () => {
                 {group.map((record, idx) => (
                   <div key={idx} className="col-md-2">
                     <div
-                      className="card"
+                      className="search-card card"
                       onClick={() => setSelectedRecord(record)}
                       style={{ cursor: "pointer" }}
                     >
                       <img
                         src={record.cover_image}
-                        className="card-img-top"
+                        className="search-card-img card-img-top"
                         alt={record.title}
                       />
-                      <div className="card-body">
-                        <p className="card-title text-dark">{record.title}</p>
+                      <div className="search-card-body card-body">
+                        <h5 className="search-card-title card-title">{record.title}</h5>
                       </div>
                     </div>
                   </div>
@@ -142,31 +141,31 @@ const Search = () => {
 
       {selectedRecord && (
         <div
-          className="modal fade show d-block"
+          className="search-modal modal fade show d-block"
           tabIndex="-1"
           role="dialog"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
           onClick={() => setSelectedRecord(null)}
         >
           <div
-            className="modal-dialog modal-dialog-centered"
+            className="search-modal-dialog modal-dialog-centered"
             role="document"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-content text-dark">
-              <div className="modal-header">
-                <h5 className="modal-title text-dark">{selectedRecord.title}</h5>
+            <div className="search-modal-content modal-content text-dark">
+              <div className="search-modal-header modal-header">
+                <h5 className="search-modal-title modal-title text-dark">{selectedRecord.title}</h5>
                 <button
                   type="button"
                   className="btn-close"
                   onClick={() => setSelectedRecord(null)}
                 ></button>
               </div>
-              <div className="modal-body text-dark">
+              <div className="search-modal-body modal-body text-dark">
                 <img
                   src={selectedRecord.cover_image}
                   alt={selectedRecord.title}
-                  className="img-fluid mb-3"
+                  className="search-modal-img img-fluid mb-3"
                 />
                 <p className="text-dark">
                   <strong>Artista:</strong> {selectedRecord.title || "Desconocido"}
@@ -192,18 +191,17 @@ const Search = () => {
                   <strong>País:</strong> {selectedRecord.country || "Desconocido"}
                 </p>
               </div>
-
-              <div className="modal-footer">
+              <div className="search-modal-footer modal-footer">
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="search-modal-btn-close btn btn-secondary"
                   onClick={() => setSelectedRecord(null)}
                 >
                   Cerrar
                 </button>
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="search-modal-btn-add btn btn-primary"
                   onClick={handleAddRecord}
                   disabled={addLoading}
                 >
@@ -216,7 +214,7 @@ const Search = () => {
       )}
 
       {message && (
-        <div className="alert alert-info mt-3">
+        <div className="search-message alert alert-info mt-3">
           {message}
         </div>
       )}
@@ -225,3 +223,4 @@ const Search = () => {
 };
 
 export default Search;
+

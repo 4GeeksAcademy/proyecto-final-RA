@@ -1,0 +1,27 @@
+/* Estilo para el contenedor principal */
+.music-search-container {
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro */
+    color: white;
+    min-height: 100vh;
+    padding: 40px 0;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #ff4500; /* Tono naranja para el título */
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+  
+  p {
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+  

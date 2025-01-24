@@ -1,0 +1,122 @@
+/* Contenedor principal de la página privada */
+.private-page-container {
+  display: flex;
+  justify-content: flex-start; /* Mantener alineado a la izquierda */
+  min-height: 100vh;
+  background-color: #121212; /* Fondo oscuro para mantener consistencia */
+  color: white; /* Texto claro */
+  padding-top: 60px; /* Espacio para que no se superponga con el navbar */
+}
+
+/* Sidebar */
+.private-sidebar {
+  width: 250px;
+  background-color: #1c1c1c; /* Fondo oscuro de las barras laterales */
+  border-right: 1px solid #333; /* Línea divisoria */
+  padding: 20px;
+  height: calc(100vh - 60px); /* Ajustar a la altura completa menos el navbar */
+  position: fixed; /* Fijar el sidebar para que se mantenga en su lugar */
+  top: 60px; /* Alineado debajo del navbar */
+  left: 0; /* Asegura que el sidebar esté alineado a la izquierda */
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+.private-sidebar-title {
+  font-size: 2.4rem; /* Texto en el título del sidebar */
+  color: white; /* Color blanco */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Enlaces del sidebar - solo reducimos el tamaño en un 20% */
+.private-sidebar-nav .private-sidebar-link {
+  color: white; /* Texto blanco */
+  font-size: 1.6rem; /* Reducido un 20% de 2rem */
+  font-weight: 500;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.private-sidebar-nav .private-sidebar-link:hover {
+  color: #ff4500; /* Naranja brillante en hover */
+  text-decoration: underline;
+}
+
+/* Contenido principal */
+.private-content {
+  flex: 1;
+  padding: 40px;
+  margin-top: 0; /* Sin margen superior en pantallas pequeñas */
+  background-color: #1c1c1c; /* Fondo oscuro para el contenido */
+  color: #ccc; /* Texto claro */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra interna */
+  width: 100%;
+}
+
+/* Títulos */
+.private-content-title {
+  font-size: 2rem; /* Sin cambios aquí */
+  color: #ff4500; /* Título principal en naranja brillante */
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.private-content-subtitle {
+  font-size: 1.2rem; /* Sin cambios aquí */
+  color: #ccc; /* Subtítulo en gris claro */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Botón */
+.private-content-btn {
+  background-color: #ff4500; /* Naranja brillante */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px; /* Sin cambios aquí */
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto; /* Centrar el botón */
+  transition: all 0.3s ease;
+}
+
+.private-content-btn:hover {
+  background-color: #cc3700; /* Naranja oscuro en hover */
+}
+
+/* Componente de búsqueda alineado a la izquierda */
+.search-container {
+  display: flex;
+  justify-content: flex-start; /* Alineado a la izquierda */
+  margin-top: 20px; /* Separación con el título */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .private-sidebar {
+    width: 100%; /* Sidebar ocupa todo el ancho en pantallas pequeñas */
+    height: auto; /* Ajusta la altura en pantallas pequeñas */
+  }
+
+  .private-content {
+    margin-top: 80px; /* Ajuste para espacio del navbar */
+    padding: 20px;
+  }
+
+  .private-sidebar-nav .private-sidebar-link {
+    font-size: 1.28rem; /* Reducción del 20% en pantallas pequeñas */
+  }
+
+  .private-content-btn {
+    width: 100%;
+    font-size: 11.2px; /* Reducción del 20% en pantallas pequeñas */
+  }
+}
+
+
+
+
+
+  

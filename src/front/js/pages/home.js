@@ -1,42 +1,48 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import "../../styles/index.css";
-import Test from "../component/test.jsx";
+
+// Named imports for components
+import { Test } from "../component/test.jsx";
 import { Register } from "../component/register.jsx";
-import  DiscogsSearch  from "../component/discogsSearch.jsx"
+import DiscogsSearch from "../component/discogsSearch.jsx";
 import SearchInvitados from "../component/SearchInvitados.jsx";
-import RandomRecordsCarousel from "../component/RandomRecordsCarousel.jsx"
+import RandomRecordsCarousel from "../component/RandomRecordsCarousel.jsx";
 
+import "../../styles/home.css";
 
-export const Home = () => {
-	const { store, actions } = useContext(Context);
+const Home = () => {
+  const { store, actions } = useContext(Context);
 
-	return (
-		<div className="container-fluid text-center cuerpo">
-            <h1>Bienvenido a la plataforma</h1>
-            <p>¡Explora, encuentra tus discos favoritos y más!</p>
+  return (
+    <div className="home-layout">
+      <div className="home-layout__sidebar left-sidebar"></div>
+      <div className="home-layout__content-wrapper">
+        <h1 className="home-layout__content-wrapper__welcome-title">
+          ¡Bienvenido a Record Swappers Blog!
+        </h1>
+        <p className="home-layout__content-wrapper__welcome-subtitle">
+          ¡Explora, encuentra tus discos favoritos y más!
+        </p>
 
+        {/* SearchInvitados Component */}
+        <SearchInvitados />
 
-            <SearchInvitados />
+        {/* DiscogsSearch Component */}
+        {/* <DiscogsSearch /> */}
 
-            <RandomRecordsCarousel />
-
-            {/* <DiscogsSearch /> */}
-			            {/* <video
-                className="video-background"
-                autoPlay
-                loop
-                muted
-                playsInline
-            >
-                <source
-                    src="https://cdn.pixabay.com/video/2024/02/23/201735-916310640_large.mp4"
-                    //  src="https://media.istockphoto.com/id/513338642/es/v%C3%ADdeo/espeluznante-paso-asnivel.mp4?s=mp4-640x640-is&k=20&c=gG2bpJ92AZUzMyXblLqWLCX6V0YdhB-6Mryn5jd9X3A="
-                    type="video/mp4"
-                />
-                Your browser does not support the video tag.
-            </video> */}
-			
-		</div>
-	);
+        {/* RandomRecordsCarousel Component */}
+        <RandomRecordsCarousel />
+      </div>
+      <div className="home-layout__sidebar right-sidebar"></div>
+    </div>
+  );
 };
+
+export default Home;
+
+
+
+
+
+
+

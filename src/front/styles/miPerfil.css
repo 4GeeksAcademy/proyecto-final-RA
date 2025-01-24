@@ -1,0 +1,121 @@
+/* Contenedor principal */
+.mi-perfil-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
+  color: white;
+}
+
+/* Sidebar */
+.mi-perfil-sidebar {
+  width: 250px;
+  background-color: #1c1c1c; /* Fondo oscuro */
+  border-right: 1px solid #333; /* Línea divisoria */
+  padding: 20px;
+  height: 100vh;
+  position: sticky;
+  top: 0; /* Fija la barra lateral */
+}
+
+.mi-perfil-sidebar-title {
+  font-size: 1.5rem;
+  color: #ff4500; /* Título en naranja brillante */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.mi-perfil-sidebar-nav .mi-perfil-sidebar-link {
+  color: #adb5bd; /* Texto gris claro */
+  font-weight: 500;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.mi-perfil-sidebar-nav .mi-perfil-sidebar-link:hover {
+  color: #ff4500; /* Naranja brillante en hover */
+  text-decoration: underline;
+}
+
+/* Contenido principal */
+.mi-perfil-content {
+  flex: 1;
+  padding: 40px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.mi-perfil-content h1 {
+  color: red; /* Título principal en rojo */
+  font-size: 36px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.user-profile {
+  background-color: #333; /* Fondo oscuro */
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.user-profile img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.user-profile h2 {
+  color: #ff4500; /* Nombre en naranja brillante */
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.user-profile p {
+  font-size: 16px;
+  color: #f8f9fa; /* Texto blanco suave */
+  margin: 10px 0;
+}
+
+.user-profile .btn {
+  background-color: #ff4500; /* Color del botón de editar */
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-profile .btn:hover {
+  background-color: #cc3700; /* Color del botón al pasar el mouse */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .mi-perfil-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid #333; /* Línea divisoria horizontal */
+  }
+
+  .mi-perfil-content {
+    padding: 20px;
+  }
+
+  .mi-perfil-content h1 {
+    font-size: 30px;
+  }
+
+  .user-profile img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+
+  

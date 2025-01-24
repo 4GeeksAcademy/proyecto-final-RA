@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
+import "../../styles/sellListComponent.css";
 
 const SellListComponent = () => {
     const { store, actions } = useContext(Context);
@@ -26,11 +27,11 @@ const SellListComponent = () => {
         }, 3000);
     };
 
-    return (
-        <div className="container py-4">
-            <h1 className="text-warning text-center mb-4">Lista de Discos en Venta</h1>
+  return (
+    <div className="sell-list-component-container">
+      <h1 className="sell-list-component-title text-center mb-4">Lista de Discos en Venta</h1>
 
-            {store.error && <p className="text-danger text-center">{store.error}</p>}
+      {store.error && <p className="sell-list-component-error text-center">{store.error}</p>}
 
             <div className="row g-3">
                 {store.onSale && store.onSale.length > 0 ? (
@@ -76,3 +77,6 @@ const SellListComponent = () => {
 };
 
 export default SellListComponent;
+
+
+

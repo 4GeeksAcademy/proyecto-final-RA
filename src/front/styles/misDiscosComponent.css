@@ -1,0 +1,127 @@
+/* Estilos generales para el componente Mis Discos */
+.mis-discos-container {
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
+  color: white;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.mis-discos-title {
+  color: red; /* Título en rojo para destacarlo */
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.mis-discos-container p {
+  font-size: 18px;
+  color: #f8f9fa; /* Texto blanco suave */
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* Estilos para las tarjetas de discos */
+.mis-discos-card {
+  background-color: #333; /* Fondo oscuro para las tarjetas */
+  border-radius: 10px;
+  border: none;
+  overflow: hidden;
+  height: 100%;
+}
+
+.mis-discos-card-img {
+  height: 250px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.mis-discos-card-body {
+  padding: 15px;
+}
+
+.mis-discos-card-title {
+  color: #f8f9fa;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.mis-discos-card-text {
+  font-size: 14px;
+  color: #f8f9fa;
+}
+
+.mis-discos-card-text strong {
+  color: #ff4500; /* Color de énfasis para los labels como 'Sello', 'Año', etc. */
+}
+
+.mis-discos-button {
+  background-color: #ff4500; /* Botón de color llamativo */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.mis-discos-button:hover {
+  background-color: #e03e00; /* Cambio de color en hover */
+}
+
+/* Estilos para los mensajes de error */
+.text-danger {
+  color: #f44336;
+  font-size: 16px;
+}
+
+/* Estilos de la alerta de éxito */
+.mis-discos-alert {
+  max-width: 800px;
+  width: 100%;
+  z-index: 1050;
+  margin-top: -50px;
+}
+
+/* Responsividad para las tarjetas de discos */
+.mis-discos-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.mis-discos-col {
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .mis-discos-container {
+      padding: 20px;
+  }
+
+  .mis-discos-title {
+      font-size: 30px;
+  }
+
+  .mis-discos-card-body {
+      padding: 10px;
+  }
+
+  .mis-discos-card-title {
+      font-size: 16px;
+  }
+
+  .mis-discos-card-text {
+      font-size: 14px;
+  }
+
+  .mis-discos-button {
+      padding: 6px 12px;
+      font-size: 14px;
+  }
+
+  .mis-discos-card-img {
+      height: 200px;
+  }
+}
+
+  

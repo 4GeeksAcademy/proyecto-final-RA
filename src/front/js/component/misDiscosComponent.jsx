@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
+import "../../styles/misDiscosComponent.css";
 import { Modal, Button } from "react-bootstrap";
 
 const MisDiscosComponent = () => {
@@ -55,12 +56,12 @@ const MisDiscosComponent = () => {
     };
 
     return (
-        <div className="container py-4">
-            <h1 className="text-warning text-center mb-4">Mi Lista de Discos</h1>
+        <div className="mis-discos-container py-4">
+            <h1 className="mis-discos-title text-warning text-center mb-4">Mi Lista de Discos</h1>
 
             {successMessage && (
                 <div
-                    className="alert alert-success text-center position-fixed top-50 start-50 translate-middle z-index-1050"
+                    className="alert alert-success mis-discos-alert text-center position-fixed top-50 start-50 translate-middle"
                     style={{
                         maxWidth: "800px",
                         width: "100%",
@@ -93,34 +94,34 @@ const MisDiscosComponent = () => {
             ) : store.records.length === 0 ? (
                 <p className="text-center">No hay registros disponibles.</p>
             ) : (
-                <div className="row g-3">
+                <div className="mis-discos-row row g-3">
                     {store.records.map((record) => (
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={record.id}>
-                            <div className="card h-100">
+                        <div className="mis-discos-col col-12 col-sm-6 col-md-4 col-lg-3" key={record.id}>
+                            <div className="mis-discos-card card h-100">
                                 {record.cover_image && (
                                     <img
                                         src={record.cover_image}
-                                        className="card-img-top image-fixed"
+                                        className="mis-discos-card-img card-img-top"
                                         alt={record.title || "Imagen del disco"}
                                     />
                                 )}
-                                <div className="card-body">
-                                    <h5 className="card-title text-truncate">
+                                <div className="mis-discos-card-body card-body">
+                                    <h5 className="mis-discos-card-title card-title text-truncate">
                                         {record.title || "Título desconocido"}
                                     </h5>
-                                    <p className="card-text mb-1">
+                                    <p className="mis-discos-card-text card-text mb-1">
                                         <strong>Sello:</strong> {record.label || "Sin información"}
                                     </p>
-                                    <p className="card-text mb-1">
+                                    <p className="mis-discos-card-text card-text mb-1">
                                         <strong>Año:</strong> {record.year || "Desconocido"}
                                     </p>
-                                    <p className="card-text">
+                                    <p className="mis-discos-card-text card-text">
                                         <strong>Género:</strong> {record.genre || "Sin género"}
                                     </p>
-                                    <div className="d-flex justify-content-between mt-3">
+                                    <div className="mis-discos-card-footer d-flex justify-content-between mt-3">
                                         <button
                                             id={`addRecordButton-${record.id}`}
-                                            className="btn btn-primary"
+                                            className="mis-discos-button"
                                             onClick={() => handleAddToSellList(record.id)}
                                         >
                                             Agregar a la lista de ventas
@@ -162,3 +163,6 @@ const MisDiscosComponent = () => {
 };
 
 export default MisDiscosComponent;
+
+
+

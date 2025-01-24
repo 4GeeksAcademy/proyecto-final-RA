@@ -111,3 +111,5 @@ export const UserProfile = ({ userId }) => {
     </div>
   );
 };
+
+export default UserProfile;
