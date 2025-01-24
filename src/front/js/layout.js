@@ -13,7 +13,7 @@ import { Register } from "./component/register.jsx";
 import { Footer } from "./component/footer";
 import { Private } from "./component/private.jsx";
 import { MisDiscos } from "./component/misDiscos.jsx";
-import { SearchMusic } from "./component/searchMusic.jsx";
+// import { SearchMusic } from "./component/searchMusic.jsx";
 import { SearchWorldWide } from "./component/searchWorldWide.jsx";
 import { AboutUs } from "./component/aboutUs.jsx"
 import { MiPerfil } from "./component/miPerfil.jsx"
@@ -38,7 +38,7 @@ const Layout = () => {
                         <Route element={<MisDiscos />} path="/mis-discos" />
                         <Route element={<DiscosEnVenta />} path="/sell-list" />
                         <Route element={<MiPerfil />} path="/mi-perfil" />
-                        <Route element={<SearchMusic />} path="/searchmusic" />
+                        {/* <Route element={<SearchMusic />} path="/searchmusic" /> */}
                         <Route element={<SearchWorldWide />} path="/searchworldwide" />
                         <Route element={<Register />} path="/register" />
                         <Route element={<Private />} path="/private" />

@@ -1,14 +1,30 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 
 const SellListComponent = () => {
     const { store, actions } = useContext(Context);
+    const [deleteMessage, setDeleteMessage] = useState("");
 
     useEffect(() => {
         if (!store.onSale || store.onSale.length === 0) {
             actions.getSellList();
         }
     }, [store.onSale, actions]);
+
+    const handleDelete = async (recordId) => {
+        const result = await actions.deleteSellListRecord(userId, recordId);
+        const userId = store.user.id;
+    
+        if (!result.success) {
+            setDeleteMessage(result.error); // Mostrar mensaje de error
+        } else {
+            setDeleteMessage(result.msg); // Mostrar mensaje de éxito
+        }
+    
+        setTimeout(() => {
+            setDeleteMessage("");
+        }, 3000);
+    };
 
     return (
         <div className="container py-4">
@@ -40,6 +56,14 @@ const SellListComponent = () => {
                                         <strong>Género:</strong> {record.record_genre || "Sin género"}
                                     </p>
                                 </div>
+
+                                <button
+                                    id={`deleteRecordButton-${record.id}`}
+                                    className="btn btn-danger"
+                                    onClick={() => handleDelete(record.id)}
+                                >
+                                    Eliminar
+                                </button>
                             </div>
                         </div>
                     ))

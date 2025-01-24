@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { SearchMusic } from '../component/searchMusic.jsx';
 
 import { RecordCarousel } from "./RecordCarousel.jsx";
 import Search from "../component/search.jsx";

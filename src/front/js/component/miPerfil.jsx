@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { UserProfile } from "./UserProfile.jsx";
+import { Context } from "../store/appContext";
 
 export const MiPerfil = () => {
+  const { store } = useContext(Context);
 
-    return (
+  // Verificar si hay datos del usuario antes de renderizar el perfil
+  if (!store.user) {
+    return <p>Cargando datos del usuario...</p>;
+  }
 
-        <div>
-            <UserProfile />
-        </div>
-    )
-}
+  return (
+    <div>
+      <UserProfile userId={store.user.id} />
+    </div>
+  );
+};

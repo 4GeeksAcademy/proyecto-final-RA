@@ -121,7 +121,7 @@ const Search = () => {
                         alt={record.title}
                       />
                       <div className="card-body">
-                        <h5 className="card-title">{record.title}</h5>
+                        <p className="card-title text-dark">{record.title}</p>
                       </div>
                     </div>
                   </div>
@@ -168,12 +168,31 @@ const Search = () => {
                   alt={selectedRecord.title}
                   className="img-fluid mb-3"
                 />
-                <p className="text-dark"><strong>Artista:</strong> {selectedRecord.title || "Desconocido"}</p>
-                <p className="text-dark"><strong>Género:</strong> {selectedRecord.genre ? selectedRecord.genre.join(", ") : "Sin género"}</p>
-                <p className="text-dark"><strong>Sello:</strong> {selectedRecord.label || "Desconocido"}</p>
-                <p className="text-dark"><strong>Año:</strong> {selectedRecord.year || "Desconocido"}</p>
-                <p className="text-dark"><strong>País:</strong> {selectedRecord.country || "Desconocido"}</p>
+                <p className="text-dark">
+                  <strong>Artista:</strong> {selectedRecord.title || "Desconocido"}
+                </p>
+                <p className="text-dark">
+                  <strong>Género:</strong>
+                  {/* Verificamos si 'genre' es un array y lo unimos con coma */}
+                  {Array.isArray(selectedRecord.genre)
+                    ? selectedRecord.genre.join(", ")
+                    : selectedRecord.genre || "Sin género"}
+                </p>
+                <p className="text-dark">
+                  <strong>Sello:</strong>
+                  {/* Verificamos si 'label' es un array y lo unimos con coma */}
+                  {Array.isArray(selectedRecord.label)
+                    ? selectedRecord.label.join(", ")
+                    : selectedRecord.label || "Desconocido"}
+                </p>
+                <p className="text-dark">
+                  <strong>Año:</strong> {selectedRecord.year || "Desconocido"}
+                </p>
+                <p className="text-dark">
+                  <strong>País:</strong> {selectedRecord.country || "Desconocido"}
+                </p>
               </div>
+
               <div className="modal-footer">
                 <button
                   type="button"

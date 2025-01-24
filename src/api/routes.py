@@ -120,6 +120,22 @@ def get_users():
         return jsonify({"error": str(e)}), 500
 
 
+@api.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    try:
+
+        user = User.query.get(user_id)
+
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
+        
+        return jsonify(user.serialize()), 200
+
+  
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @api.route('/register', methods=['POST'])
 def register():
     try:
@@ -238,6 +254,28 @@ def get_records():
         return jsonify({"error": "Error al obtener los registros", "message": str(e)}), 500
 
 
+
+@api.route('/records/<int:record_id>', methods=['DELETE'])
+def delete_record(record_id):
+    try:
+        # Verificar si el disco está en venta
+        sell_list_entry = SellList.query.filter_by(record_id=record_id).first()
+        if sell_list_entry:
+            return jsonify({"error": "El disco está en venta y no se puede eliminar."}), 400
+
+        # Eliminar el registro si no está en venta
+        record = Record.query.get(record_id)
+        if not record:
+            return jsonify({"error": "Disco no encontrado."}), 404
+
+        db.session.delete(record)
+        db.session.commit()
+        return jsonify({"msg": "Disco eliminado correctamente."}), 200
+
+    except Exception as e:
+        return jsonify({"error": "Error al eliminar el disco", "message": str(e)}), 500
+
+
 @api.route('/sell_list', methods=['POST'])
 def add_to_sell_list():
     try:
@@ -288,3 +326,18 @@ def get_sell_list():
 
 
 
+@api.route('/sell_lista/<int:record_id>', methods=['DELETE'])
+def delete_sellList_record(record_id):
+    try:
+
+        # Eliminar el registro si no está en venta
+        record = SellList.query.get(record_id)
+        if not record:
+            return jsonify({"error": "Disco no encontrado."}), 404
+
+        db.session.delete(record)
+        db.session.commit()
+        return jsonify({"msg": "Disco eliminado correctamente."}), 200
+
+    except Exception as e:
+        return jsonify({"error": "Error al eliminar el disco", "message": str(e)}), 500
