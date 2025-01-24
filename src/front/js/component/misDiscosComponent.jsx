@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
+import { Modal, Button } from "react-bootstrap";
 
 const MisDiscosComponent = () => {
     const { store, actions } = useContext(Context);
     const [successMessage, setSuccessMessage] = useState("");
     const [deleteMessage, setDeleteMessage] = useState("");
+    const [showAuthModal, setShowAuthModal] = useState(false); // Estado del modal de autenticación
 
     useEffect(() => {
         if (!store.records || store.records.length === 0) {
@@ -14,15 +16,11 @@ const MisDiscosComponent = () => {
 
     const userId = store.user?.id || localStorage.getItem("userId");
 
-    if (!userId) {
-        return (
-            <div className="container py-4">
-                <p className="text-warning text-center">
-                    No se ha encontrado el ID del usuario. Por favor, inicie sesión.
-                </p>
-            </div>
-        );
-    }
+    useEffect(() => {
+        if (!userId) {
+            setShowAuthModal(true); // Mostrar el modal si no hay usuario autenticado
+        }
+    }, [userId]);
 
     const handleAddToSellList = async (recordId) => {
         try {
@@ -49,6 +47,11 @@ const MisDiscosComponent = () => {
         setTimeout(() => {
             setDeleteMessage("");
         }, 3000);
+    };
+
+    const handleAuthRedirect = () => {
+        setShowAuthModal(false);
+        actions.redirectToLogin(); // Acción para redirigir al inicio de sesión
     };
 
     return (
@@ -136,6 +139,24 @@ const MisDiscosComponent = () => {
                     ))}
                 </div>
             )}
+
+            {/* Modal de autenticación */}
+            <Modal show={showAuthModal} onHide={() => setShowAuthModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Autenticación Requerida</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Por favor, regístrese o inicie sesión para acceder a sus discos.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowAuthModal(false)}>
+                        Cerrar
+                    </Button>
+                    <Button variant="primary" onClick={handleAuthRedirect}>
+                        Iniciar Sesión
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

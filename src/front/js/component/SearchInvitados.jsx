@@ -9,10 +9,11 @@ const SearchInvitados = () => {
   const [searchBy, setSearchBy] = useState("artist"); // Tipo de búsqueda
   const [showModal, setShowModal] = useState(false); // Estado del modal
   const [selectedRecord, setSelectedRecord] = useState(null); // Disco seleccionado
+  const [addLoading, setAddLoading] = useState(false); // Estado del botón "Agregar Disco"
 
   useEffect(() => {
     if (!store.randomFetched) {
-      actions.FetchRandomRecords(); // Llamar FetchRandomRecords una sola vez
+      actions.FetchRandomRecords(); // Llamar a FetchRandomRecords una sola vez
     }
   }, [store.randomFetched, actions]);
 
@@ -28,56 +29,21 @@ const SearchInvitados = () => {
   };
 
   const handleCloseModal = () => {
-
     setShowModal(false);
     setSelectedRecord(null);
   };
 
-  const [isAdding, setIsAdding] = useState(false);
-
-  const handleAddRecord = async () => {
-    if (isAdding) return;
-    setIsAdding(true);
-  
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch('https://fictional-succotash-rwgj44xqwvj2pjr4-3001.app.github.dev/api/add_record', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title: selectedRecord.title,
-          year: selectedRecord.year,
-          genre: selectedRecord.genre,
-          label: selectedRecord.label,
-          style: selectedRecord.style,
-          cover_image: selectedRecord.cover_image,
-        }),
-      });
-  
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Disco agregado:', result);
-        actions.addRecordToDatabase(selectedRecord);
-        handleCloseModal();
-      } else {
-        const errorResult = await response.json();
-        console.error('Error al agregar disco:', errorResult.error);
-      }
-    } catch (error) {
-      console.error('Error al hacer la solicitud:', error);
-    } finally {
-      setIsAdding(false); 
-    }
-
-    setShowModal(false); // Cierra el modal
-    setSelectedRecord(null); // Limpia el disco seleccionado
-
+  const handleAddRecord = () => {
+    setAddLoading(true);
+    // Simulación de la lógica de agregar un disco
+    setTimeout(() => {
+      setAddLoading(false);
+      alert("Registrate o inicia sesion!.");
+      setSelectedRecord(null); // Cierra el modal
+    }, 1000); // Simula un retraso
   };
 
-  // Dividir los resultados en bloques de 5
+  // Dividir los resultados en bloques de 5 para el carrusel
   const chunkedResults = [];
   for (let i = 0; i < store.searchResults.length; i += 5) {
     chunkedResults.push(store.searchResults.slice(i, i + 5));
@@ -178,6 +144,14 @@ const SearchInvitados = () => {
             <Button variant="secondary" onClick={handleCloseModal}>
               Cerrar
             </Button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleAddRecord}
+              disabled={addLoading}
+            >
+              {addLoading ? "Agregando..." : "Agregar Disco"}
+            </button>
           </Modal.Footer>
         </Modal>
       )}
@@ -186,12 +160,3 @@ const SearchInvitados = () => {
 };
 
 export default SearchInvitados;
-
-
-
-
-
-
-
-
-
