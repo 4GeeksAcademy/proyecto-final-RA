@@ -1,4 +1,4 @@
-import React  from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/navbar.css"
 
@@ -23,7 +23,7 @@ export const Navbar = () => {
 				</button>
 				<div className="collapse navbar-collapse" id="navbarNav">
 					<ul className="navbar-nav ml-auto">
-					<li className="nav-item">
+						<li className="nav-item">
 							<Link className="nav-link" to={"/private"}>
 								Mi perfil
 							</Link>
@@ -34,7 +34,7 @@ export const Navbar = () => {
 							</Link>
 						</li>
 						<li className="nav-item">
-							<Link className="nav-link" to={"/"}>
+							<Link className="nav-link" to={"/local-records"}>
 								Search Local
 							</Link>
 						</li>
