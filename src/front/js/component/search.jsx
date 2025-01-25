@@ -11,6 +11,7 @@ const Search = () => {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [addLoading, setAddLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [currentPage, setCurrentPage] = useState(0); // Estado para la página actual
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -43,7 +44,7 @@ const Search = () => {
     setAddLoading(true);
 
     try {
-      const response = await fetch(process.env.BACKEND_URL + 'api/add_record', {
+      const response = await fetch(process.env.BACKEND_URL + '/api/add_record', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,6 +80,17 @@ const Search = () => {
     }
   };
 
+  // Cambié el código del carrusel para que coincida con el de SearchInvitados
+  const handlePageChange = (direction) => {
+    if (direction === "next") {
+      setCurrentPage((prevPage) => (prevPage + 1) % slides.length); // Circular hacia adelante
+    } else if (direction === "prev") {
+      setCurrentPage((prevPage) =>
+        prevPage === 0 ? slides.length - 1 : prevPage - 1
+      ); // Circular hacia atrás
+    }
+  };
+
   return (
     <div className="search-container container d-flex flex-column align-items-center my-4">
       <h1 className="search-title text-center mb-4">Buscar en la Plataforma</h1>
@@ -102,55 +114,53 @@ const Search = () => {
       {store.error && (
         <div className="search-error alert alert-danger mt-3">{store.error}</div>
       )}
-      <div id="searchCarousel" className="carousel slide my-4" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          {slides.map((group, index) => (
-            <div
-              key={index}
-              className={`carousel-item ${index === 0 ? "active" : ""}`}
+
+      {slides.length > 0 && (
+        <div className="mt-4">
+          <div className="decorative-bar top-bar"></div>
+          <h2 className="text-center mb-4">Resultados</h2>
+
+          <div className="carousel-wrapper">
+            <button
+              className="carousel-control prev"
+              onClick={() => handlePageChange("prev")}
             >
-              <div className="row justify-content-center">
-                {group.map((record, idx) => (
-                  <div key={idx} className="col-md-3 col-lg-2 mb-4">
-                    <div
-                      className="search-card card"
-                      onClick={() => setSelectedRecord(record)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img
-                        src={record.cover_image}
-                        className="search-card-img card-img-top"
-                        alt={record.title}
-                      />
-                      <div className="search-card-body card-body">
-                        <h5 className="search-card-title card-title">{record.title}</h5>
-                      </div>
+              &#8249;
+            </button>
+
+            <div className="carousel-inner">
+              <div className="d-flex justify-content-center">
+                {slides[currentPage].map((record, idx) => (
+                  <div
+                    key={idx}
+                    className="card bg-dark text-white mx-2"
+                    style={{ width: "18rem", cursor: "pointer" }}
+                    onClick={() => setSelectedRecord(record)}
+                  >
+                    <img
+                      src={record.cover_image}
+                      className="card-img-top"
+                      alt={record.title}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{record.title}</h5>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
+
+            <button
+              className="carousel-control next"
+              onClick={() => handlePageChange("next")}
+            >
+              &#8250;
+            </button>
+          </div>
+
+          <div className="decorative-bar bottom-bar"></div>
         </div>
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#searchCarousel"
-          data-bs-slide="prev"
-        >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#searchCarousel"
-          data-bs-slide="next"
-        >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div>
+      )}
 
       {/* Modal para el detalle de disco */}
       {selectedRecord && (
@@ -237,4 +247,3 @@ const Search = () => {
 };
 
 export default Search;
-
