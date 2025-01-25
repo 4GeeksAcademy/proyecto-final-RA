@@ -206,24 +206,27 @@ def protected():
 
 
 # -----------------------------------------------------------------------------------------------
-@api.route('/edit_user/<int:user_id>', methods=['PUT'])
-def edit_user(user_id):
+@api.route('/edit_user', methods=['PUT'])
+@jwt_required()
+def edit_user():
     try:
+        id = get_jwt_identity()
+        user = User.query.get(id)
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
         data = request.get_json()
 
         if not data:
             return jsonify({"msg": "No se han proporcionado datos para actualizar"}), 400
 
-        user = User.query.get(user_id)
-        if not user:
-            return jsonify({"msg": "Usuario no encontrado"}), 404
+        
 
         if "name" in data:
             user.name = data["name"]
 
         if "email" in data:
             existing_user = User.query.filter_by(email=data["email"]).first()
-            if existing_user and existing_user.id != user_id:
+            if existing_user and existing_user.id != id:
                 return jsonify({"msg": "El correo electrónico ya está en uso"}), 400
             user.email = data["email"]
 
@@ -248,7 +251,7 @@ def edit_user(user_id):
 def get_records():
     try:
         records = Record.query.all()
-        serialized_records = [record.serialize() for record in records]  # Serializar los datos
+        serialized_records = [record.serialize() for record in records]
         return jsonify(serialized_records), 200
     except Exception as e:
         return jsonify({"error": "Error al obtener los registros", "message": str(e)}), 500
@@ -258,12 +261,11 @@ def get_records():
 @api.route('/records/<int:record_id>', methods=['DELETE'])
 def delete_record(record_id):
     try:
-        # Verificar si el disco está en venta
+       
         sell_list_entry = SellList.query.filter_by(record_id=record_id).first()
         if sell_list_entry:
             return jsonify({"error": "El disco está en venta y no se puede eliminar."}), 400
 
-        # Eliminar el registro si no está en venta
         record = Record.query.get(record_id)
         if not record:
             return jsonify({"error": "Disco no encontrado."}), 404

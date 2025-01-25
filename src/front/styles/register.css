@@ -1,98 +1,97 @@
-/* Estilo para el contenedor del formulario de registro */
 .register-container {
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-    color: white;
-  }
-  
-  /* Estilo para el contenedor del formulario */
+  background-color: rgba(0, 0, 0, 0.8);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: white;
+}
+
+/* Estilo para el contenedor del formulario */
+.form-container {
+  background-color: #333;
+  /* Fondo oscuro para el formulario */
+  border-radius: 8px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  /* Limitar el tamaño del formulario */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Título del formulario */
+.form-container h2 {
+  text-align: center;
+  color: #ff4500;
+  /* Rojo anaranjado para el título */
+  margin-bottom: 30px;
+}
+
+/* Estilo de los campos de entrada */
+.input-field {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #444;
+  color: white;
+  font-size: 16px;
+}
+
+/* Estilo del botón de enviar */
+.submit-btn-css {
+  width: 100%;
+  padding: 15px;
+  background-color: red;
+  /* Rojo anaranjado para el botón */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Estilo del botón de alternar entre registro e inicio de sesión */
+.toggle-button {
+  width: 100%;
+  background-color: transparent;
+  color: #ff4500;
+  /* Rojo anaranjado para el texto */
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Estilo de los mensajes de error */
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+
+@media (max-width: 768px) {
   .form-container {
-    background-color: #333; /* Fondo oscuro para el formulario */
-    border-radius: 8px;
-    padding: 40px;
-    width: 100%;
-    max-width: 400px; /* Limitar el tamaño del formulario */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    padding: 30px;
   }
-  
-  /* Título del formulario */
-  .form-container h2 {
-    text-align: center;
-    color: #ff4500; /* Rojo anaranjado para el título */
-    margin-bottom: 30px;
-  }
-  
-  /* Estilo de los campos de entrada */
+
   .input-field {
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #555;
-    background-color: #444;
-    color: white;
-    font-size: 16px;
-  }
-  
-  /* Estilo del botón de enviar */
-  .submit-btn {
-    width: 100%;
-    padding: 15px;
-    background-color: #ff4500; /* Rojo anaranjado para el botón */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submit-btn:hover {
-    background-color: #e63946; /* Rojo más intenso en hover */
-  }
-  
-  /* Estilo del botón de alternar entre registro e inicio de sesión */
-  .toggle-button {
-    width: 100%;
-    background-color: transparent;
-    color: #ff4500; /* Rojo anaranjado para el texto */
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 15px;
-  }
-  
-  /* Estilo de los mensajes de error */
-  .error-message {
-    color: red;
-    text-align: center;
+    padding: 12px;
     font-size: 14px;
-    margin-top: 15px;
   }
-  
-  /* Media query para pantallas pequeñas */
-  @media (max-width: 768px) {
-    .form-container {
-      padding: 30px;
-    }
-  
-    .input-field {
-      padding: 12px;
-      font-size: 14px;
-    }
-  
-    .submit-btn {
-      padding: 12px;
-      font-size: 16px;
-    }
-  
-    .toggle-button {
-      font-size: 14px;
-    }
+
+  .submit-btn {
+    padding: 12px;
+    font-size: 16px;
   }
-  
+
+  .toggle-button {
+    font-size: 14px;
+  }
+}

@@ -183,43 +183,49 @@ const getState = ({ getStore, setStore, getActions }) => {
       },
 
 
-      editUser: async (id, updatedData) => {
+      editUser: async (updatedData) => {
         try {
-          // Verifica que se pase un ID válido
-          if (!id) {
-            console.error("El ID del usuario no se proporcionó.");
-            return { success: false, error: "ID del usuario no proporcionado" };
+          // Verificar token
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("Token no encontrado.");
+            return { success: false, error: "No se encontró un token válido" };
           }
-
-          // Construye la URL y realiza la solicitud
-          const response = await fetch(`${process.env.BACKEND_URL}/api/edit_user/${id}`, {
+      
+          // URL del backend
+          const BACKEND_URL = process.env.BACKEND_URL;
+      
+          // Enviar la solicitud al servidor
+          const response = await fetch(`${BACKEND_URL}/api/edit_user`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Si usas autenticación
+              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(updatedData), // Datos actualizados que se enviarán al backend
+            body: JSON.stringify(updatedData),
           });
-
-          // Manejo de errores en la respuesta
+      
+          // Manejar errores del servidor
           if (!response.ok) {
             const errorData = await response.json();
-            console.error("Error al editar usuario:", errorData);
-            return { success: false, error: errorData.msg || "Error desconocido al actualizar el usuario" };
+            console.error("Error al editar usuario:", errorData.msg || response.statusText);
+            return {
+              success: false,
+              error: errorData.msg || "Error desconocido al actualizar el usuario",
+            };
           }
-
-          // Manejo exitoso
+      
+          // Procesar respuesta
           const data = await response.json();
           console.log("Usuario actualizado con éxito:", data);
-
-          return { success: true, data }; // Devuelve los datos de éxito
-
+          return { success: true, data };
+      
         } catch (error) {
-          // Manejo de errores de conexión o problemas generales
-          console.error("Error al conectar con el backend:", error);
+          console.error("Error al conectar con el backend:", error.message);
           return { success: false, error: "Error de conexión con el servidor" };
         }
       },
+      
 
       addRecord: async (record) => {
         const token = localStorage.getItem("token");

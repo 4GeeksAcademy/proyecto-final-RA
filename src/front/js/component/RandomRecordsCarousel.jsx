@@ -5,70 +5,68 @@ import "../../styles/randomRecordsCarousel.css";
 
 const RandomRecordsCarousel = () => {
   const { store, actions } = useContext(Context);
-  const [selectedRecord, setSelectedRecord] = useState(null); // Estado para el modal
-  const [addLoading, setAddLoading] = useState(false); // Estado para botón de "Agregar Disco"
-  const [currentPage, setCurrentPage] = useState(0); // Estado para la página actual del carrusel
+  const [selectedRecord, setSelectedRecord] = useState(null); 
+  const [addLoading, setAddLoading] = useState(false); 
+  const [currentPage, setCurrentPage] = useState(0); 
 
-  // Llamada automática a FetchRandomRecords al montar el componente
+
   useEffect(() => {
     if (!store.loading && !store.isSearching && store.randomResults.length === 0) {
       actions.FetchRandomRecords("Drum & Bass");
     }
   }, [store.loading, store.isSearching, store.randomResults.length, actions]);
 
-  // Muestra un mensaje mientras se cargan los datos
   if (store.loading) {
     return <p>Cargando discos...</p>;
   }
 
-  // Muestra un mensaje de error si algo falla
+
   if (store.error) {
     return <p style={{ color: "red" }}>Error: {store.error}</p>;
   }
 
-  // Obtiene los primeros 50 resultados
+
   const results = store.randomResults.slice(0, 50);
 
-  // Divide los resultados en páginas de 5 elementos cada una
+ 
   const chunkedResults = [];
   for (let i = 0; i < results.length; i += 5) {
     chunkedResults.push(results.slice(i, i + 5));
   }
 
-  // Maneja la acción de agregar un disco
+
   const handleAddRecord = () => {
     setAddLoading(true);
-    // Simulación de la lógica de agregar un disco
     setTimeout(() => {
       setAddLoading(false);
       alert("¡Regístrate o inicia sesión!");
-      setSelectedRecord(null); // Cierra el modal
-    }, 1000); // Simula un retraso
+      setSelectedRecord(null);
+    }, 1000); 
   };
 
-  // Muestra un mensaje si no hay resultados
+
   if (!chunkedResults.length) {
     return <p>No se encontraron discos para mostrar.</p>;
   }
 
-  // Función para cambiar la página (con comportamiento circular)
+
   const handlePageChange = (direction) => {
     if (direction === "next") {
-      setCurrentPage((prevPage) => (prevPage + 1) % chunkedResults.length); // Circular hacia adelante
+      setCurrentPage((prevPage) => (prevPage + 1) % chunkedResults.length); 
     } else if (direction === "prev") {
       setCurrentPage((prevPage) =>
         prevPage === 0 ? chunkedResults.length - 1 : prevPage - 1
-      ); // Circular hacia atrás
+      ); 
     }
   };
 
   return (
     <div className="random-records-carousel">
-      {/* Barra superior decorativa */}
+
       <div className="decorative-bar top-bar"></div>
       <h2 className="text-center mb-4">Popular Entre Otros Usuarios</h2>
       <div className="carousel-wrapper">
-        {/* Botón para desplazarse hacia atrás */}
+
         <button
           className="carousel-control prev"
           onClick={() => handlePageChange("prev")}
@@ -76,7 +74,6 @@ const RandomRecordsCarousel = () => {
           &#8249;
         </button>
 
-        {/* Contenido del carrusel */}
         <div className="carousel-inner">
           <div className="d-flex justify-content-center">
             {chunkedResults[currentPage].map((result) => (
@@ -84,7 +81,7 @@ const RandomRecordsCarousel = () => {
                 key={result.id}
                 className="card mx-2"
                 style={{ width: "18rem", textAlign: "center" }}
-                onClick={() => setSelectedRecord(result)} // Al hacer clic, abre el modal con el disco seleccionado
+                onClick={() => setSelectedRecord(result)} 
               >
                 <img
                   src={result.cover_image || "placeholder.jpg"}
@@ -105,8 +102,6 @@ const RandomRecordsCarousel = () => {
             ))}
           </div>
         </div>
-
-        {/* Botón para desplazarse hacia adelante */}
         <button
           className="carousel-control next"
           onClick={() => handlePageChange("next")}
@@ -114,10 +109,8 @@ const RandomRecordsCarousel = () => {
           &#8250;
         </button>
       </div>
-      {/* Barra inferior decorativa */}
       <div className="decorative-bar bottom-bar"></div>
 
-      {/* Modal para mostrar detalles del disco seleccionado */}
       {selectedRecord && (
         <div
           className="modal fade show d-block"

@@ -1,0 +1,49 @@
+.private-sidebar {
+    background-color: #343a40; 
+    height: 100vh; 
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 250px;
+    padding: 20px;
+    color: #fff; 
+    z-index: 100;
+    
+  }
+  
+  .private-sidebar-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .private-sidebar-nav {
+    flex-grow: 1;
+    
+  }
+  
+  .private-sidebar-link {
+    color: #ddd;
+    text-decoration: none; 
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+  
+  .private-sidebar-link:hover {
+    color: red; 
+    /* background-color: #495057; */
+    border-radius: 5px;
+  }
+  
+
+ 
+  @media (max-width: 768px) {
+    .private-sidebar {
+      width: 200px; 
+    }
+  
+    body {
+      margin-left: 0; 
+      font-size: 0.5rem;
+    }
+  }
+  

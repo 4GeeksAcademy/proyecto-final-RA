@@ -4,6 +4,8 @@
   color: white;
   min-height: 100vh;
   padding: 40px 0;
+  position: relative;
+  margin-top: 300px;
 }
 
 /* Título principal */

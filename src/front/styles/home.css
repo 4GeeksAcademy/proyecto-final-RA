@@ -5,43 +5,24 @@
   min-height: 100vh;
   background-color: #121212; /* Fondo oscuro */
   color: white;
+  overflow: hidden; /* Evita que haya scroll en el contenedor principal */
 }
 
-/* Barras laterales */
-.home-layout__sidebar {
-  width: 250px;
-  background-color: #1c1c1c; /* Fondo oscuro para las barras laterales */
-}
 
-.home-layout__sidebar.left-sidebar {
-  border-right: 1px solid #333;
-}
 
-.home-layout__sidebar.right-sidebar {
-  border-left: 1px solid #333;
-}
 
-/* Contenedor principal */
-.home-layout__content-wrapper {
-  flex: 1;
-  padding: 40px;
-  margin-top: 60px; /* Espacio igual a la altura del navbar */
-  background-color: #1c1c1c; /* Fondo oscuro */
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
+/* Título principal */
 .home-layout__content-wrapper__welcome-title {
   color: #ff4500; /* Título en naranja brillante */
-  font-size: 2.5rem;
+  font-size: 1.8rem; /* Reducido para un diseño más compacto */
   text-align: center;
+  margin-bottom: 10px; /* Menos espacio abajo */
 }
 
+/* Subtítulo */
 .home-layout__content-wrapper__welcome-subtitle {
   color: #ccc; /* Subtítulo */
-  font-size: 1.2rem;
+  font-size: 1rem; /* Reducción de tamaño */
   text-align: center;
-  margin-bottom: 20px; /* Reducido para más proximidad */
+  margin-bottom: 15px; /* Espacio más pequeño */
 }
-
-
-  

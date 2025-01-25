@@ -1,97 +1,10 @@
-/* Estilo para el contenedor principal del carrusel de discos */
-.record-carousel-container {
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
-    padding: 40px;
-    min-height: 100vh;
-    color: white;
-  }
-  
-  /* Título principal del carrusel */
-  .record-carousel-container h2 {
-    color: red; /* Título en rojo */
-    font-size: 36px;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  /* Estilos para los elementos del carrusel */
-  .carousel-item {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .card {
-    background-color: #333; /* Fondo oscuro para las tarjetas */
-    border-radius: 8px; /* Bordes redondeados */
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .card:hover {
-    transform: scale(1.05); /* Efecto de ampliación al pasar el mouse */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Sombra en hover */
-  }
-  
-  .card-img-top {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-  
-  /* Cuerpo de la tarjeta */
-  .card-body {
-    padding: 15px;
-    text-align: center;
-  }
-  
-  /* Títulos de los discos */
-  .card-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 10px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  
-  /* Textos de los discos */
-  .card-text {
-    color: #f0f0f0;
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-  
-  /* Estilo para los elementos de cada grupo de discos (5 discos por grupo) */
-  .carousel-item .d-flex {
-    justify-content: center;
-  }
-  
-  .carousel-item .card {
-    margin: 10px;
-  }
-  
-  /* Media query para hacer la interfaz más amigable en dispositivos pequeños */
-  @media (max-width: 768px) {
-    .record-carousel-container h2 {
-      font-size: 28px;
-    }
-  
-    .card {
-      width: 80%; /* Ajuste del tamaño de las tarjetas en pantallas pequeñas */
-      margin: 10px auto;
-    }
-  
-    .card-body {
-      padding: 10px;
-    }
-  
-    .card-title {
-      font-size: 16px;
-    }
-  
-    .card-text {
-      font-size: 12px;
-    }
-  }
-  
+.search-modal .modal-dialog {
+  max-width: 90%;
+}
+
+.search-modal .modal-dialog-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}

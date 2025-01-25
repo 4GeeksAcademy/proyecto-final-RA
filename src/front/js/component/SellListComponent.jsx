@@ -17,9 +17,9 @@ const SellListComponent = () => {
         const userId = store.user.id;
     
         if (!result.success) {
-            setDeleteMessage(result.error); // Mostrar mensaje de error
+            setDeleteMessage(result.error);
         } else {
-            setDeleteMessage(result.msg); // Mostrar mensaje de éxito
+            setDeleteMessage(result.msg); 
         }
     
         setTimeout(() => {

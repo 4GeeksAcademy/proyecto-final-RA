@@ -14,7 +14,7 @@ const Home = () => {
   const { store, actions } = useContext(Context);
 
   return (
-    <div className="home-layout">
+    <div className="container-fluid home-layout">
       <div className="home-layout__sidebar left-sidebar"></div>
       <div className="home-layout__content-wrapper">
         <h1 className="home-layout__content-wrapper__welcome-title">
@@ -24,12 +24,7 @@ const Home = () => {
           ¡Explora, encuentra tus discos favoritos y más!
         </p>
 
-        {/* SearchInvitados Component */}
         <SearchInvitados />
-
-        {/* DiscogsSearch Component */}
-        {/* <DiscogsSearch /> */}
-
         {/* RandomRecordsCarousel Component */}
         <RandomRecordsCarousel />
       </div>

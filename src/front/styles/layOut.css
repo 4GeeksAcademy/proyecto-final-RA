@@ -1,0 +1,7 @@
+/* Estilo para el contenedor principal donde el contenido se desplaza */
+.main-content {
+    padding-top: 80px; /* Ajusta según la altura de tu navbar */
+    max-height: calc(100vh - 80px); /* Ocupa el resto de la pantalla después del navbar */
+    overflow-y: auto; /* Activa el desplazamiento vertical si el contenido es más alto que el contenedor */
+  }
+  

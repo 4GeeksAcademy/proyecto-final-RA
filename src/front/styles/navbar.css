@@ -1,6 +1,10 @@
-/* Navbar general styles */
+.content-container {
+  padding-top: 4rem;
+}
+
+
 .navbar-container {
-  background-color: rgba(0, 0, 0, 0.7); /* Black translucent background */
+  background-color: rgb(0, 0, 0);
   position: fixed;
   top: 0;
   left: 0;
@@ -10,73 +14,62 @@
   padding: 10px 20px;
   display: flex;
   align-items: center;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow effect */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* Navigation links container */
+
 .navbar-nav {
-  display: flex; /* Flexbox to arrange links horizontally */
-  flex-direction: row; /* Ensures the links are in one row */
+  display: flex;
+  flex-direction: row;
   list-style: none;
   padding: 0;
   margin: 0;
-  gap: 30px; /* Spacing between links */
-  margin-left: 50px; /* Increased space between "Home" and "Mi perfil" */
+  gap: 50px;
+  margin-left: 50px;
 }
 
-/* Individual link styles */
 .navbar-nav .nav-link {
   color: white !important;
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: color 0.3s ease;
-  white-space: nowrap; /* Prevent text from wrapping */
+  white-space: nowrap;
 }
 
-/* Hover effect for links */
+
 .navbar-nav .nav-link:hover {
-  color: #f8f9fa !important;
+  color: red !important;
 }
 
-/* Logo styles */
+
 .navbar-brand {
   font-size: 2rem;
   font-weight: bold;
   color: red !important;
   text-decoration: none;
+  
+  display: flex; 
+  align-items:center;
+  justify-content: center; 
+  height: 100%; 
+  text-align: center; 
 }
 
-/* Login/Register button */
 .btn-login {
   font-size: 1rem;
   font-weight: bold;
-  padding: 10px 20px;
+  padding: 12px 25px;
+  margin-right: 40px;
+  position: relative;
+  background-color: black; /* Rojo vibrante */
+  color: white; /* Texto blanco */
+  border: none;
+  cursor: pointer; 
+  transition: all 0.3s ease; 
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .navbar-nav {
-    gap: 15px; /* Reduce gap between links */
-    margin-left: 20px; /* Reduced spacing on smaller screens */
-  }
-
-  .navbar-nav .nav-link {
-    font-size: 1.2rem;
-  }
-
-  .btn-login {
-    font-size: 0.9rem;
-  }
+.btn-login:hover {
+  color: red
 }
 
-
-
-
-
-
-
-
-
-
-  

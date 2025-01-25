@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/recordCarousel.css";
 
+
 const Search = () => {
   const { store, actions } = useContext(Context);
   const [query, setQuery] = useState("");
@@ -101,14 +102,16 @@ const Search = () => {
       {store.error && (
         <div className="search-error alert alert-danger mt-3">{store.error}</div>
       )}
-
-      <div id="carouselExample" className="search-carousel carousel slide mt-4" data-bs-ride="carousel">
+      <div id="searchCarousel" className="carousel slide my-4" data-bs-ride="carousel">
         <div className="carousel-inner">
           {slides.map((group, index) => (
-            <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+            <div
+              key={index}
+              className={`carousel-item ${index === 0 ? "active" : ""}`}
+            >
               <div className="row justify-content-center">
                 {group.map((record, idx) => (
-                  <div key={idx} className="col-md-2">
+                  <div key={idx} className="col-md-3 col-lg-2 mb-4">
                     <div
                       className="search-card card"
                       onClick={() => setSelectedRecord(record)}
@@ -129,16 +132,27 @@ const Search = () => {
             </div>
           ))}
         </div>
-        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <button
+          className="carousel-control-prev"
+          type="button"
+          data-bs-target="#searchCarousel"
+          data-bs-slide="prev"
+        >
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
         </button>
-        <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <button
+          className="carousel-control-next"
+          type="button"
+          data-bs-target="#searchCarousel"
+          data-bs-slide="next"
+        >
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Next</span>
         </button>
       </div>
 
+      {/* Modal para el detalle de disco */}
       {selectedRecord && (
         <div
           className="search-modal modal fade show d-block"
@@ -148,7 +162,7 @@ const Search = () => {
           onClick={() => setSelectedRecord(null)}
         >
           <div
-            className="search-modal-dialog modal-dialog-centered"
+            className="search-modal-dialog modal-dialog-centered modal-sm"
             role="document"
             onClick={(e) => e.stopPropagation()}
           >
@@ -172,14 +186,12 @@ const Search = () => {
                 </p>
                 <p className="text-dark">
                   <strong>Género:</strong>
-                  {/* Verificamos si 'genre' es un array y lo unimos con coma */}
                   {Array.isArray(selectedRecord.genre)
                     ? selectedRecord.genre.join(", ")
                     : selectedRecord.genre || "Sin género"}
                 </p>
                 <p className="text-dark">
                   <strong>Sello:</strong>
-                  {/* Verificamos si 'label' es un array y lo unimos con coma */}
                   {Array.isArray(selectedRecord.label)
                     ? selectedRecord.label.join(", ")
                     : selectedRecord.label || "Desconocido"}
@@ -219,6 +231,8 @@ const Search = () => {
         </div>
       )}
     </div>
+
+
   );
 };
 
