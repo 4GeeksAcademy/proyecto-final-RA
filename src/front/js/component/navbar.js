@@ -19,15 +19,15 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/searchworldwide">
-                Search Worldwide
+              <Link className="nav-link" to="/buscarenrsb">
+                Buscar en RSB
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link className="nav-link" to="/search-local">
                 Search Local
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link className="nav-link" to="/aboutUs">
                 About Us!

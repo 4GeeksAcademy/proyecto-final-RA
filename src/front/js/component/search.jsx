@@ -93,7 +93,7 @@ const Search = () => {
 
   return (
     <div className="search-container container d-flex flex-column align-items-center my-4">
-      <h1 className="search-title text-center mb-4">Buscar en la Plataforma</h1>
+      <h1 className="search-title text-center mb-4">¡Encuentra Tus Favoritos!</h1>
       <div className="search-form w-50 d-flex flex-column align-items-center">
         <input
           type="text"

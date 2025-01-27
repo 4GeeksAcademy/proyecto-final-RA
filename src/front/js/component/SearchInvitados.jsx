@@ -63,7 +63,7 @@ const SearchInvitados = () => {
 
   return (
     <div className="container my-4">
-      <h1 className="text-center mb-4">Buscar en la Plataforma</h1>
+      <h1 className="text-center mb-4">¡Encuentra Tus Favoritos!</h1>
 
       <form onSubmit={handleSearch} className="mb-4">
         <div className="d-flex justify-content-center align-items-center">
