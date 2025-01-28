@@ -320,17 +320,19 @@ def add_to_sell_list():
 
 
 @api.route('/sell_lista', methods=['GET'])
+@jwt_required()
 def get_sell_list():
     try:
+        id = get_jwt_identity()
+        sell_list_discs = SellList.query.filter_by(user_id=id).all()
 
-        sell_list_discs = SellList.query.all()
-        
+        if not sell_list_discs:
+            return jsonify({'sellList': [], 'message': 'No hay discos en venta'}), 200
 
         sell_list = [disc.serialize() for disc in sell_list_discs]
-        
         return jsonify({'sellList': sell_list}), 200
-    except Exception as e:
 
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 

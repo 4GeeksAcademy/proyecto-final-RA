@@ -40,9 +40,9 @@ const MisDiscosComponent = () => {
         const result = await actions.deleteRecord(userId, recordId);
 
         if (!result.success) {
-            setDeleteMessage(result.error); // Mostrar mensaje de error
+            setDeleteMessage(result.error);
         } else {
-            setDeleteMessage(result.msg); // Mostrar mensaje de éxito
+            setDeleteMessage(result.msg);
         }
 
         setTimeout(() => {
@@ -52,7 +52,7 @@ const MisDiscosComponent = () => {
 
     const handleAuthRedirect = () => {
         setShowAuthModal(false);
-        actions.redirectToLogin(); // Acción para redirigir al inicio de sesión
+        actions.redirectToLogin();
     };
 
     return (

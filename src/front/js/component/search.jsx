@@ -6,34 +6,21 @@ import { Modal, Button } from "react-bootstrap";
 const Search = () => {
   const { store, actions } = useContext(Context);
   const [query, setQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("artist"); 
   const [loading, setLoading] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [showModal, setShowModal] = useState(false); 
+  const [showModal, setShowModal] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setLoading(true);
-    actions.searchDiscogs(query, searchBy);
+    actions.searchDiscogs(query);
   };
 
   useEffect(() => {
     setLoading(false);
   }, [store.searchResults]);
-
-  const chunkArray = (array, size) => {
-    const result = [];
-    for (let i = 0; i < array.length; i += size) {
-      result.push(array.slice(i, i + size));
-    }
-    return result;
-  };
-
-  const chunkedResults = chunkArray(store.searchResults || [], 5);
-  const slides = chunkedResults;
 
   const handleShowModal = (record) => {
     setSelectedRecord(record);
@@ -43,16 +30,6 @@ const Search = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedRecord(null);
-  };
-
-  const handlePageChange = (direction) => {
-    if (direction === "next") {
-      setCurrentPage((prevPage) => (prevPage + 1) % slides.length);
-    } else if (direction === "prev") {
-      setCurrentPage((prevPage) =>
-        prevPage === 0 ? slides.length - 1 : prevPage - 1
-      ); // Circular hacia atrás
-    }
   };
 
   const handleAddRecord = async () => {
@@ -93,7 +70,7 @@ const Search = () => {
       setAddLoading(false);
       setSelectedRecord(null);
 
-      actions.getRecords()
+      actions.getRecords();
     } catch (error) {
       console.error("Error:", error);
       setMessage("Error al agregar el disco: " + error.message);
@@ -123,47 +100,40 @@ const Search = () => {
 
       {store.error && <p className="text-danger text-center">{store.error}</p>}
 
-      {slides.length > 0 && (
+      {store.searchResults?.length > 0 && (
         <div className="mt-4">
           <div className="decorative-bar top-bar"></div>
           <h2 className="text-center mb-4">Resultados</h2>
 
-          <div className="carousel-wrapper">
-            <button
-              className="carousel-control prev"
-              onClick={() => handlePageChange("prev")}
-            >
-              &#8249;
-            </button>
-
-            <div className="carousel-inner">
-              <div className="d-flex justify-content-center">
-                {slides[currentPage].map((record, idx) => (
-                  <div
-                    key={idx}
-                    className="card bg-dark text-white mx-2"
-                    style={{ width: "18rem", cursor: "pointer" }}
-                    onClick={() => handleShowModal(record)}
-                  >
-                    <img
-                      src={record.cover_image || "placeholder.jpg"}
-                      className="card-img-top"
-                      alt={record.title || "Sin título"}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">{record.title || "Sin título"}</h5>
-                    </div>
+          <div className="row">
+            {store.searchResults.map((record, idx) => (
+              <div
+                key={idx}
+                className="col-12 col-md-2 mb-4"
+                onClick={() => handleShowModal(record)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="card bg-dark text-white">
+                  <img
+                    src={record.cover_image || "placeholder.jpg"}
+                    className="card-img-top"
+                    alt={record.title || "Sin título"}
+                  />
+                  <div className="card-body">
+                    <h5
+                      className="card-title"
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {record.title || "Sin título"}
+                    </h5>
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-
-            <button
-              className="carousel-control next"
-              onClick={() => handlePageChange("next")}
-            >
-              &#8250;
-            </button>
+            ))}
           </div>
 
           <div className="decorative-bar bottom-bar"></div>
@@ -171,7 +141,12 @@ const Search = () => {
       )}
 
       {selectedRecord && (
-        <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal
+          show={showModal}
+          onHide={handleCloseModal}
+          centered
+          size="sm" // Modal más pequeño en altura
+        >
           <Modal.Header closeButton>
             <Modal.Title>{selectedRecord.title || "Sin título"}</Modal.Title>
           </Modal.Header>

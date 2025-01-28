@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Modal, Button } from "react-bootstrap"; 
+import { Modal, Button } from "react-bootstrap";
 import "../../styles/searchInvitados.css";
 
 const SearchInvitados = () => {

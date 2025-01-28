@@ -42,3 +42,26 @@
 
 
    */
+
+
+   .custom-modal .modal-dialog {
+    max-width: 80%; /* Cambia esto según el ancho que prefieras */
+    margin: 1.75rem auto; /* Asegura que esté centrado */
+  }
+  
+  .custom-modal .modal-content {
+    background-color: #333; /* Fondo oscuro para hacerlo más estilizado */
+    color: white;
+    border-radius: 10px; /* Bordes redondeados */
+  }
+  
+  .custom-modal .modal-header {
+    border-bottom: none; /* Sin borde inferior */
+  }
+  
+  .custom-modal .modal-footer {
+    border-top: none; /* Sin borde superior */
+    display: flex;
+    justify-content: space-between;
+  }
+  
