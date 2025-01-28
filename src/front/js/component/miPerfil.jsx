@@ -63,55 +63,52 @@ export const MiPerfil = () => {
   return (
     <div className="mi-perfil-bg">
       <div className="mi-perfil-container">
-        <h2 className="mi-perfil-title">Mis Datos de Usuario</h2>
         {message && <p className="mi-perfil-message">{message}</p>}
 
         {isEditing ? (
-          <div className="form-container mi-perfil-form">
-            <h2>Mi Perfil</h2>
+          <div className="mi-perfil-form">
+            <h2 className="mi-perfil-title">Mi Perfil</h2>
             <div className="form-control">
-              <div className="input-field">
-                <label>Nombre:</label>
+              <div className="mi-perfil-field">
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name || ""}
-                  onChange={handleInputChange}
                   className="input-field"
-                  placeholder="Nombre"
+                  onChange={handleInputChange}
+                  name="name" // Asegúrate que 'name' coincida con la clave en formData
+                  placeholder="Nombre de Usuario"
+                  value={formData.name || ""}
                 />
               </div>
-              <div className="input-field">
-                <label>Email:</label>
+              <div className="mi-perfil-field">
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email || ""}
-                  onChange={handleInputChange}
                   className="input-field"
-                  placeholder="Correo electrónico"
+                  onChange={handleInputChange}
+                  name="email" // Asegúrate que 'email' coincida con la clave en formData
+                  placeholder="Correo Electrónico"
+                  value={formData.email || ""}
+                  required
                 />
               </div>
-              <div className="input-field">
-                <label>Contraseña:</label>
+              <div className="mi-perfil-field">
                 <input
                   type="password"
-                  name="password"
-                  value={formData.password || ""}
-                  onChange={handleInputChange}
                   className="input-field"
+                  onChange={handleInputChange}
+                  name="password" // Asegúrate que 'password' coincida con la clave en formData
                   placeholder="Contraseña"
+                  value={formData.password || ""}
+                  required
                 />
               </div>
-              <button onClick={handleSave} className="submit-btn-css">
+              <button onClick={handleSave} className="mi-perfil-btn-save toggle-button">
                 Guardar
               </button>
-              <button onClick={() => setIsEditing(false)} className="toggle-button">
+              <button onClick={() => setIsEditing(false)} className="mi-perfil-btn-cancel toggle-button">
                 Cancelar
               </button>
             </div>
           </div>
-
         ) : (
           <div>
             <p>
@@ -120,7 +117,7 @@ export const MiPerfil = () => {
             <p>
               <strong>Email:</strong> {store.user?.email || "N/A"}
             </p>
-            <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit">
+            <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit styled-button">
               Editar
             </button>
           </div>
@@ -131,4 +128,9 @@ export const MiPerfil = () => {
 };
 
 export default MiPerfil;
+
+
+
+
+
 
