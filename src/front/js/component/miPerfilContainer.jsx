@@ -4,8 +4,10 @@ import "../../styles/userProfile.css"; // Asegúrate de que el CSS esté importa
 
 export const MiPerfilContainer = () => {
   return (
-    <div className="container m-auto bg-dark">
-      <MiPerfil />
+    <div className="register-container"> {/* Usa el mismo estilo del contenedor principal */}
+      <div className="form-container"> {/* Usa el mismo estilo del formulario */}
+        <MiPerfil />
+      </div>
     </div>
   );
 };

@@ -1,7 +1,4 @@
-body {
-    background: black;
-}
-.container {
+.mi-perfil-container-bg {
     background: black;
 
     min-height: 100vh;
@@ -12,6 +9,7 @@ body {
     align-items: center;
 
     padding: 20px;
-    color: #000000;
-
-}
+    color: #fff;
+    /* Texto blanco */
+  }
+  

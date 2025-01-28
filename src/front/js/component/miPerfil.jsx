@@ -58,69 +58,77 @@ export const MiPerfil = () => {
     }
   };
 
-  if (!store.user) return <p>Cargando datos...</p>;
+  if (!store.user) return <p className="mi-perfil-loading">Cargando datos...</p>;
 
   return (
-    <div className="container-fluid bg-dark">
-    <div className="user-container">
-      <h2>Mis Datos de Usuario</h2>
-      {message && <p className="message">{message}</p>}
+    <div className="mi-perfil-bg">
+      <div className="mi-perfil-container">
+        <h2 className="mi-perfil-title">Mis Datos de Usuario</h2>
+        {message && <p className="mi-perfil-message">{message}</p>}
 
-      {isEditing ? (
-        <div>
-          <div>
-            <label>Nombre:</label>
-            <input
-              className="input-field"
-              type="text"
-              name="name"
-              value={formData.name || ""}
-              onChange={handleInputChange}
-            />
+        {isEditing ? (
+          <div className="form-container mi-perfil-form">
+            <h2>Mi Perfil</h2>
+            <div className="form-control">
+              <div className="input-field">
+                <label>Nombre:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name || ""}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  placeholder="Nombre"
+                />
+              </div>
+              <div className="input-field">
+                <label>Email:</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email || ""}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  placeholder="Correo electrónico"
+                />
+              </div>
+              <div className="input-field">
+                <label>Contraseña:</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password || ""}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  placeholder="Contraseña"
+                />
+              </div>
+              <button onClick={handleSave} className="submit-btn-css">
+                Guardar
+              </button>
+              <button onClick={() => setIsEditing(false)} className="toggle-button">
+                Cancelar
+              </button>
+            </div>
           </div>
+
+        ) : (
           <div>
-            <label>Email:</label>
-            <input
-              className="input-field"
-              type="email"
-              name="email"
-              value={formData.email || ""}
-              onChange={handleInputChange}
-            />
+            <p>
+              <strong>Nombre:</strong> {store.user?.name || "N/A"}
+            </p>
+            <p>
+              <strong>Email:</strong> {store.user?.email || "N/A"}
+            </p>
+            <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit">
+              Editar
+            </button>
           </div>
-          <div>
-            <label>Contraseña:</label>
-            <input
-              className="input-field"
-              type="password"
-              name="password"
-              value={formData.password || ""}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button onClick={handleSave} className="submit-btn">
-            Guardar
-          </button>
-          <button onClick={() => setIsEditing(false)} className="toggle-button">
-            Cancelar
-          </button>
-        </div>
-      ) : (
-        <div>
-          <p>
-            <strong>Nombre:</strong> {store.user?.name || "N/A"}
-          </p>
-          <p>
-            <strong>Email:</strong> {store.user?.email || "N/A"}
-          </p>
-          <button onClick={() => setIsEditing(true)} className="submit-btn">
-            Editar
-          </button>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </div>
   );
 };
 
 export default MiPerfil;
+
