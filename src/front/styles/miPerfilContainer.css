@@ -1,13 +1,13 @@
 .mi-perfil-container-bg {
     background: black;
-    /* Fondo oscuro */
+
     min-height: 100vh;
-    /* Asegura que ocupe toda la altura de la pantalla */
+
     display: flex;
     justify-content: center;
-    /* Centra horizontalmente */
+
     align-items: center;
-    /* Centra verticalmente */
+
     padding: 20px;
     color: #fff;
     /* Texto blanco */

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Modal, Button } from "react-bootstrap"; // Asegúrate de importar Modal y Button
+import { Modal, Button } from "react-bootstrap";
 import "../../styles/searchInvitados.css";
 
 const SearchInvitados = () => {
@@ -65,17 +65,9 @@ const SearchInvitados = () => {
     <div className="container my-4">
       <h1 className="text-center mb-4">¡Encuentra Tus Favoritos!</h1>
 
-      <form onSubmit={handleSearch} className="mb-4">
+      <form onSubmit={handleSearch} className="">
         <div className="d-flex justify-content-center align-items-center">
-          <select
-            className="form-control w-auto me-3"
-            value={searchBy}
-            onChange={(e) => setSearchBy(e.target.value)}
-          >
-            <option value="artist">Artista</option>
-            <option value="label">Sello</option>
-            <option value="genre">Género</option>
-          </select>
+
           <input
             type="text"
             className="form-control w-auto me-3"
@@ -94,7 +86,7 @@ const SearchInvitados = () => {
       {chunkedResults.length > 0 && (
         <div className="mt-4">
           <div className="decorative-bar top-bar"></div>
-          <h2 className="text-center mb-4">Resultados</h2>
+          <h2 className="text-center mb-1">Resultados</h2>
 
           <div className="carousel-wrapper">
             <button

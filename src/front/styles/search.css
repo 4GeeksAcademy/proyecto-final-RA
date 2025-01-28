@@ -1,44 +1,67 @@
-/* Contenedor del carrusel */
+/* 
 .carousel-wrapper {
   display: flex;
   align-items: center;
   position: relative;
-  overflow: visible; /* Permitir que las flechas sean visibles */
+  overflow: visible; 
 }
 
-/* Flechas de navegación */
+
 .carousel-control {
-  background-color: rgba(0, 0, 0, 0.6); /* Fondo translúcido */
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
-  font-size: 1.5rem; /* Tamaño del texto */
-  width: 50px; /* Ancho del botón */
-  height: 50px; /* Alto del botón */
+  font-size: 1.5rem;
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%; /* Forma circular */
-  position: absolute; /* Posicionamiento absoluto */
-  top: 50%; /* Centrado vertical */
-  transform: translateY(-50%); /* Ajuste para centrar */
-  z-index: 10; /* Asegurarse de que esté por encima del contenido */
-  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  border-radius: 50%; 
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10; 
+  cursor: pointer; 
 }
 
-/* Botón izquierdo */
+
 .carousel-control.prev {
-  left: 10px; /* Separación del borde izquierdo */
-}
-/* Botón derecho */
-.carousel-control.next {
-  right: 10px; /* Misma posición que SearchInvitados */
+  left: 10px; 
 }
 
-/* Hover en las flechas */
+.carousel-control.next {
+  right: 10px; 
+}
+
+
 .carousel-control:hover {
-  background-color: rgba(255, 255, 255, 0.8); /* Color de fondo al pasar por encima */
+  background-color: rgba(255, 255, 255, 0.8); 
   color: black;
 }
 
 
+   */
+
+
+   .custom-modal .modal-dialog {
+    max-width: 80%; /* Cambia esto según el ancho que prefieras */
+    margin: 1.75rem auto; /* Asegura que esté centrado */
+  }
+  
+  .custom-modal .modal-content {
+    background-color: #333; /* Fondo oscuro para hacerlo más estilizado */
+    color: white;
+    border-radius: 10px; /* Bordes redondeados */
+  }
+  
+  .custom-modal .modal-header {
+    border-bottom: none; /* Sin borde inferior */
+  }
+  
+  .custom-modal .modal-footer {
+    border-top: none; /* Sin borde superior */
+    display: flex;
+    justify-content: space-between;
+  }
   

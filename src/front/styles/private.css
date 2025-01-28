@@ -1,8 +1,9 @@
 .private-page-container {
   background: #121212;
   color: white;
-  overflow: hidden;
+  /* overflow: hidden; */
   height: 42rem;
+  /* width:100rem; */
 }
 
 
@@ -16,7 +17,7 @@
   overflow: hidden;
 }
 
-/* Títulos del contenido */
+
 .private-content-title {
   font-size: 1rem;
   color: #ff4500;
@@ -30,3 +31,4 @@
   text-align: center;
   margin-bottom: 20px;
 }
+

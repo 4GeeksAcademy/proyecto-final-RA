@@ -185,17 +185,17 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       editUser: async (updatedData) => {
         try {
-          // Verificar token
+ 
           const token = localStorage.getItem("token");
           if (!token) {
             console.error("Token no encontrado.");
             return { success: false, error: "No se encontró un token válido" };
           }
+
       
-          // URL del backend
           const BACKEND_URL = process.env.BACKEND_URL;
-      
-          // Enviar la solicitud al servidor
+
+   
           const response = await fetch(`${BACKEND_URL}/api/edit_user`, {
             method: "PUT",
             headers: {
@@ -204,8 +204,8 @@ const getState = ({ getStore, setStore, getActions }) => {
             },
             body: JSON.stringify(updatedData),
           });
-      
-          // Manejar errores del servidor
+
+    
           if (!response.ok) {
             const errorData = await response.json();
             console.error("Error al editar usuario:", errorData.msg || response.statusText);
@@ -214,18 +214,18 @@ const getState = ({ getStore, setStore, getActions }) => {
               error: errorData.msg || "Error desconocido al actualizar el usuario",
             };
           }
-      
-          // Procesar respuesta
+
+ 
           const data = await response.json();
           console.log("Usuario actualizado con éxito:", data);
           return { success: true, data };
-      
+
         } catch (error) {
           console.error("Error al conectar con el backend:", error.message);
           return { success: false, error: "Error de conexión con el servidor" };
         }
       },
-      
+
 
       addRecord: async (record) => {
         const token = localStorage.getItem("token");
@@ -239,7 +239,7 @@ const getState = ({ getStore, setStore, getActions }) => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               title: record.title,
@@ -257,6 +257,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           }
 
           const data = await response.json();
+          getActions().getRecords()
           return data;
 
         } catch (error) {
@@ -267,7 +268,19 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       getRecords: async () => {
         try {
-          const response = await fetch(process.env.BACKEND_URL + "/api/records");
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("Token no encontrado.");
+            return { success: false, error: "No se encontró un token válido" };
+          }
+
+
+          const response = await fetch(process.env.BACKEND_URL + "/api/records", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}` 
+            }
+          });
           if (!response.ok) throw new Error("Error al obtener los registros");
           const data = await response.json();
 
@@ -318,7 +331,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           const data = await response.json();
 
-          // Actualizar los registros en el store
+
           const updatedRecords = getStore().records.filter(record => record.id !== recordId);
           setStore({ records: updatedRecords });
 
@@ -350,7 +363,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           const data = await response.json();
 
-          // Actualizar los registros en el store
+ 
           const updatedRecords = getStore().onSale.filter(record => record.id !== recordId);
           setStore({ onSale: updatedRecords });
 
@@ -366,24 +379,38 @@ const getState = ({ getStore, setStore, getActions }) => {
 
 
       getSellList: async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("Token no encontrado.");
+          return { success: false, error: "No se encontró un token válido" };
+        }
         try {
+
           const response = await fetch(process.env.BACKEND_URL + '/api/sell_lista', {
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
+              Authorization: `Bearer ${token}` 
+            }
           });
-          if (response.ok) {
-            const data = await response.json();
-            getActions().setSellList(data.sellList);
-          } else {
-            throw new Error('Error al cargar la lista de discos');
-          }
+          if (!response.ok) throw new Error("Error al obtener los registros");
+          const data = await response.json();
+          console.log("Datos recibidos:", data);
+
+          if (!data.sellList) throw new Error("sellList no encontrado en la respuesta");
+
+          setStore({ onSale: data.sellList });
         } catch (error) {
-          setStore({ error: error.message });
+          console.error("Error en getRecords:", error);
+          setStore({ error: "No se pudieron cargar los registros" });
         }
       },
 
       addToSellList: async (userId, recordId) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          throw new Error("No se encontró el token. Asegúrate de haber iniciado sesión.");
+        }
         try {
 
           if (!userId || !recordId) {
@@ -394,23 +421,21 @@ const getState = ({ getStore, setStore, getActions }) => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
             body: JSON.stringify({ user_id: userId, record_id: recordId }),
           });
 
 
-          if (response.ok) {
-            const data = await response.json();
-            console.log("Disco agregado a la lista de ventas", data);
-
-          } else {
+          if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Error al agregar el disco');
+            throw new Error(errorData.error || "Error en la solicitud");v
           }
-        } catch (err) {
-          console.error("Error al agregar el disco:", err);
-          setStore({ error: err.message });
+
+          return await response.json();
+        } catch (error) {
+          console.error("Error al agregar el disco:", error);
+          throw error;
         }
       },
 

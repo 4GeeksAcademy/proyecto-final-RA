@@ -1,13 +1,12 @@
-/* Estilos generales para el componente Mis Discos */
-.mis-discos-container {
-  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
+/* .mis-discos-container {
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 40px;
   min-height: 100vh;
 }
 
 .mis-discos-title {
-  color: red; /* Título en rojo para destacarlo */
+  color: red; 
   font-size: 36px;
   margin-bottom: 20px;
   text-align: center;
@@ -15,14 +14,14 @@
 
 .mis-discos-container p {
   font-size: 18px;
-  color: #f8f9fa; /* Texto blanco suave */
+  color: #f8f9fa;
   line-height: 1.8;
   text-align: center;
 }
 
-/* Estilos para las tarjetas de discos */
+
 .mis-discos-card {
-  background-color: #333; /* Fondo oscuro para las tarjetas */
+  background-color: #333; 
   border-radius: 10px;
   border: none;
   overflow: hidden;
@@ -51,11 +50,11 @@
 }
 
 .mis-discos-card-text strong {
-  color: #ff4500; /* Color de énfasis para los labels como 'Sello', 'Año', etc. */
+  color: #ff4500;
 }
 
 .mis-discos-button {
-  background-color: #ff4500; /* Botón de color llamativo */
+  background-color: #ff4500;
   color: white;
   border: none;
   padding: 8px 15px;
@@ -65,16 +64,16 @@
 }
 
 .mis-discos-button:hover {
-  background-color: #e03e00; /* Cambio de color en hover */
+  background-color: #e03e00;
 }
 
-/* Estilos para los mensajes de error */
+
 .text-danger {
   color: #f44336;
   font-size: 16px;
 }
 
-/* Estilos de la alerta de éxito */
+
 .mis-discos-alert {
   max-width: 800px;
   width: 100%;
@@ -82,7 +81,7 @@
   margin-top: -50px;
 }
 
-/* Responsividad para las tarjetas de discos */
+
 .mis-discos-row {
   display: flex;
   flex-wrap: wrap;
@@ -124,4 +123,4 @@
   }
 }
 
-  
+   */
