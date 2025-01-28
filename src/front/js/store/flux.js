@@ -185,17 +185,17 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       editUser: async (updatedData) => {
         try {
-          // Verificar token
+ 
           const token = localStorage.getItem("token");
           if (!token) {
             console.error("Token no encontrado.");
             return { success: false, error: "No se encontró un token válido" };
           }
+
       
-          // URL del backend
           const BACKEND_URL = process.env.BACKEND_URL;
-      
-          // Enviar la solicitud al servidor
+
+   
           const response = await fetch(`${BACKEND_URL}/api/edit_user`, {
             method: "PUT",
             headers: {
@@ -204,7 +204,7 @@ const getState = ({ getStore, setStore, getActions }) => {
             },
             body: JSON.stringify(updatedData),
           });
-      
+
           // Manejar errores del servidor
           if (!response.ok) {
             const errorData = await response.json();
@@ -214,18 +214,18 @@ const getState = ({ getStore, setStore, getActions }) => {
               error: errorData.msg || "Error desconocido al actualizar el usuario",
             };
           }
-      
-          // Procesar respuesta
+
+ 
           const data = await response.json();
           console.log("Usuario actualizado con éxito:", data);
           return { success: true, data };
-      
+
         } catch (error) {
           console.error("Error al conectar con el backend:", error.message);
           return { success: false, error: "Error de conexión con el servidor" };
         }
       },
-      
+
 
       addRecord: async (record) => {
         const token = localStorage.getItem("token");
@@ -257,6 +257,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           }
 
           const data = await response.json();
+          getActions().getRecords()
           return data;
 
         } catch (error) {
@@ -267,7 +268,20 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       getRecords: async () => {
         try {
-          const response = await fetch(process.env.BACKEND_URL + "/api/records");
+
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("Token no encontrado.");
+            return { success: false, error: "No se encontró un token válido" };
+          }
+
+
+          const response = await fetch(process.env.BACKEND_URL + "/api/records", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}` 
+            }
+          });
           if (!response.ok) throw new Error("Error al obtener los registros");
           const data = await response.json();
 
@@ -318,7 +332,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           const data = await response.json();
 
-          // Actualizar los registros en el store
+
           const updatedRecords = getStore().records.filter(record => record.id !== recordId);
           setStore({ records: updatedRecords });
 
@@ -350,7 +364,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           const data = await response.json();
 
-          // Actualizar los registros en el store
+ 
           const updatedRecords = getStore().onSale.filter(record => record.id !== recordId);
           setStore({ onSale: updatedRecords });
 

@@ -1,7 +1,7 @@
 // src/js/component/RecordCarousel.jsx
 import React from "react";
 import { Carousel } from "react-bootstrap";
-import "../../styles/recordCarousel.css";
+// import "../../styles/recordCarousel.css";
 
 const RecordCarousel = ({ records }) => {
   // Dividir los elementos en bloques de 5

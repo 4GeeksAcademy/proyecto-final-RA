@@ -50,7 +50,7 @@ const Register = () => {
             value={formData.password}
             required
           />
-          <button type="submit" className="submit-btn-css">
+          <button type="submit" className="submit-btn-css styled-button">
             {isRegister ? 'Registrar' : 'Iniciar Sesión'}
           </button>
         </form>

@@ -111,9 +111,9 @@ def handle_hello():
 @api.route('/users', methods=['GET'])
 def get_users():
     try:
-        # Obtener todos los usuarios
+    
         users = User.query.all()
-        # Serializar la información de cada usuario
+  
         result = [user.serialize() for user in users]
         return jsonify(result), 200
     except Exception as e:
@@ -248,9 +248,11 @@ def edit_user():
     # ----------------------------------------------------------------------------------------------------------
 
 @api.route('/records', methods=['GET'])
+@jwt_required()
 def get_records():
     try:
-        records = Record.query.all()
+        id = get_jwt_identity()
+        records = Record.query.filter_by(owner_id=id).all()
         serialized_records = [record.serialize() for record in records]
         return jsonify(serialized_records), 200
     except Exception as e:
@@ -279,37 +281,42 @@ def delete_record(record_id):
 
 
 @api.route('/sell_list', methods=['POST'])
+@jwt_required() 
 def add_to_sell_list():
     try:
+   
         data = request.get_json()
-        user_id = data.get('user_id')
         record_id = data.get('record_id')
+
+        if not record_id:
+            return jsonify({'error': 'record_id es requerido'}), 400
         
-        if not user_id or not record_id:
-            return jsonify({'error': 'user_id y record_id son requeridos'}), 400
-        
+   
+        user_id = get_jwt_identity()
+
+  
         user = User.query.get(user_id)
         if not user:
             return jsonify({'error': 'El usuario no existe'}), 404
         
+     
         record = Record.query.get(record_id)
         if not record:
             return jsonify({'error': 'El disco no existe'}), 404
         
-
+      
         new_sell_list_item = SellList(user_id=user_id, record_id=record_id)
         
 
         db.session.add(new_sell_list_item)
         db.session.commit()
         
-
         return jsonify({'message': 'Disco agregado a la lista de venta', 'id': new_sell_list_item.id}), 201
         
     except Exception as e:
-
         db.session.rollback()
         return jsonify({'error': f'Error al agregar el disco: {str(e)}'}), 500
+
 
 
 @api.route('/sell_lista', methods=['GET'])

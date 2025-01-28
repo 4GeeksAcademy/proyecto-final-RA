@@ -1,20 +1,19 @@
-/* Estilo para la contenedor principal de la página de búsqueda */
-.app {
-    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro */
+/* .app {
+    background-color: rgba(0, 0, 0, 0.9);
     color: white;
     min-height: 100vh;
     padding: 40px 0;
   }
   
-  /* Título principal */
+
   h2 {
-    color: #ff4500; /* Tono naranja para el título */
+    color: #ff4500;
     font-size: 2rem;
     margin-bottom: 30px;
     text-align: center;
   }
   
-  /* Estilo del contenedor de búsqueda */
+  
   .search-music {
     max-width: 600px;
     margin: 0 auto;
@@ -45,7 +44,7 @@
     outline: none;
   }
   
-  /* Estilo del input */
+  
   .custom-input {
     background-color: #444;
     color: white;
@@ -63,7 +62,7 @@
     outline: none;
   }
   
-  /* Estilo del botón */
+
   button {
     background-color: #ff4500;
     border: none;
@@ -84,20 +83,20 @@
     background-color: #777;
   }
   
-  /* Mensajes de carga y error */
+
   p {
     text-align: center;
     font-size: 1rem;
   }
   
-  /* Estilo del mensaje de error */
+
   .error-message {
     color: red;
     font-size: 1rem;
     text-align: center;
   }
   
-  /* Estilo para los resultados de la búsqueda */
+
   ul {
     list-style-type: none;
     padding: 0;
@@ -174,4 +173,4 @@
       font-size: 1rem;
     }
   }
-  
+   */
