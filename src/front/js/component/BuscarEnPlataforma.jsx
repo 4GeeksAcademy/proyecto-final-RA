@@ -1,6 +1,7 @@
 import React from 'react';
 import "../../styles/searchWorldWide.css";
 import SideBar from "./sideBar.jsx";
+import { BuscarEnPlataformaComponent } from "../component/BuscarEnPlataformaComponent.jsx";
 
 const BuscarEnPlataforma = () => {
   return (
@@ -9,6 +10,7 @@ const BuscarEnPlataforma = () => {
       <div className="searchWorldwide-content-container">
         <h2>Descubre Artistas alrededor del mundo!</h2>
         <p>Explora música de todos los rincones del planeta y encuentra tus nuevos artistas favoritos.</p>
+        <BuscarEnPlataformaComponent />
       </div>
     </div>
   );
