@@ -1,13 +1,13 @@
 .searchWorldwide-page-container {
   display: flex;
-  background: #121212; /* Igual que el fondo oscuro del segundo */
-  color: white; /* Texto blanco */
-  overflow: hidden; /* Igual que el segundo */
-  height: 42rem; /* Igual que la altura fija del segundo */
+  background: #121212; 
+  color: white; 
+  /* overflow: hidden;  */
+  height: 42rem; 
 }
 
 .searchWorldwide-content-container {
-  padding: 40px; /* Igual que el relleno del segundo */
+  padding: 40px; 
   margin-left: 250px; /* Igual que el margen izquierdo del segundo */
   background: #1c1c1c; /* Fondo oscuro del contenido */
   color: #ccc; /* Color gris claro para el texto */

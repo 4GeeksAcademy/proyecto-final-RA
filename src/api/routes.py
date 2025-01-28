@@ -336,6 +336,21 @@ def get_sell_list():
         return jsonify({'error': str(e)}), 500
 
 
+@api.route('/sell_listas', methods=['GET'])
+def get_sell_lists():
+    try:
+
+        sell_list_discs = SellList.query.all()
+        
+
+        sell_list = [disc.serialize() for disc in sell_list_discs]
+        
+        return jsonify({'sellList': sell_list}), 200
+    except Exception as e:
+
+        return jsonify({'error': str(e)}), 500
+
+
 
 @api.route('/sell_lista/<int:record_id>', methods=['DELETE'])
 def delete_sellList_record(record_id):

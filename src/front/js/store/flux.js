@@ -185,17 +185,17 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       editUser: async (updatedData) => {
         try {
- 
+
           const token = localStorage.getItem("token");
           if (!token) {
             console.error("Token no encontrado.");
             return { success: false, error: "No se encontró un token válido" };
           }
 
-      
+
           const BACKEND_URL = process.env.BACKEND_URL;
 
-   
+
           const response = await fetch(`${BACKEND_URL}/api/edit_user`, {
             method: "PUT",
             headers: {
@@ -205,7 +205,7 @@ const getState = ({ getStore, setStore, getActions }) => {
             body: JSON.stringify(updatedData),
           });
 
-    
+
           if (!response.ok) {
             const errorData = await response.json();
             console.error("Error al editar usuario:", errorData.msg || response.statusText);
@@ -215,7 +215,7 @@ const getState = ({ getStore, setStore, getActions }) => {
             };
           }
 
- 
+
           const data = await response.json();
           console.log("Usuario actualizado con éxito:", data);
           return { success: true, data };
@@ -278,7 +278,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           const response = await fetch(process.env.BACKEND_URL + "/api/records", {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}` 
+              Authorization: `Bearer ${token}`
             }
           });
           if (!response.ok) throw new Error("Error al obtener los registros");
@@ -363,7 +363,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           const data = await response.json();
 
- 
+
           const updatedRecords = getStore().onSale.filter(record => record.id !== recordId);
           setStore({ onSale: updatedRecords });
 
@@ -389,7 +389,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           const response = await fetch(process.env.BACKEND_URL + '/api/sell_lista', {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}` 
+              Authorization: `Bearer ${token}`
             }
           });
           if (!response.ok) throw new Error("Error al obtener los registros");
@@ -429,7 +429,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || "Error en la solicitud");v
+            throw new Error(errorData.error || "Error en la solicitud"); v
           }
 
           return await response.json();

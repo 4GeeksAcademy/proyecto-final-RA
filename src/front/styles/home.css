@@ -3,9 +3,9 @@
   display: flex;
   justify-content: space-between;
   min-height: 100vh;
-  background-color: #121212; /* Fondo oscuro */
+  background-color: #121212; 
   color: white;
-  overflow: hidden; /* Evita que haya scroll en el contenedor principal */
+  overflow: hidden; 
 }
 
 
