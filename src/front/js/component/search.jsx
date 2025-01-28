@@ -102,27 +102,24 @@ const Search = () => {
   };
 
   return (
-    <div className="container my-4">
-      <h1 className="text-center mb-4">Buscar en la Plataforma</h1>
-
-      <form onSubmit={handleSearch} className="mb-4">
-        <div className="d-flex justify-content-center align-items-center">
-          <input
-            type="text"
-            className="form-control w-auto me-3"
-            placeholder="Ingresa un término"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading || store.isSearching}
-          >
-            {loading || store.isSearching ? "Buscando..." : "Buscar"}
-          </button>
-        </div>
-      </form>
+    <div className="search-container container d-flex flex-column align-items-center my-4">
+      <h1 className="search-title text-center mb-4">¡Encuentra Tus Favoritos!</h1>
+      <div className="search-form w-50 d-flex flex-column align-items-center">
+        <input
+          type="text"
+          className="search-input form-control mb-3"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Ingresa un término de búsqueda"
+        />
+        <button
+          className="search-btn btn btn-primary"
+          onClick={handleSearch}
+          disabled={loading}
+        >
+          {loading ? "Buscando..." : "Buscar"}
+        </button>
+      </div>
 
       {store.error && <p className="text-danger text-center">{store.error}</p>}
 
