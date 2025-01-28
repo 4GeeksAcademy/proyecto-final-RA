@@ -1,9 +1,4 @@
-/* Agrega esto a tu archivo CSS */
-
-body {
-    background: black;
-}
-.container {
+.mi-perfil-container-bg {
     background: black;
     /* Fondo oscuro */
     min-height: 100vh;
@@ -16,4 +11,5 @@ body {
     padding: 20px;
     color: #fff;
     /* Texto blanco */
-}
+  }
+  
