@@ -5,6 +5,7 @@ const getState = ({ getStore, setStore, getActions }) => {
       loading: false,
       error: null,
       user: null,
+      users: {},
       searchResults: [],
       randomResults: [],
       isSearching: false,
@@ -174,7 +175,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           if (!resp.ok) throw new Error('Algo ha ido mal');
           const data = await resp.json();
           setStore({ user: data.user });
-          console.log("INFO de Usuario ===>", data.user.id);
+          console.log("INFO de Usuario ===>", data.user.email);
           return true;
         } catch (error) {
           console.error(error);
@@ -293,19 +294,35 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       getUserData: async (userId) => {
         try {
-          console.log("Fetching user data for ID:", userId);
-          console.log("Fetching user data from URL:", `${process.env.BACKEND_URL}api/users/${userId}`);
-
-          const response = await fetch(`${process.env.BACKEND_URL}api/users/${userId}`);
-          if (!response.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${response.status}`);
-          }
-          const data = await response.json();
-          setStore({ user: data });
+            // Comprobar si el usuario ya está en el store
+            if (store.users[userId]) {
+                console.log("Usuario ya presente en el store:", store.users[userId]);
+                return;
+            }
+    
+            console.log("Fetching user data for ID:", userId);
+    
+            const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`);
+            if (!response.ok) {
+                throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+            }
+    
+            // Verificar si la respuesta contiene datos válidos
+            const data = await response.json();
+            console.log("Datos obtenidos del usuario:", data);
+    
+            // Actualizar el store con los datos del usuario
+            setStore((prevStore) => {
+                const updatedUsers = { ...prevStore.users, [userId]: data };
+                console.log("Usuarios actualizados en store:", updatedUsers);
+                return { ...prevStore, users: updatedUsers };
+            });
+    
         } catch (err) {
-          console.error("Error al obtener los datos del usuario:", err.message);
+            console.error("Error al obtener los datos del usuario:", err.message);
         }
-      },
+    },
+    
 
       setStore: (updatedStore) => {
         setStore(updatedStore);

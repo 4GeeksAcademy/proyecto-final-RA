@@ -2,3 +2,16 @@
     color: red;
     height: 100rem;
 }
+
+.avatar-container {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .avatar-img {
+    width: 40px;  /* Tamaño del avatar */
+    height: 40px;
+    border-radius: 50%;  /* Hace la imagen redonda */
+    object-fit: cover;  /* Ajusta la imagen al contenedor */
+  }
+  

@@ -120,20 +120,29 @@ def get_users():
         return jsonify({"error": str(e)}), 500
 
 
+from sqlalchemy.exc import SQLAlchemyError
+
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:
-
+        # Intentamos obtener el usuario con el ID proporcionado
         user = User.query.get(user_id)
 
+        # Si no se encuentra el usuario, devolvemos un error 404
         if not user:
             return jsonify({"msg": "Usuario no encontrado"}), 404
         
+        # Devolvemos la información del usuario en formato JSON
         return jsonify(user.serialize()), 200
 
-  
+    except SQLAlchemyError as e:
+        # Si ocurre un error relacionado con la base de datos
+        return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
+    
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        # Si ocurre un error general
+        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+
 
 
 @api.route('/register', methods=['POST'])

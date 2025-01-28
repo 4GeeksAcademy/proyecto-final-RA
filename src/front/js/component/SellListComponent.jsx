@@ -60,13 +60,13 @@ const SellListComponent = () => {
                                         {record.record_title || "Título desconocido"}
                                     </h5>
                                     <p className="card-text mb-1 text-dark">
-                                        <strong>Sello:</strong> {record.record_label || "Sin información"}
+                                        <strong>Sello:</strong> {record.record_label.replace(/{|}/g, "") || "Sin información"}
                                     </p>
                                     <p className="card-text mb-1 text-dark">
                                         <strong>Año:</strong> {record.record_year || "Desconocido"}
                                     </p>
                                     <p className="card-text text-dark">
-                                        <strong>Género:</strong> {record.record_genre || "Sin género"}
+                                        <strong>Género:</strong> {record.record_genre.replace(/{|}/g, "") || "Sin género"}
                                     </p>
                                 </div>
 

@@ -110,13 +110,13 @@ const MisDiscosComponent = () => {
                                         {record.title || "Título desconocido"}
                                     </h5>
                                     <p className="mis-discos-card-text card-text mb-1">
-                                        <strong>Sello:</strong> {record.label || "Sin información"}
+                                        <strong>Sello:</strong> {record.label.replace(/{|}/g, "") || "Sin información"}
                                     </p>
                                     <p className="mis-discos-card-text card-text mb-1">
                                         <strong>Año:</strong> {record.year || "Desconocido"}
                                     </p>
                                     <p className="mis-discos-card-text card-text">
-                                        <strong>Género:</strong> {record.genre || "Sin género"}
+                                        <strong>Género:</strong> {record.genre.replace(/{|}/g, "") || "Sin género"}
                                     </p>
                                     <div className="mis-discos-card-footer d-flex justify-content-between mt-3">
                                         <button

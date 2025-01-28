@@ -67,11 +67,14 @@ class SellList(db.Model):
     __tablename__ = 'sell_list'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    record_id = db.Column(db.Integer, db.ForeignKey('records.id',), nullable=False)
+    record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
 
     __table_args__ = (
         db.UniqueConstraint('user_id', 'record_id', name='unique_sell_list'),  # Evita duplicados
     )
+
+    # Relación con la tabla User
+    user = db.relationship('User', backref='sell_list', lazy=True)
 
     # Relación con la tabla Record
     record = db.relationship('Record', backref='sell_list', lazy=True)
@@ -83,6 +86,8 @@ class SellList(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "user_name": self.user.name,  # Nombre del usuario
+            "user_email": self.user.email,  # Email del usuario
             "record_id": self.record_id,
             "record_title": self.record.title,  # Título del disco
             "record_cover_image": self.record.cover_image,  # Imagen del disco
@@ -90,6 +95,7 @@ class SellList(db.Model):
             "record_year": self.record.year,  # Año del disco
             "record_genre": self.record.genre,  # Género del disco
         }
+
 
 
 class WishList(db.Model):
