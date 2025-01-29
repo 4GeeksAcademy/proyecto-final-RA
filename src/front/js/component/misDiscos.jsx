@@ -7,7 +7,7 @@ import SideBar from "./sideBar.jsx";
 
 const MisDiscos = () => {
   return (
-    <div className="mis-discos-container"> 
+    <div className="mis-discos-container">
       <Link to={"/private"}>
         <h1>Back</h1>
       </Link>

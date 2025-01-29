@@ -72,11 +72,8 @@ class SellList(db.Model):
     __table_args__ = (
         db.UniqueConstraint('user_id', 'record_id', name='unique_sell_list'),  # Evita duplicados
     )
-
-    # Relación con la tabla User
     user = db.relationship('User', backref='sell_list', lazy=True)
 
-    # Relación con la tabla Record
     record = db.relationship('Record', backref='sell_list', lazy=True)
 
     def __repr__(self):
@@ -86,14 +83,14 @@ class SellList(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "user_name": self.user.name,  # Nombre del usuario
-            "user_email": self.user.email,  # Email del usuario
+            "user_name": self.user.name,
+            "user_email": self.user.email, 
             "record_id": self.record_id,
-            "record_title": self.record.title,  # Título del disco
-            "record_cover_image": self.record.cover_image,  # Imagen del disco
-            "record_label": self.record.label,  # Sello del disco
-            "record_year": self.record.year,  # Año del disco
-            "record_genre": self.record.genre,  # Género del disco
+            "record_title": self.record.title, 
+            "record_cover_image": self.record.cover_image,
+            "record_label": self.record.label,
+            "record_year": self.record.year,
+            "record_genre": self.record.genre,
         }
 
 
@@ -108,6 +105,11 @@ class WishList(db.Model):
         db.UniqueConstraint('user_id', 'record_id', name='unique_wish_list'),  # Evita duplicados
     )
 
+    user = db.relationship('User', backref='wish_list', lazy=True)
+
+
+    record = db.relationship('Record', backref='wish_list', lazy=True)
+
     def __repr__(self):
         return f'<WishList {self.id}>'
 
@@ -115,7 +117,14 @@ class WishList(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "user_name": self.user.name,
+            "user_email": self.user.email,
             "record_id": self.record_id,
+            "record_title": self.record.title,
+            "record_cover_image": self.record.cover_image,
+            "record_label": self.record.label,
+            "record_year": self.record.year,
+            "record_genre": self.record.genre,
         }
 
 

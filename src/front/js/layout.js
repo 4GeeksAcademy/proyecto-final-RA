@@ -20,6 +20,7 @@ import AboutUs from "./component/aboutUs.jsx"
 import { MiPerfil } from "./component/miPerfil.jsx"
 import DiscosEnVenta from "./component/discosEnVenta.jsx";
 import { MiPerfilContainer } from "./component/miPerfilContainer.jsx";
+import { FavoritosVista } from "./component/FavoritosVista.jsx";
 
 
 
@@ -38,6 +39,7 @@ const Layout = () => {
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<MisDiscos />} path="/mis-discos" />
+                        <Route element={<FavoritosVista />} path="/vista-favoritos" />
                         <Route element={<DiscosEnVenta />} path="/sell-list" />
                         <Route element={<MiPerfilContainer />} path="/mi-perfil-container" />
                         {/* <Route element={<MiPerfil />} path="/mi-perfil" /> */}

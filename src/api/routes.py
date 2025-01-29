@@ -125,22 +125,19 @@ from sqlalchemy.exc import SQLAlchemyError
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:
-        # Intentamos obtener el usuario con el ID proporcionado
         user = User.query.get(user_id)
 
-        # Si no se encuentra el usuario, devolvemos un error 404
         if not user:
             return jsonify({"msg": "Usuario no encontrado"}), 404
         
-        # Devolvemos la información del usuario en formato JSON
         return jsonify(user.serialize()), 200
 
     except SQLAlchemyError as e:
-        # Si ocurre un error relacionado con la base de datos
+
         return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
     
     except Exception as e:
-        # Si ocurre un error general
+    
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
 
@@ -383,20 +380,16 @@ def delete_sellList_record(record_id):
 @jwt_required()
 def add_to_wishlist():
     try:
-        # Obtener la identidad del JWT
         id = get_jwt_identity()
 
-        # Obtener los datos del cuerpo de la solicitud
         data = request.get_json()
         user_id = data['user_id']
         record_id = data['record_id']
         
-        # Verifica si el ítem ya está en la wishlist
         existing_entry = WishList.query.filter_by(user_id=user_id, record_id=record_id).first()
         if existing_entry:
             return jsonify({"message": "Este disco ya está en tu wishlist."}), 400
 
-        # Crear una nueva entrada en la wishlist
         new_entry = WishList(user_id=user_id, record_id=record_id)
         db.session.add(new_entry)
         db.session.commit()
@@ -411,18 +404,23 @@ def add_to_wishlist():
 @api.route("/wishlist", methods=["GET"])
 @jwt_required()
 def get_wishlist():
-    user_id = get_jwt_identity()  # Obtener el ID del usuario logueado
+    user_id = get_jwt_identity() 
 
-    # Buscar los ítems en la wishlist del usuario
     wishlist_items = WishList.query.filter_by(user_id=user_id).all()
 
     if not wishlist_items:
-        return jsonify([]), 200  # Si no hay ítems, devolver lista vacía
+        return jsonify([]), 200
 
-    # Convertir los objetos a diccionarios
     wishlist_data = [
         {
-            "record_id": item.record_id,
+            "id": item.id,
+            "record_id": item.record.id,
+            "record_title": item.record.title,
+            "record_artist": item.record.artist if hasattr(item.record, "artist") else "Desconocido",
+            "record_cover_image": item.record.cover_image,
+            "record_label": item.record.label,
+            "record_year": item.record.year,
+            "record_genre": item.record.genre
         }
         for item in wishlist_items
     ]

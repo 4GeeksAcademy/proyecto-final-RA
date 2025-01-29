@@ -2,30 +2,25 @@ import React, { useState, useEffect, useContext } from "react";
 import "../../styles/buscarEnPlataformaComponent.css";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
+import { Modal, Button, Form } from "react-bootstrap"; 
 
 export const BuscarEnPlataformaComponent = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
-  const { store } = useContext(Context);
+  const { store, actions } = useContext(Context); 
   const [addLoading, setAddLoading] = useState(false);
   const navigate = useNavigate();
   const [comments, setComments] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [exchangeRecord, setExchangeRecord] = useState("");
 
+  useEffect(() => {
+    actions.getSellList(); 
+  }, []);
 
-
-
-  const handleAddComment = (record_id, newComment) => {
-    if (!newComment.trim()) return;
-  
-    setComments(prevComments => ({
-      ...prevComments,
-      [record_id]: [...(prevComments[record_id] || []), newComment]
-    }));
-  
-    // Aquí enviaríamos el comentario al backend si es necesario.
-  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -73,49 +68,63 @@ export const BuscarEnPlataformaComponent = () => {
     fetchWishlist();
   }, [store.user]);
 
-  const handleAddToWishlist = async (selectedRecord) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Por favor, inicia sesión para agregar a favoritos.");
-      navigate("/register");
+  const handleAddComment = (record_id, newComment) => {
+    if (!newComment.trim()) return;
+
+    setComments(prevComments => ({
+      ...prevComments,
+      [record_id]: [...(prevComments[record_id] || []), newComment]
+    }));
+  };
+
+  const handleShowModal = (item) => {
+    setSelectedItem(item);
+    setShowModal(true);
+    setExchangeRecord(""); 
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedItem(null);
+  };
+
+  const handleExchangeRecord = async () => {
+    if (!exchangeRecord) {
+      alert("Por favor, selecciona un disco para intercambiar.");
       return;
     }
 
-    setAddLoading(true);
+    
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/exchange_record`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           user_id: store.user.id,
-          record_id: selectedRecord.record_id,
+          selected_record_id: selectedItem.record_id,
+          exchange_record_id: exchangeRecord,
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Error al agregar el ítem a la lista de deseos.");
+        throw new Error("Error al realizar el intercambio.");
       }
 
-      setItems(prevItems =>
-        prevItems.map(item =>
-          item.record_id === selectedRecord.record_id
-            ? { ...item, isFavorite: !item.isFavorite }
-            : item
-        )
-      );
-      alert("Ítem agregado a la lista de deseos.");
+
+      alert("Intercambio realizado con éxito.");
+      setShowModal(false);
     } catch (error) {
-      alert(error.message || "Hubo un problema al agregar el ítem.");
-    } finally {
-      setAddLoading(false);
+      alert(error.message || "Hubo un problema al realizar el intercambio.");
     }
   };
 
+
   if (loading) return <div className="text-center">Cargando...</div>;
   if (error) return <div className="text-danger text-center">{error}</div>;
+
 
   const filteredItems = items.filter(item =>
     item.record_title.toLowerCase().includes(query.toLowerCase())
@@ -157,9 +166,21 @@ export const BuscarEnPlataformaComponent = () => {
                   <p className="card-text">
                     <strong>Año:</strong> {item.record_year}
                   </p>
+                  <div className="comments-section">
+                    <input
+                      type="text"
+                      placeholder="Escribe un comentario"
+                      onBlur={(e) => handleAddComment(item.record_id, e.target.value)}
+                    />
+                    <div>
+                      {comments[item.record_id] && comments[item.record_id].map((comment, idx) => (
+                        <p key={idx}>{comment}</p>
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 <div className="card-footer text-center">
-                  <button className="btn btn-primary">Ver más</button>
+                  <button className="btn btn-primary" onClick={() => handleShowModal(item)}>Ver más</button>
                   <button
                     onClick={() => handleAddToWishlist(item)}
                     className="fs-4 btn"
@@ -167,7 +188,6 @@ export const BuscarEnPlataformaComponent = () => {
                   >
                     {item.isFavorite ? "❤️" : "💛"}
                   </button>
-                  
                 </div>
               </div>
             </div>
@@ -176,7 +196,41 @@ export const BuscarEnPlataformaComponent = () => {
           <div className="col-12 text-center">No hay ítems en venta que coincidan con tu búsqueda.</div>
         )}
       </div>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedItem?.record_title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedItem?.record_cover_image && (
+            <img
+              src={selectedItem.record_cover_image}
+              alt={selectedItem.record_title}
+              className="img-fluid mb-3"
+            />
+          )}
+          <p><strong>Género:</strong> {selectedItem?.record_genre}</p>
+          <p><strong>Año:</strong> {selectedItem?.record_year}</p>
+          <Form.Group controlId="exchangeRecord">
+            <Form.Label>Selecciona un ítem para intercambiar</Form.Label>
+            <Form.Control as="select" value={exchangeRecord} onChange={(e) => setExchangeRecord(e.target.value)}>
+              <option value="">Selecciona un ítem...</option>
+              {store.onSale && store.onSale.length > 0 ? (
+                store.onSale.map((record) => (
+                  <option key={record.record_id} value={record.record_id}>
+                    {record.record_title}
+                  </option>
+                ))
+              ) : (
+                <option>No tienes ítems en venta.</option>
+              )}
+            </Form.Control>
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
+          <Button variant="primary" onClick={handleExchangeRecord}>Intercambiar</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
-

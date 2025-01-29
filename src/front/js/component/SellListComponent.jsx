@@ -11,7 +11,7 @@ const SellListComponent = () => {
     }, []);
 
     const handleDelete = async (recordId) => {
-        const userId = store.user?.id;  // Asegurar que userId está definido
+        const userId = store.user?.id;  
         if (!userId) {
             setDeleteMessage("No se encontró el usuario");
             return;
