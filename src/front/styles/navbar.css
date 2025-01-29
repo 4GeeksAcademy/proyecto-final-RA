@@ -2,7 +2,6 @@
   padding-top: 4rem;
 }
 
-
 .navbar-container {
   background-color: rgb(0, 0, 0);
   position: fixed;
@@ -16,7 +15,6 @@
   align-items: center;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
-
 
 .navbar-nav {
   display: flex;
@@ -37,23 +35,20 @@
   white-space: nowrap;
 }
 
-
 .navbar-nav .nav-link:hover {
   color: red !important;
 }
-
 
 .navbar-brand {
   font-size: 2rem;
   font-weight: bold;
   color: red !important;
   text-decoration: none;
-  
-  display: flex; 
-  align-items:center;
-  justify-content: center; 
-  height: 100%; 
-  text-align: center; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
 }
 
 .btn-login {
@@ -62,14 +57,37 @@
   padding: 12px 25px;
   margin-right: 40px;
   position: relative;
-  background-color: black; /* Rojo vibrante */
-  color: white; /* Texto blanco */
+  background-color: black;
+  color: white;
   border: none;
-  cursor: pointer; 
-  transition: all 0.3s ease; 
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-login:hover {
-  color: red
+  color: red;
 }
+
+.btn-radio {
+  background-color: #ff3300;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.btn-radio:hover {
+  color: red !important;
+}
+
+.radio-navbar {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+
+
 

@@ -1,0 +1,35 @@
+.radio-container {
+    position: fixed; 
+    bottom: 20px;
+    left: 0;
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.8); 
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    text-align: center;
+    color: white;
+  }
+  
+  .radio-container h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  .radio-container audio {
+    width: 100%;
+  }
+  
+  @media (max-width: 768px) {
+    .radio-container {
+      width: 90%;
+      left: 5%;
+      bottom: 10px;
+    }
+  }
+  
+  
+  
+  
+  
