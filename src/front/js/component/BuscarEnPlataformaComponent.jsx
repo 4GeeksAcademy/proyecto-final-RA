@@ -3,12 +3,12 @@ import "../../styles/buscarEnPlataformaComponent.css";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 
-export const BuscarEnPlataformaComponent = (props) => {
+export const BuscarEnPlataformaComponent = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [query, setQuery] = useState(""); // Estado para la búsqueda
-  const { store, actions } = useContext(Context);
+  const [query, setQuery] = useState("");
+  const { store } = useContext(Context);
   const [addLoading, setAddLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -29,13 +29,12 @@ export const BuscarEnPlataformaComponent = (props) => {
     };
 
     const fetchWishlist = async () => {
-      if (!store.user) return; // Si no hay usuario logueado, no hacer la petición
-
+      if (!store.user) return;
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
 
         if (!response.ok) {
@@ -43,13 +42,11 @@ export const BuscarEnPlataformaComponent = (props) => {
         }
 
         const wishlistData = await response.json();
-        const wishlistIds = wishlistData.map(item => item.record_id); // Extraer solo los IDs
-
-        // Marcar los favoritos en la lista de ítems
+        const wishlistIds = wishlistData.map(item => item.record_id);
         setItems(prevItems =>
           prevItems.map(item => ({
             ...item,
-            isFavorite: wishlistIds.includes(item.record_id)
+            isFavorite: wishlistIds.includes(item.record_id),
           }))
         );
       } catch (error) {
@@ -59,8 +56,7 @@ export const BuscarEnPlataformaComponent = (props) => {
 
     fetchItems();
     fetchWishlist();
-  }, [store.user]); // Se ejecuta cuando el usuario cambia
-
+  }, [store.user]);
 
   const handleAddToWishlist = async (selectedRecord) => {
     const token = localStorage.getItem("token");
@@ -71,7 +67,6 @@ export const BuscarEnPlataformaComponent = (props) => {
     }
 
     setAddLoading(true);
-
     try {
       const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
         method: "POST",
@@ -89,7 +84,6 @@ export const BuscarEnPlataformaComponent = (props) => {
         throw new Error("Error al agregar el ítem a la lista de deseos.");
       }
 
-      // Actualizar el estado local para reflejar el cambio de favorito
       setItems(prevItems =>
         prevItems.map(item =>
           item.record_id === selectedRecord.record_id
@@ -105,19 +99,16 @@ export const BuscarEnPlataformaComponent = (props) => {
     }
   };
 
-  if (loading) {
-    return <div className="text-center">Cargando...</div>;
-  }
+  if (loading) return <div className="text-center">Cargando...</div>;
+  if (error) return <div className="text-danger text-center">{error}</div>;
 
-  if (error) {
-    return <div className="text-danger text-center">{error}</div>;
-  }
+  const filteredItems = items.filter(item =>
+    item.record_title.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <div className="container my-4 grid-ventas">
       <h1 className="text-center mb-4">Ítems en Venta</h1>
-
-      {/* Campo de búsqueda */}
       <div className="search-container mb-4">
         <input
           type="text"
@@ -127,7 +118,6 @@ export const BuscarEnPlataformaComponent = (props) => {
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
-
       <div className="row">
         {filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
@@ -148,7 +138,6 @@ export const BuscarEnPlataformaComponent = (props) => {
                   <h5 className="card-title">{item.record_title}</h5>
                   <p className="card-text">
                     <strong>Género:</strong> {item.record_genre.replace(/{|}/g, "")}
-                    <strong>Género:</strong> {item.record_genre.replace(/{|}/g, "")}
                   </p>
                   <p className="card-text">
                     <strong>Año:</strong> {item.record_year}
@@ -159,7 +148,8 @@ export const BuscarEnPlataformaComponent = (props) => {
                   <button
                     onClick={() => handleAddToWishlist(item)}
                     className="fs-4 btn"
-                    disabled={addLoading}>
+                    disabled={addLoading}
+                  >
                     {item.isFavorite ? "❤️" : "💛"}
                   </button>
                 </div>
