@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import requests
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Record, SellList
+from api.models import db, User, Record, SellList, WishList
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -376,3 +376,55 @@ def delete_sellList_record(record_id):
 
     except Exception as e:
         return jsonify({"error": "Error al eliminar el disco", "message": str(e)}), 500
+    
+
+
+@api.route('/wishlist', methods=['POST'])
+@jwt_required()
+def add_to_wishlist():
+    try:
+        # Obtener la identidad del JWT
+        id = get_jwt_identity()
+
+        # Obtener los datos del cuerpo de la solicitud
+        data = request.get_json()
+        user_id = data['user_id']
+        record_id = data['record_id']
+        
+        # Verifica si el ítem ya está en la wishlist
+        existing_entry = WishList.query.filter_by(user_id=user_id, record_id=record_id).first()
+        if existing_entry:
+            return jsonify({"message": "Este disco ya está en tu wishlist."}), 400
+
+        # Crear una nueva entrada en la wishlist
+        new_entry = WishList(user_id=user_id, record_id=record_id)
+        db.session.add(new_entry)
+        db.session.commit()
+
+        return jsonify({"message": "Disco agregado a tu wishlist."}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+@api.route("/wishlist", methods=["GET"])
+@jwt_required()
+def get_wishlist():
+    user_id = get_jwt_identity()  # Obtener el ID del usuario logueado
+
+    # Buscar los ítems en la wishlist del usuario
+    wishlist_items = WishList.query.filter_by(user_id=user_id).all()
+
+    if not wishlist_items:
+        return jsonify([]), 200  # Si no hay ítems, devolver lista vacía
+
+    # Convertir los objetos a diccionarios
+    wishlist_data = [
+        {
+            "record_id": item.record_id,
+        }
+        for item in wishlist_items
+    ]
+
+    return jsonify(wishlist_data), 200
