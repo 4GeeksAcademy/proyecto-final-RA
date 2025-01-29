@@ -1,17 +1,145 @@
-.grid-ventas {
-    color: red;
-    height: 200rem;
+/* Contenedor principal */
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Estilo del feed */
+.feed {
+  width: 100%;
+  max-width: 500px; /* Ancho similar al feed de Instagram */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Tarjeta de publicación */
+.post-card {
+  background: rgba(255, 255, 255, 0.198);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Cabecera (Usuario) */
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  color: black;
 }
 
 .avatar-container {
-    display: inline-block;
-    margin-right: 10px;
-  }
-  
-  .avatar-img {
-    width: 40px;  /* Tamaño del avatar */
-    height: 40px;
-    border-radius: 50%;  /* Hace la imagen redonda */
-    object-fit: cover;  /* Ajusta la imagen al contenedor */
-  }
-  
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-right: 10px;
+  color: black;
+}
+
+/* Imagen principal */
+.post-img {
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Cuerpo de la publicación */
+.post-body {
+  padding: 10px;
+}
+
+.post-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+}
+
+.post-text {
+  font-size: 14px;
+  color: black;
+}
+strong {
+  color: black;
+}
+
+/* Pie de publicación */
+.post-footer {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Botón de "me gusta" */
+.like-btn {
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Comentarios */
+.comment-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.comments-list {
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 5px;
+  list-style: none;
+}
+
+.comment {
+  font-size: 14px;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Input de comentarios */
+.comment-input {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-top: 1px solid #ddd;
+}
+
+.comment-textarea {
+  flex-grow: 1;
+  border: none;
+  background: #f8f8f8;
+  padding: 8px;
+  border-radius: 20px;
+  font-size: 14px;
+  resize: none;
+}
+
+.comment-textarea:focus {
+  outline: none;
+}
+
+.comment-btn {
+  background: none;
+  border: none;
+  color: #0095f6;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.comment-btn:hover {
+  color: #007bb5;
+}

@@ -115,10 +115,10 @@ export const MiPerfil = () => {
         ) : (
           <div>
             <p>
-              <strong>Nombre:</strong> {store.user?.name || "N/A"}
+              <strong className="text-black">Nombre:</strong> {store.user?.name || "N/A"}
             </p>
             <p>
-              <strong>Email:</strong> {store.user?.email || "N/A"}
+              <strong className="text-black">Email:</strong> {store.user?.email || "N/A"}
             </p>
             <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit">
               Editar

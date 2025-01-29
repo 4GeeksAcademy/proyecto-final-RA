@@ -10,6 +10,21 @@ export const BuscarEnPlataformaComponent = (props) => {
   const { store, actions } = useContext(Context);
   const [addLoading, setAddLoading] = useState(false);
   const navigate = useNavigate();
+  const [comments, setComments] = useState({});
+
+
+
+
+  const handleAddComment = (record_id, newComment) => {
+    if (!newComment.trim()) return;
+  
+    setComments(prevComments => ({
+      ...prevComments,
+      [record_id]: [...(prevComments[record_id] || []), newComment]
+    }));
+  
+    // Aquí enviaríamos el comentario al backend si es necesario.
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -148,6 +163,7 @@ export const BuscarEnPlataformaComponent = (props) => {
                     disabled={addLoading}>
                     {item.isFavorite ? "❤️" : "💛"}
                   </button>
+                  
                 </div>
               </div>
             </div>
