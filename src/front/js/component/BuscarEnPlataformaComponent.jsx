@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../../styles/buscarEnPlataformaComponent.css";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
 
-export const BuscarEnPlataformaComponent = () => {
+export const BuscarEnPlataformaComponent = (props) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState(""); // Estado para la búsqueda
   const { store, actions } = useContext(Context);
+  const [addLoading, setAddLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -25,15 +28,82 @@ export const BuscarEnPlataformaComponent = () => {
       }
     };
 
-    fetchItems();
-  }, []);
+    const fetchWishlist = async () => {
+      if (!store.user) return; // Si no hay usuario logueado, no hacer la petición
 
-  // Filtrar los ítems en base a la consulta
-  const filteredItems = items.filter((item) => {
-    const itemName = item.record_title ? item.record_title.toLowerCase() : '';
-    const searchQuery = query.toLowerCase();
-    return itemName.includes(searchQuery);
-  });
+      try {
+        const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("No se pudo obtener la wishlist.");
+        }
+
+        const wishlistData = await response.json();
+        const wishlistIds = wishlistData.map(item => item.record_id); // Extraer solo los IDs
+
+        // Marcar los favoritos en la lista de ítems
+        setItems(prevItems =>
+          prevItems.map(item => ({
+            ...item,
+            isFavorite: wishlistIds.includes(item.record_id)
+          }))
+        );
+      } catch (error) {
+        console.error("Error al obtener la wishlist:", error.message);
+      }
+    };
+
+    fetchItems();
+    fetchWishlist();
+  }, [store.user]); // Se ejecuta cuando el usuario cambia
+
+
+  const handleAddToWishlist = async (selectedRecord) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Por favor, inicia sesión para agregar a favoritos.");
+      navigate("/register");
+      return;
+    }
+
+    setAddLoading(true);
+
+    try {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user_id: store.user.id,
+          record_id: selectedRecord.record_id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al agregar el ítem a la lista de deseos.");
+      }
+
+      // Actualizar el estado local para reflejar el cambio de favorito
+      setItems(prevItems =>
+        prevItems.map(item =>
+          item.record_id === selectedRecord.record_id
+            ? { ...item, isFavorite: !item.isFavorite }
+            : item
+        )
+      );
+      alert("Ítem agregado a la lista de deseos.");
+    } catch (error) {
+      alert(error.message || "Hubo un problema al agregar el ítem.");
+    } finally {
+      setAddLoading(false);
+    }
+  };
 
   if (loading) {
     return <div className="text-center">Cargando...</div>;
@@ -67,9 +137,8 @@ export const BuscarEnPlataformaComponent = () => {
                   <div className="avatar-container">
                     <i className="fa-solid fa-user"></i>
                   </div>
-                  <strong>{item.user_name}</strong> <br />
+                  <strong>{item.user_name}</strong>
                 </div>
-
                 <img
                   src={item.record_cover_image || "placeholder.jpg"}
                   className="card-img-top"
@@ -79,14 +148,20 @@ export const BuscarEnPlataformaComponent = () => {
                   <h5 className="card-title">{item.record_title}</h5>
                   <p className="card-text">
                     <strong>Género:</strong> {item.record_genre.replace(/{|}/g, "")}
+                    <strong>Género:</strong> {item.record_genre.replace(/{|}/g, "")}
                   </p>
                   <p className="card-text">
                     <strong>Año:</strong> {item.record_year}
                   </p>
                 </div>
-
                 <div className="card-footer text-center">
                   <button className="btn btn-primary">Ver más</button>
+                  <button
+                    onClick={() => handleAddToWishlist(item)}
+                    className="fs-4 btn"
+                    disabled={addLoading}>
+                    {item.isFavorite ? "❤️" : "💛"}
+                  </button>
                 </div>
               </div>
             </div>

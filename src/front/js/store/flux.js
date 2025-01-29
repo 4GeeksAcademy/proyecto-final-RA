@@ -12,8 +12,34 @@ const getState = ({ getStore, setStore, getActions }) => {
       isFetchingRandom: false,
       randomFetched: false,
       onSale: [],
+      favorites: [],
+      currentUser: null,
     },
     actions: {
+      addToWishlist: async (recordId, userId) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              record_id: recordId,
+              user_id: userId
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al agregar el disco a la wishlist.");
+          }
+
+          // Actualiza el store
+          actions.fetchWishlist(userId); // Si tienes una acción para obtener la wishlist
+        } catch (error) {
+          console.error("Error al agregar a la wishlist:", error.message);
+        }
+      },
+
       searchDiscogs: async (query, searchBy) => {
         const store = getStore();
 
@@ -68,7 +94,6 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-
       FetchRandomRecords: async (q = "Drum & Bass") => {
         const store = getStore();
 
@@ -94,7 +119,6 @@ const getState = ({ getStore, setStore, getActions }) => {
 
           const data = await resp.json();
           console.log("Respuesta de la API (resultados aleatorios):", data);
-
 
           if (data.results && data.results.length > 0) {
             setStore({
@@ -183,7 +207,6 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-
       editUser: async (updatedData) => {
         try {
 
@@ -193,9 +216,7 @@ const getState = ({ getStore, setStore, getActions }) => {
             return { success: false, error: "No se encontró un token válido" };
           }
 
-
           const BACKEND_URL = process.env.BACKEND_URL;
-
 
           const response = await fetch(`${BACKEND_URL}/api/edit_user`, {
             method: "PUT",
@@ -206,7 +227,6 @@ const getState = ({ getStore, setStore, getActions }) => {
             body: JSON.stringify(updatedData),
           });
 
-
           if (!response.ok) {
             const errorData = await response.json();
             console.error("Error al editar usuario:", errorData.msg || response.statusText);
@@ -215,7 +235,6 @@ const getState = ({ getStore, setStore, getActions }) => {
               error: errorData.msg || "Error desconocido al actualizar el usuario",
             };
           }
-
 
           const data = await response.json();
           console.log("Usuario actualizado con éxito:", data);
@@ -226,7 +245,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           return { success: false, error: "Error de conexión con el servidor" };
         }
       },
-
 
       addRecord: async (record) => {
         const token = localStorage.getItem("token");
@@ -275,7 +293,6 @@ const getState = ({ getStore, setStore, getActions }) => {
             return { success: false, error: "No se encontró un token válido" };
           }
 
-
           const response = await fetch(process.env.BACKEND_URL + "/api/records", {
             method: "GET",
             headers: {
@@ -294,34 +311,26 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       getUserData: async (userId) => {
         try {
-            // Comprobar si el usuario ya está en el store
-            if (store.users[userId]) {
-                console.log("Usuario ya presente en el store:", store.users[userId]);
-                return;
-            }
-    
-            console.log("Fetching user data for ID:", userId);
-    
-            const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`);
-            if (!response.ok) {
-                throw new Error(`Error en la respuesta del servidor: ${response.status}`);
-            }
-    
-            // Verificar si la respuesta contiene datos válidos
-            const data = await response.json();
-            console.log("Datos obtenidos del usuario:", data);
-    
-            // Actualizar el store con los datos del usuario
-            setStore((prevStore) => {
-                const updatedUsers = { ...prevStore.users, [userId]: data };
-                console.log("Usuarios actualizados en store:", updatedUsers);
-                return { ...prevStore, users: updatedUsers };
-            });
-    
-        } catch (err) {
-            console.error("Error al obtener los datos del usuario:", err.message);
+          // Comprobar si el usuario ya está en el store
+          const store = getStore();
+          if (store.users[userId]) {
+              console.log("Usuario ya presente en el store:", store.users[userId]);
+              return;
+          }
+
+          console.log("Fetching user data for:", userId);
+          const response = await fetch(`${process.env.BACKEND_URL}/api/user/${userId}`);
+          const data = await response.json();
+          setStore({
+            users: {
+              ...store.users,
+              [userId]: data,
+            },
+          });
+        } catch (error) {
+          console.error("Error al obtener los datos del usuario:", error);
         }
-    },
+      },
     
 
       setStore: (updatedStore) => {
