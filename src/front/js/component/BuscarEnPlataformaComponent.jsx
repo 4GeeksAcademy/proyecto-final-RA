@@ -3,11 +3,12 @@ import "../../styles/buscarEnPlataformaComponent.css";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 
-export const BuscarEnPlataformaComponent = (props) => {
+export const BuscarEnPlataformaComponent = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { store, actions } = useContext(Context);
+  const [query, setQuery] = useState("");
+  const { store } = useContext(Context);
   const [addLoading, setAddLoading] = useState(false);
   const navigate = useNavigate();
   const [comments, setComments] = useState({});
@@ -43,13 +44,12 @@ export const BuscarEnPlataformaComponent = (props) => {
     };
 
     const fetchWishlist = async () => {
-      if (!store.user) return; // Si no hay usuario logueado, no hacer la petición
-
+      if (!store.user) return;
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
 
         if (!response.ok) {
@@ -57,13 +57,11 @@ export const BuscarEnPlataformaComponent = (props) => {
         }
 
         const wishlistData = await response.json();
-        const wishlistIds = wishlistData.map(item => item.record_id); // Extraer solo los IDs
-
-        // Marcar los favoritos en la lista de ítems
+        const wishlistIds = wishlistData.map(item => item.record_id);
         setItems(prevItems =>
           prevItems.map(item => ({
             ...item,
-            isFavorite: wishlistIds.includes(item.record_id)
+            isFavorite: wishlistIds.includes(item.record_id),
           }))
         );
       } catch (error) {
@@ -73,8 +71,7 @@ export const BuscarEnPlataformaComponent = (props) => {
 
     fetchItems();
     fetchWishlist();
-  }, [store.user]); // Se ejecuta cuando el usuario cambia
-
+  }, [store.user]);
 
   const handleAddToWishlist = async (selectedRecord) => {
     const token = localStorage.getItem("token");
@@ -85,7 +82,6 @@ export const BuscarEnPlataformaComponent = (props) => {
     }
 
     setAddLoading(true);
-
     try {
       const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
         method: "POST",
@@ -103,7 +99,6 @@ export const BuscarEnPlataformaComponent = (props) => {
         throw new Error("Error al agregar el ítem a la lista de deseos.");
       }
 
-      // Actualizar el estado local para reflejar el cambio de favorito
       setItems(prevItems =>
         prevItems.map(item =>
           item.record_id === selectedRecord.record_id
@@ -119,20 +114,28 @@ export const BuscarEnPlataformaComponent = (props) => {
     }
   };
 
-  if (loading) {
-    return <div className="text-center">Cargando...</div>;
-  }
+  if (loading) return <div className="text-center">Cargando...</div>;
+  if (error) return <div className="text-danger text-center">{error}</div>;
 
-  if (error) {
-    return <div className="text-danger text-center">{error}</div>;
-  }
+  const filteredItems = items.filter(item =>
+    item.record_title.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <div className="container my-4 grid-ventas">
       <h1 className="text-center mb-4">Ítems en Venta</h1>
+      <div className="search-container mb-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar ítems"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
       <div className="row">
-        {items.length > 0 ? (
-          items.map((item, index) => (
+        {filteredItems.length > 0 ? (
+          filteredItems.map((item, index) => (
             <div key={index} className="col-12 col-md-4 mb-4">
               <div className="card">
                 <div className="card-header">
@@ -160,7 +163,8 @@ export const BuscarEnPlataformaComponent = (props) => {
                   <button
                     onClick={() => handleAddToWishlist(item)}
                     className="fs-4 btn"
-                    disabled={addLoading}>
+                    disabled={addLoading}
+                  >
                     {item.isFavorite ? "❤️" : "💛"}
                   </button>
                   
@@ -169,9 +173,10 @@ export const BuscarEnPlataformaComponent = (props) => {
             </div>
           ))
         ) : (
-          <div className="col-12 text-center">No hay ítems en venta en este momento.</div>
+          <div className="col-12 text-center">No hay ítems en venta que coincidan con tu búsqueda.</div>
         )}
       </div>
     </div>
   );
 };
+
