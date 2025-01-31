@@ -13,7 +13,7 @@ export const MiPerfil = () => {
       setFormData({
         name: store.user.name || "",
         email: store.user.email || "",
-        password: "", // La contraseña no se muestra por razones de seguridad
+        password: "",
       });
     }
   }, [store.user]);
@@ -74,7 +74,7 @@ export const MiPerfil = () => {
                   type="text"
                   className="input-field"
                   onChange={handleInputChange}
-                  name="name" // Asegúrate que 'name' coincida con la clave en formData
+                  name="name" 
                   placeholder="Nombre de Usuario"
                   value={formData.name || ""}
                 />
@@ -84,7 +84,7 @@ export const MiPerfil = () => {
                   type="email"
                   className="input-field"
                   onChange={handleInputChange}
-                  name="email" // Asegúrate que 'email' coincida con la clave en formData
+                  name="email"
                   placeholder="Correo Electrónico"
                   value={formData.email || ""}
                   required
@@ -95,7 +95,7 @@ export const MiPerfil = () => {
                   type="password"
                   className="input-field"
                   onChange={handleInputChange}
-                  name="password" // Asegúrate que 'password' coincida con la clave en formData
+                  name="password" 
                   placeholder="Contraseña"
                   value={formData.password || ""}
                   required

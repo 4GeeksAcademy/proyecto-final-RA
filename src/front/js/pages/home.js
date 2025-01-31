@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
-// Named imports for components
-import { Test } from "../component/test.jsx";
+
 import { Register } from "../component/register.jsx";
 import SearchInvitados from "../component/SearchInvitados.jsx";
 import RandomRecordsCarousel from "../component/RandomRecordsCarousel.jsx";

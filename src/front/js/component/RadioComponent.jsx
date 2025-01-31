@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import Plyr from "plyr";
-import "plyr/dist/plyr.css"; 
+import "plyr/dist/plyr.css";
 import "../../styles/RadioComponent.css";
 
 const RadioComponent = () => {
   const audioRef = useRef(null);
-  const plyrRef = useRef(null); 
+  const plyrRef = useRef(null);
 
   const [radioUrl, setRadioUrl] = useState("https://amoris.sknt.ru/dnb.mp3");
 
@@ -18,11 +18,11 @@ const RadioComponent = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      plyrRef.current = new Plyr(audioRef.current); 
+      plyrRef.current = new Plyr(audioRef.current);
 
       return () => plyrRef.current.destroy();
     }
-  }, []); 
+  }, []);
 
   const toggleRadio = () => {
     const currentIndex = radioStations.indexOf(radioUrl);
@@ -32,7 +32,7 @@ const RadioComponent = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      const isPlaying = !audioRef.current.paused; 
+      const isPlaying = !audioRef.current.paused;
 
       audioRef.current.src = radioUrl;
 
