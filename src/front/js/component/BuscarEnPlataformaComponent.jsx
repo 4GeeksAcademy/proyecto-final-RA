@@ -134,24 +134,26 @@ export const BuscarEnPlataformaComponent = () => {
 
   const handleAddToWishlist = async (item) => {
     setAddLoading(true);
-  
+
     try {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);  // Verifica si el token está presente
+
       const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
         method: item.isFavorite ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          record_id: item.record_id,
-        }),
+        body: JSON.stringify({ record_id: recordId }),
       });
-      console.log(response, "<========")
-  
+
+      console.log(response, "<========"); // Verifica la respuesta
+
       if (!response.ok) {
         throw new Error("No se pudo actualizar la wishlist.");
       }
-  
+
       setItems((prevItems) =>
         prevItems.map((prevItem) =>
           prevItem.record_id === item.record_id
@@ -165,7 +167,9 @@ export const BuscarEnPlataformaComponent = () => {
       setAddLoading(false);
     }
   };
-  
+
+
+
 
 
 
