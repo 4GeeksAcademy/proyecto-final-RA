@@ -42,30 +42,30 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       getWishList: async () => {
         try {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                console.error("Token no encontrado.");
-                return { success: false, error: "No se encontró un token válido" };
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("Token no encontrado.");
+            return { success: false, error: "No se encontró un token válido" };
+          }
+
+          const response = await fetch(process.env.BACKEND_URL + "/api/wishlist", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`
             }
-    
-            const response = await fetch(process.env.BACKEND_URL + "/api/wishlist", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-    
-            if (!response.ok) throw new Error("Error al obtener la lista de favoritos");
-    
-            const data = await response.json();
-    
-            setStore({ wishList: data });
+          });
+
+          if (!response.ok) throw new Error("Error al obtener la lista de favoritos");
+
+          const data = await response.json();
+
+          setStore({ wishList: data });
         } catch (error) {
-            console.error("Error en getWishList:", error);
-            setStore({ error: "No se pudieron cargar los favoritos" });
+          console.error("Error en getWishList:", error);
+          setStore({ error: "No se pudieron cargar los favoritos" });
         }
-    },
-    
+      },
+
 
 
 

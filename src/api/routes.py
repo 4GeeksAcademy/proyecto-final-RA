@@ -383,21 +383,28 @@ def add_to_wishlist():
         id = get_jwt_identity()
 
         data = request.get_json()
-        user_id = data['user_id']
+        print("Datos recibidos:", data)
+
         record_id = data['record_id']
         
-        existing_entry = WishList.query.filter_by(user_id=user_id, record_id=record_id).first()
+   
+        if not id or not record_id:
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
+
+        existing_entry = WishList.query.filter_by(user_id=id, record_id=record_id).first()
         if existing_entry:
             return jsonify({"message": "Este disco ya está en tu wishlist."}), 400
 
-        new_entry = WishList(user_id=user_id, record_id=record_id)
+        new_entry = WishList(user_id=id, record_id=record_id)
         db.session.add(new_entry)
         db.session.commit()
 
         return jsonify({"message": "Disco agregado a tu wishlist."}), 200
 
     except Exception as e:
+        print("Error en el servidor:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
@@ -426,3 +433,37 @@ def get_wishlist():
     ]
 
     return jsonify(wishlist_data), 200
+
+
+
+@api.route('/exchange_record', methods=['POST'])
+@jwt_required()
+def exchange_record():
+
+    user_id = get_jwt_identity() 
+    data = request.get_json()
+
+    user_id = data.get("user_id")
+    selected_record_id = data.get("selected_record_id")
+    exchange_record_id = data.get("exchange_record_id")
+
+    if not user_id or not selected_record_id or not exchange_record_id:
+        return jsonify({"message": "Faltan datos para el intercambio."}), 400
+
+    # Obtener el usuario logueado y el otro usuario
+    user = User.query.get(user_id)
+    exchange_user = User.query.filter_by(id=user_id).first()  # Asegúrate de que el usuario logueado sea el dueño del ítem seleccionado
+
+    # Verificar que el usuario logueado tiene el ítem que desea intercambiar
+    record_to_exchange = Record.query.get(exchange_record_id)
+    if record_to_exchange not in user.on_sale:
+        return jsonify({"message": "El disco seleccionado no pertenece al usuario logueado."}), 400
+
+    # Intercambiar ítems
+    record_to_exchange.user_id = exchange_user.id  # Actualizar el usuario que posee el disco que se intercambia
+    selected_record = Record.query.get(selected_record_id)
+    selected_record.user_id = user.id  # El usuario logueado obtiene el disco
+
+    db.session.commit()
+
+    return jsonify({"message": "Intercambio realizado con éxito."}), 200

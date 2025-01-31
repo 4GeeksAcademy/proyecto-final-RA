@@ -2,14 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import "../../styles/buscarEnPlataformaComponent.css";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
-import { Modal, Button, Form } from "react-bootstrap"; 
+import { Modal, Button, Form } from "react-bootstrap";
 
 export const BuscarEnPlataformaComponent = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
-  const { store, actions } = useContext(Context); 
+  const { store, actions } = useContext(Context);
   const [addLoading, setAddLoading] = useState(false);
   const navigate = useNavigate();
   const [comments, setComments] = useState({});
@@ -18,7 +18,7 @@ export const BuscarEnPlataformaComponent = () => {
   const [exchangeRecord, setExchangeRecord] = useState("");
 
   useEffect(() => {
-    actions.getSellList(); 
+    actions.getSellList();
   }, []);
 
 
@@ -80,7 +80,7 @@ export const BuscarEnPlataformaComponent = () => {
   const handleShowModal = (item) => {
     setSelectedItem(item);
     setShowModal(true);
-    setExchangeRecord(""); 
+    setExchangeRecord("");
   };
 
   const handleCloseModal = () => {
@@ -94,7 +94,7 @@ export const BuscarEnPlataformaComponent = () => {
       return;
     }
 
-    
+
     try {
       const response = await fetch(`${process.env.BACKEND_URL}/api/exchange_record`, {
         method: "POST",
@@ -108,6 +108,8 @@ export const BuscarEnPlataformaComponent = () => {
           exchange_record_id: exchangeRecord,
         }),
       });
+
+      console.log(response, "EXCHANGEEEEEE")
 
       if (!response.ok) {
         throw new Error("Error al realizar el intercambio.");
@@ -129,6 +131,45 @@ export const BuscarEnPlataformaComponent = () => {
   const filteredItems = items.filter(item =>
     item.record_title.toLowerCase().includes(query.toLowerCase())
   );
+
+  const handleAddToWishlist = async (item) => {
+    setAddLoading(true);
+  
+    try {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
+        method: item.isFavorite ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          record_id: item.record_id,
+        }),
+      });
+      console.log(response, "<========")
+  
+      if (!response.ok) {
+        throw new Error("No se pudo actualizar la wishlist.");
+      }
+  
+      setItems((prevItems) =>
+        prevItems.map((prevItem) =>
+          prevItem.record_id === item.record_id
+            ? { ...prevItem, isFavorite: !prevItem.isFavorite }
+            : prevItem
+        )
+      );
+    } catch (error) {
+      console.error("Error al actualizar la wishlist:", error.message);
+    } finally {
+      setAddLoading(false);
+    }
+  };
+  
+
+
+
+
 
   return (
     <div className="container my-4 grid-ventas">
@@ -208,8 +249,8 @@ export const BuscarEnPlataformaComponent = () => {
               className="img-fluid mb-3"
             />
           )}
-          <p><strong>Género:</strong> {selectedItem?.record_genre}</p>
-          <p><strong>Año:</strong> {selectedItem?.record_year}</p>
+          <p><strong>Género:</strong> {selectedItem?.record_genre.replace(/{|}/g, "")}</p>
+          <p><strong>Año:</strong> {selectedItem?.record_year.replace(/{|}/g, "")}</p>
           <Form.Group controlId="exchangeRecord">
             <Form.Label>Selecciona un ítem para intercambiar</Form.Label>
             <Form.Control as="select" value={exchangeRecord} onChange={(e) => setExchangeRecord(e.target.value)}>
