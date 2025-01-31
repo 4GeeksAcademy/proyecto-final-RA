@@ -15,7 +15,7 @@ const Home = () => {
     <div className="container-fluid home-layout">
       <div className="home-layout__sidebar left-sidebar"></div>
       <div className="home-layout__content-wrapper">
-        <h1 className="home-layout__content-wrapper__welcome-title">
+        <h1 className="home-layout__content-wrapper__welcome-title pt-4 mt-5">
           ¡Bienvenido a Record Swappers Blog!
         </h1>
         <p className="home-layout__content-wrapper__welcome-subtitle">
