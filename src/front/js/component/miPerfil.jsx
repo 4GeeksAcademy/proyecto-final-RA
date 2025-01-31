@@ -58,6 +58,26 @@ export const MiPerfil = () => {
     }
   };
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es irreversible.");
+
+    if (confirmDelete) {
+      try {
+        const result = await actions.deleteUser(); 
+
+        if (result.success) {
+          setMessage("Usuario eliminado con éxito.");
+          window.location.href = "/login";
+        } else {
+          setMessage(result.error || "Error al eliminar el usuario.");
+        }
+      } catch (error) {
+        console.error("Error al eliminar el usuario:", error);
+        setMessage("Error inesperado al intentar eliminar el usuario.");
+      }
+    }
+  };
+
   if (!store.user) return <p className="mi-perfil-loading">Cargando datos...</p>;
 
   return (
@@ -117,9 +137,14 @@ export const MiPerfil = () => {
             <p>
               <strong className="text-black">Email:</strong> {store.user?.email || "N/A"}
             </p>
-            <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit styled-button">
-              Editar
-            </button>
+            <div className="mi-perfil-buttons">
+              <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit styled-button">
+                Editar
+              </button>
+              <button onClick={handleDelete} className="mi-perfil-btn-delete styled-button">
+                Eliminar Cuenta
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -128,6 +153,8 @@ export const MiPerfil = () => {
 };
 
 export default MiPerfil;
+
+
 
 
 

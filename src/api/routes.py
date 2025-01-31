@@ -426,3 +426,34 @@ def get_wishlist():
     ]
 
     return jsonify(wishlist_data), 200
+
+
+@api.route('/delete_user', methods=['DELETE'])
+@jwt_required()
+def delete_user():
+    try:
+        user_id = get_jwt_identity()  # Obtener el id del usuario desde el token JWT
+
+        # Buscar al usuario en la base de datos
+        user = User.query.get(user_id)
+        
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
+
+        # Eliminar los registros en SellList, WishList, y cualquier otro dato relacionado
+        WishList.query.filter_by(user_id=user_id).delete()
+        SellList.query.filter_by(user_id=user_id).delete()
+        Record.query.filter_by(owner_id=user_id).delete()
+
+        # Eliminar finalmente al usuario
+        db.session.delete(user)
+        db.session.commit()
+
+        # Respuesta exitosa
+        return jsonify({"msg": "Usuario y sus datos han sido eliminados correctamente"}), 200
+
+    except Exception as e:
+        db.session.rollback()  # Deshacer la transacción si algo sale mal
+        return jsonify({"error": str(e)}), 500
+
+

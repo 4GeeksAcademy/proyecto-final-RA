@@ -1,99 +1,38 @@
-/* Contenedor principal */
-.user-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  background-color: #f9f9f9; /* Fondo claro */
-  border-radius: 10px; /* Bordes redondeados */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-  font-family: Arial, sans-serif;
-}
-
-/* Título */
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-}
-
-/* Estilo para los mensajes */
-p {
-  text-align: center;
-  font-size: 1rem;
-  color: #666;
-}
-
-p strong {
-  color: #333;
-}
-
-/* Campos de entrada */
-.input-field {
+.mi-perfil-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  align-items: center;
   width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px; /* Bordes redondeados */
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
 }
 
-.input-field:focus {
-  border-color: #007bff; /* Azul al enfoque */
-  outline: none;
-}
-
-/* Botones */
-.submit-btn,
-.toggle-button {
-  display: inline-block;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #007bff; /* Azul para botones principales */
+.mi-perfil-btn-edit,
+.mi-perfil-btn-delete {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 1rem;
-}
-
-.toggle-button {
-  background-color: #6c757d; /* Gris para el botón de cancelar */
-}
-
-.submit-btn:hover {
-  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
-}
-
-.toggle-button:hover {
-  background-color: #5a6268; /* Gris más oscuro al pasar el ratón */
-}
-
-/* Mensajes de estado */
-.message {
   text-align: center;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  color: #007bff; /* Azul para mensajes informativos */
 }
 
-/* Ajustes responsivos */
-@media (max-width: 768px) {
-  .user-container {
-    padding: 1rem;
-  }
+.mi-perfil-btn-edit {
+  background-color: #007bff;
+  color: white;
+}
 
-  h2 {
-    font-size: 1.5rem;
-  }
+.mi-perfil-btn-edit:hover {
+  background-color: #0056b3;
+}
 
-  .submit-btn,
-  .toggle-button {
-    width: 100%; /* Botones en bloque en pantallas pequeñas */
-    margin-bottom: 0.5rem;
-  }
+.mi-perfil-btn-delete {
+  background-color: darkred;
+  color: white;
+}
+
+.mi-perfil-btn-delete:hover {
+  background-color: red;
 }
