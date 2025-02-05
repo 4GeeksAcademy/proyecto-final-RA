@@ -1,13 +1,14 @@
 .private-sidebar {
     background-color: #343a40; 
-    height: 100vh; 
+    height: 100rem; 
     position: fixed;
-    top: 70px;
+    top: 3rem;
     left: 0;
+    height: 100rem;
     width: 250px;
-    padding: 20px;
     color: #fff; 
     z-index: 100;
+    margin-top: 20px;
     
   }
   
@@ -46,4 +47,6 @@
       font-size: 0.5rem;
     }
   }
+  
+
   

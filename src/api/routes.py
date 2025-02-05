@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import requests
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Record, SellList, WishList
+from api.models import db, User, Record, SellList, WishList, Comment
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -406,6 +406,24 @@ def add_to_wishlist():
         return jsonify({"error": str(e)}), 500
 
 
+# Eliminar de la wishlist (DELETE)
+@api.route('/wishlist/<int:record_id>', methods=['DELETE'])
+@jwt_required()
+def remove_from_wishlist(record_id):
+    user_id = get_jwt_identity()
+    
+    wishlist_item = WishList.query.filter_by(user_id=user_id, record_id=record_id).first()
+    if not wishlist_item:
+        return jsonify({"error": "El ítem no está en la wishlist"}), 404
+
+    db.session.delete(wishlist_item)
+    db.session.commit()
+
+    return jsonify({"msg": "Eliminado correctamente"}), 200
+
+
+
+
 
 
 @api.route("/wishlist", methods=["GET"])
@@ -467,3 +485,31 @@ def exchange_record():
     db.session.commit()
 
     return jsonify({"message": "Intercambio realizado con éxito."}), 200
+
+
+@api.route("/comments/<int:record_id>", methods=["GET"])
+def get_comments(record_id):
+    comments = Comment.query.filter_by(record_id=record_id).all()
+    return jsonify([comment.serialize() for comment in comments])  # Usa el método serialize()
+
+
+@api.route("/comments", methods=["POST"])
+@jwt_required()
+def add_comment():
+    data = request.get_json()
+    user_id = get_jwt_identity()
+
+    # Verifica que los campos requeridos estén presentes
+    if not data or "record_id" not in data or "content" not in data:
+        return jsonify({"error": "record_id y content son campos requeridos"}), 400
+
+    # Crea el comentario
+    comment = Comment(
+        user_id=user_id,
+        record_id=data["record_id"],
+        content=data["content"],
+    )
+    db.session.add(comment)
+    db.session.commit()
+
+    return jsonify(comment.serialize()), 201

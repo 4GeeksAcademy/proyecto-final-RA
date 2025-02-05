@@ -16,6 +16,7 @@ const getState = ({ getStore, setStore, getActions }) => {
       currentUser: null,
       likes: {},
       wishList: [],
+      comments: {},
     },
     actions: {
       toggleLike: (recordId) => {
@@ -39,6 +40,56 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
+      // Obtener comentarios de un ítem
+      getComments: async (record_id) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}comments/${record_id}`);
+          if (!response.ok) throw new Error("No se pudieron obtener los comentarios.");
+          
+          const data = await response.json();
+          setStore(prevStore => ({
+            ...prevStore,
+            comments: { ...prevStore.comments, [record_id]: data }
+          }));
+        } catch (error) {
+          console.error("Error obteniendo comentarios:", error.message);
+        }
+      },
+      
+      // Agregar un comentario
+      addComment: async (record_id, content) => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) throw new Error("No se encontró el token.");
+
+          const response = await fetch(`${process.env.BACKEND_URL}/api/comments`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              record_id: record_id,
+              content: content,
+            }),
+          });
+
+          if (!response.ok) throw new Error("Error al agregar el comentario.");
+
+          // Actualiza el estado global con el nuevo comentario
+          const store = getStore();
+          const newComment = { content: content, user: store.user.name };
+          setStore({
+            comments: {
+              ...store.comments,
+              [record_id]: [...(store.comments[record_id] || []), newComment],
+            },
+          });
+        } catch (error) {
+          console.error("Error:", error.message);
+          throw error;
+        }
+      },
 
       getWishList: async () => {
         try {
@@ -48,48 +99,76 @@ const getState = ({ getStore, setStore, getActions }) => {
             return { success: false, error: "No se encontró un token válido" };
           }
 
-          const response = await fetch(process.env.BACKEND_URL + "/api/wishlist", {
+          const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           });
 
           if (!response.ok) throw new Error("Error al obtener la lista de favoritos");
 
           const data = await response.json();
-
           setStore({ wishList: data });
+
+          return { success: true };
         } catch (error) {
           console.error("Error en getWishList:", error);
-          setStore({ error: "No se pudieron cargar los favoritos" });
+          return { success: false, error: error.message };
         }
       },
 
-
-
-
-
       addToWishlist: async (recordId, userId) => {
         try {
-          const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              record_id: recordId,
-              user_id: userId
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error("Error al agregar el disco a la wishlist.");
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("Token no encontrado.");
+            return { success: false, error: "No se encontró un token válido" };
           }
 
-          actions.fetchWishlist(userId);
+          const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ record_id: recordId, user_id: userId }),
+          });
+
+          if (!response.ok) throw new Error("Error al agregar el favorito");
+
+          // Actualiza el estado global
+          const store = getStore();
+          const newWishItem = { record_id: recordId, user_id: userId };
+          setStore({ wishList: [...store.wishList, newWishItem] });
+
+          return { success: true };
         } catch (error) {
-          console.error("Error al agregar a la wishlist:", error.message);
+          console.error("Error en addToWishlist:", error);
+          return { success: false, error: error.message };
+        }
+      },
+
+      removeFromWishlist: async (record_id) => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist/${record_id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Error al eliminar de la wishlist");
+
+          const store = getStore();
+          const updatedWishlist = store.wishList.filter(item => item.record_id !== record_id);
+          setStore({ wishList: updatedWishlist });
+
+        } catch (error) {
+          console.error("Error eliminando de la wishlist:", error);
         }
       },
 
@@ -147,7 +226,7 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-      FetchRandomRecords: async (q = "Drum & Bass") => {
+      FetchRandomRecords: async (q = "enduser") => {
         const store = getStore();
 
         if (store.isSearching || store.isFetchingRandom || store.randomFetched) {
@@ -262,7 +341,6 @@ const getState = ({ getStore, setStore, getActions }) => {
 
       editUser: async (updatedData) => {
         try {
-
           const token = localStorage.getItem("token");
           if (!token) {
             console.error("Token no encontrado.");
@@ -385,7 +463,6 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-
       setStore: (updatedStore) => {
         setStore(updatedStore);
       },
@@ -409,8 +486,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           }
 
           const data = await response.json();
-
-
           const updatedRecords = getStore().records.filter(record => record.id !== recordId);
           setStore({ records: updatedRecords });
 
@@ -420,7 +495,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           return { success: false, error: error.message };
         }
       },
-
 
       deleteSellListRecord: async (userId, recordId) => {
         try {
@@ -441,8 +515,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           }
 
           const data = await response.json();
-
-
           const updatedRecords = getStore().onSale.filter(record => record.id !== recordId);
           setStore({ onSale: updatedRecords });
 
@@ -453,10 +525,6 @@ const getState = ({ getStore, setStore, getActions }) => {
         }
       },
 
-
-
-
-
       getSellList: async () => {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -464,7 +532,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           return { success: false, error: "No se encontró un token válido" };
         }
         try {
-
           const response = await fetch(process.env.BACKEND_URL + '/api/sell_lista', {
             method: "GET",
             headers: {
@@ -491,7 +558,6 @@ const getState = ({ getStore, setStore, getActions }) => {
           throw new Error("No se encontró el token. Asegúrate de haber iniciado sesión.");
         }
         try {
-
           if (!userId || !recordId) {
             throw new Error('userId y record.id son requeridos');
           }
@@ -505,10 +571,9 @@ const getState = ({ getStore, setStore, getActions }) => {
             body: JSON.stringify({ user_id: userId, record_id: recordId }),
           });
 
-
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || "Error en la solicitud"); v
+            throw new Error(errorData.error || "Error en la solicitud");
           }
 
           return await response.json();
@@ -533,13 +598,3 @@ const getState = ({ getStore, setStore, getActions }) => {
 };
 
 export default getState;
-
-
-
-
-
-
-
-
-
-

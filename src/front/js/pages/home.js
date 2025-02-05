@@ -7,6 +7,7 @@ import SearchInvitados from "../component/SearchInvitados.jsx";
 import RandomRecordsCarousel from "../component/RandomRecordsCarousel.jsx";
 
 import "../../styles/home.css";
+import { Jumbotron } from "../component/Jumbotron.jsx";
 
 const Home = () => {
   const { store, actions } = useContext(Context);
@@ -15,13 +16,7 @@ const Home = () => {
     <div className="container-fluid home-layout">
       <div className="home-layout__sidebar left-sidebar"></div>
       <div className="home-layout__content-wrapper">
-        <h1 className="home-layout__content-wrapper__welcome-title pt-4 mt-5">
-          ¡Bienvenido a Record Swappers Blog!
-        </h1>
-        <p className="home-layout__content-wrapper__welcome-subtitle">
-          ¡Explora, encuentra tus discos favoritos y más!
-        </p>
-
+        <Jumbotron />
         <SearchInvitados />
         <RandomRecordsCarousel />
       </div>

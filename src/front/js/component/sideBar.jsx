@@ -22,8 +22,6 @@ const SideBar = () => {
                 <Link className="private-sidebar-link nav-link" to="/mis-discos">Colección</Link>
                 <Link className="private-sidebar-link nav-link" to="/vista-favoritos">Lista de deseos</Link>
                 <Link className="private-sidebar-link nav-link" to="/sell-list">Discos en venta</Link>
-                <Link className="private-sidebar-link nav-link" to="#">Configuración</Link>
-                <Link className="private-sidebar-link nav-link" to="#">Ayuda</Link>
                 <Link className="private-sidebar-link nav-link" to="#" onClick={handleLogout}>Cerrar sesión</Link>
             </nav>
         </div>

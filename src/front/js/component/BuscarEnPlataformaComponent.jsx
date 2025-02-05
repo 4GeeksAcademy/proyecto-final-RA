@@ -16,21 +16,18 @@ export const BuscarEnPlataformaComponent = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [exchangeRecord, setExchangeRecord] = useState("");
-
-  useEffect(() => {
-    actions.getSellList();
-  }, []);
-
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/api/sell_listas`);
-        if (!response.ok) {
-          throw new Error("No se pudieron cargar los ítems.");
-        }
+        if (!response.ok) throw new Error("No se pudieron cargar los ítems.");
         const data = await response.json();
         setItems(data.sellList);
+        return data.sellList;
       } catch (error) {
         setError(error.message);
       } finally {
@@ -38,44 +35,36 @@ export const BuscarEnPlataformaComponent = () => {
       }
     };
 
-    const fetchWishlist = async () => {
-      if (!store.user) return;
+    const fetchWishlist = async (itemsFromFetch) => {
+      if (!store.user || !itemsFromFetch) return;
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
-
-        if (!response.ok) {
-          throw new Error("No se pudo obtener la wishlist.");
-        }
+        if (!response.ok) throw new Error("No se pudo obtener la wishlist.");
 
         const wishlistData = await response.json();
         const wishlistIds = wishlistData.map(item => item.record_id);
-        setItems(prevItems =>
-          prevItems.map(item => ({
-            ...item,
-            isFavorite: wishlistIds.includes(item.record_id),
-          }))
-        );
+
+        // Actualiza los items con el estado de favorito
+        const updatedItems = itemsFromFetch.map(item => ({
+          ...item,
+          isFavorite: wishlistIds.includes(item.record_id),
+        }));
+
+        setItems(updatedItems);
       } catch (error) {
         console.error("Error al obtener la wishlist:", error.message);
       }
     };
 
-    fetchItems();
-    fetchWishlist();
+    const loadData = async () => {
+      const itemsFromFetch = await fetchItems();
+      await fetchWishlist(itemsFromFetch);
+    };
+
+    loadData();
   }, [store.user]);
-
-  const handleAddComment = (record_id, newComment) => {
-    if (!newComment.trim()) return;
-
-    setComments(prevComments => ({
-      ...prevComments,
-      [record_id]: [...(prevComments[record_id] || []), newComment]
-    }));
-  };
 
   const handleShowModal = (item) => {
     setSelectedItem(item);
@@ -88,95 +77,109 @@ export const BuscarEnPlataformaComponent = () => {
     setSelectedItem(null);
   };
 
-  const handleExchangeRecord = async () => {
-    if (!exchangeRecord) {
-      alert("Por favor, selecciona un disco para intercambiar.");
-      return;
-    }
-
+  const handleShowCommentsModal = async (item) => {
+    setSelectedItem(item);
+    setShowCommentsModal(true);
 
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/api/exchange_record`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          user_id: store.user.id,
-          selected_record_id: selectedItem.record_id,
-          exchange_record_id: exchangeRecord,
-        }),
-      });
+      const response = await fetch(`${process.env.BACKEND_URL}/api/comments/${item.record_id}`);
+      if (!response.ok) throw new Error("No se pudieron cargar los comentarios.");
 
-      console.log(response, "EXCHANGEEEEEE")
-
-      if (!response.ok) {
-        throw new Error("Error al realizar el intercambio.");
-      }
-
-
-      alert("Intercambio realizado con éxito.");
-      setShowModal(false);
+      const commentsData = await response.json();
+      setComments((prevComments) => ({
+        ...prevComments,
+        [item.record_id]: commentsData,
+      }));
     } catch (error) {
-      alert(error.message || "Hubo un problema al realizar el intercambio.");
+      console.error("Error al obtener los comentarios:", error.message);
     }
   };
 
+  const handleCloseCommentsModal = () => {
+    setShowCommentsModal(false);
+    setSelectedItem(null);
+  };
 
-  if (loading) return <div className="text-center">Cargando...</div>;
-  if (error) return <div className="text-danger text-center">{error}</div>;
-
-
-  const filteredItems = items.filter(item =>
-    item.record_title.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const handleAddToWishlist = async (item) => {
-    setAddLoading(true);
+  const handleAddComment = async () => {
+    if (!newComment.trim()) return;
 
     try {
       const token = localStorage.getItem("token");
-      console.log("Token:", token);  // Verifica si el token está presente
+      if (!token) {
+        setShowRegisterModal(true);
+        return;
+      }
 
-      const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
-        method: item.isFavorite ? "DELETE" : "POST",
+      const response = await fetch(`${process.env.BACKEND_URL}/api/comments`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ record_id: recordId }),
+        body: JSON.stringify({
+          record_id: selectedItem.record_id,
+          content: newComment,
+        }),
       });
 
-      console.log(response, "<========"); // Verifica la respuesta
+      if (!response.ok) throw new Error("Error al agregar el comentario.");
 
-      if (!response.ok) {
-        throw new Error("No se pudo actualizar la wishlist.");
+      const newCommentData = await response.json();
+      setComments((prevComments) => ({
+        ...prevComments,
+        [selectedItem.record_id]: [
+          ...(prevComments[selectedItem.record_id] || []),
+          newCommentData,
+        ],
+      }));
+
+      setNewComment("");
+    } catch (error) {
+      console.error("Error:", error.message);
+      alert("Error al agregar el comentario.");
+    }
+  };
+
+  const handleAddToWishlist = async (item) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setShowRegisterModal(true);
+      return;
+    }
+
+    setAddLoading(true);
+    try {
+      if (item.isFavorite) {
+        await actions.removeFromWishlist(item.record_id);
+      } else {
+        await actions.addToWishlist(item.record_id, store.user.id);
       }
 
-      setItems((prevItems) =>
-        prevItems.map((prevItem) =>
+      setItems(prevItems =>
+        prevItems.map(prevItem =>
           prevItem.record_id === item.record_id
             ? { ...prevItem, isFavorite: !prevItem.isFavorite }
             : prevItem
         )
       );
     } catch (error) {
-      console.error("Error al actualizar la wishlist:", error.message);
+      console.error("Error:", error.message);
+      alert("Error al actualizar favoritos");
     } finally {
       setAddLoading(false);
     }
   };
 
+  if (loading) return <div className="text-center">Cargando...</div>;
+  if (error) return <div className="text-danger text-center">{error}</div>;
 
-
-
-
-
-
+  const filteredItems = items.filter(item =>
+    item.record_title.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
-    <div className="container my-4 grid-ventas">
+    <div className="container my-4 col-12">
       <h1 className="text-center mb-4">Ítems en Venta</h1>
       <div className="search-container mb-4">
         <input
@@ -187,10 +190,10 @@ export const BuscarEnPlataformaComponent = () => {
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
-      <div className="row">
+      <div className="card-grid">
         {filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
-            <div key={index} className="col-12 col-md-4 mb-4">
+            <div key={index} className="card-item">
               <div className="card">
                 <div className="card-header">
                   <div className="avatar-container">
@@ -206,22 +209,13 @@ export const BuscarEnPlataformaComponent = () => {
                 <div className="card-body">
                   <h5 className="card-title">{item.record_title}</h5>
                   <p className="card-text">
-                    <strong>Género:</strong> {item.record_genre.replace(/{|}/g, "")}
+                    <strong className="description">Género:</strong> {item.record_genre.replace(/{|}/g, "")}
                   </p>
                   <p className="card-text">
-                    <strong>Año:</strong> {item.record_year}
+                    <strong className="description">Año:</strong> {item.record_year}
                   </p>
                   <div className="comments-section">
-                    <input
-                      type="text"
-                      placeholder="Escribe un comentario"
-                      onBlur={(e) => handleAddComment(item.record_id, e.target.value)}
-                    />
-                    <div>
-                      {comments[item.record_id] && comments[item.record_id].map((comment, idx) => (
-                        <p key={idx}>{comment}</p>
-                      ))}
-                    </div>
+                    <a href="#" onClick={() => handleShowCommentsModal(item)}>Comentarios</a>
                   </div>
                 </div>
                 <div className="card-footer text-center">
@@ -238,9 +232,10 @@ export const BuscarEnPlataformaComponent = () => {
             </div>
           ))
         ) : (
-          <div className="col-12 text-center">No hay ítems en venta que coincidan con tu búsqueda.</div>
+          <div className="no-items">No hay ítems en venta que coincidan con tu búsqueda.</div>
         )}
       </div>
+
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>{selectedItem?.record_title}</Modal.Title>
@@ -253,8 +248,8 @@ export const BuscarEnPlataformaComponent = () => {
               className="img-fluid mb-3"
             />
           )}
-          <p><strong>Género:</strong> {selectedItem?.record_genre.replace(/{|}/g, "")}</p>
-          <p><strong>Año:</strong> {selectedItem?.record_year.replace(/{|}/g, "")}</p>
+          <p><strong className="description">Género:</strong> {selectedItem?.record_genre.replace(/{|}/g, "")}</p>
+          <p><strong className="description">Año:</strong> {selectedItem?.record_year.replace(/{|}/g, "")}</p>
           <Form.Group controlId="exchangeRecord">
             <Form.Label>Selecciona un ítem para intercambiar</Form.Label>
             <Form.Control as="select" value={exchangeRecord} onChange={(e) => setExchangeRecord(e.target.value)}>
@@ -273,7 +268,48 @@ export const BuscarEnPlataformaComponent = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
-          <Button variant="primary" onClick={handleExchangeRecord}>Intercambiar</Button>
+          <Button variant="primary" >Intercambiar</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showRegisterModal} onHide={() => setShowRegisterModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Registro o Inicio de sesión Requerido</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Para agregar ítems a favoritos, debes registrarte o iniciar sesión.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowRegisterModal(false)}>Cerrar</Button>
+          <Button variant="primary" onClick={() => navigate("/register")}>Registrarse</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showCommentsModal} onHide={handleCloseCommentsModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Comentarios</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="comments-list" style={{ maxHeight: "300px", overflowY: "auto" }}>
+            {comments[selectedItem?.record_id]?.map((comment, index) => (
+              <div key={index} className="comment-item mb-3">
+                <strong>{comment.user_name}:</strong> {comment.content}
+              </div>
+            ))}
+          </div>
+          <Form.Group className="mt-3">
+            <Form.Control
+              as="textarea"
+              rows={3}
+              placeholder="Escribe un comentario..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseCommentsModal}>Cerrar</Button>
+          <Button variant="primary" onClick={handleAddComment}>Enviar</Button>
         </Modal.Footer>
       </Modal>
     </div>

@@ -11,19 +11,19 @@ const SellListComponent = () => {
     }, []);
 
     const handleDelete = async (recordId) => {
-        const userId = store.user?.id;  
+        const userId = store.user?.id;
         if (!userId) {
             setDeleteMessage("No se encontró el usuario");
             return;
         }
 
         const result = await actions.deleteSellListRecord(userId, recordId);
-        
+
         if (!result.success) {
             setDeleteMessage(result.error);
         } else {
             setDeleteMessage(result.msg);
-            actions.getSellList(); 
+            actions.getSellList();
         }
 
         setTimeout(() => {
