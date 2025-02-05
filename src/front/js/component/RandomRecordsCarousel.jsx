@@ -12,7 +12,7 @@ const RandomRecordsCarousel = () => {
 
   useEffect(() => {
     if (!store.loading && !store.isSearching && store.randomResults.length === 0) {
-      actions.FetchRandomRecords("Drum & Bass"); 
+      actions.FetchRandomRecords("Drum & Bass");
     }
   }, [store.loading, store.isSearching, store.randomResults.length, actions]);
 

@@ -1,145 +1,174 @@
-/* Contenedor principal */
-.feed-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
+/* Contenedor del grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Tarjetas más pequeñas y responsivas */
+  gap: 15px; /* Espacio entre tarjetas */
+  padding: 15px;
+  width: 100%; /* Asegura que el grid no se salga del contenedor */
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
-/* Estilo del feed */
-.feed {
-  width: 100%;
-  max-width: 500px; /* Ancho similar al feed de Instagram */
+/* Estilo de cada tarjeta */
+.card-item {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-/* Tarjeta de publicación */
-.post-card {
-  background: rgba(255, 255, 255, 0.198);
+  background: #2c2c2c; /* Gris oscuro */
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; /* Evita que el contenido se desborde */
 }
 
-/* Cabecera (Usuario) */
-.post-header {
+.card-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo del header de la tarjeta */
+.card-header {
+  background: #1f1f1f; /* Negro */
+  color: #ffffff; /* Texto blanco */
+  padding: 10px;
   display: flex;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  color: black;
+  gap: 8px;
 }
 
 .avatar-container {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
+  background: #444; /* Gris más claro */
   border-radius: 50%;
-  background: #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  margin-right: 10px;
-  color: black;
 }
 
-/* Imagen principal */
-.post-img {
+/* Estilo de la imagen */
+.card-img-top {
   width: 100%;
-  object-fit: cover;
+  height: 150px; /* Altura fija */
+  object-fit: cover; /* Asegura que la imagen cubra el espacio */
+  border-bottom: 2px solid #444; /* Gris más claro */
 }
 
-/* Cuerpo de la publicación */
-.post-body {
+/* Estilo del cuerpo de la tarjeta */
+.card-body {
   padding: 10px;
+  background: #2c2c2c; /* Gris oscuro */
+  flex: 1; /* Hace que el cuerpo de la tarjeta ocupe el espacio restante */
 }
 
-.post-title {
-  font-size: 16px;
+.card-title,
+.card-text {
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el texto que no cabe */
+  text-overflow: ellipsis; /* Añade puntos suspensivos */
+}
+
+.card-title {
+  font-size: 1rem; /* Tamaño de fuente reducido */
   font-weight: bold;
-  color: black;
+  color: #ffffff; /* Texto blanco */
 }
 
-.post-text {
-  font-size: 14px;
-  color: black;
-}
-strong {
-  color: black;
+.card-text {
+  font-size: 0.8rem; /* Tamaño de fuente reducido */
+  color: #bdbdbd; /* Texto gris claro */
 }
 
-/* Pie de publicación */
-.post-footer {
-  padding: 10px;
-  border-top: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
+/* Sección de comentarios */
+.comments-section {
+  margin-top: 8px;
 }
 
-/* Botón de "me gusta" */
-.like-btn {
-  font-size: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 10px;
+.comments-section input {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #444; /* Gris más claro */
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: #1f1f1f; /* Negro */
+  color: #ffffff; /* Texto blanco */
 }
 
-/* Comentarios */
-.comment-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.comments-list {
-  max-height: 150px;
+.comments-section div {
+  max-height: 80px; /* Altura reducida */
   overflow-y: auto;
-  padding: 5px;
-  list-style: none;
+  color: #bdbdbd; /* Texto gris claro */
 }
 
-.comment {
-  font-size: 14px;
-  padding: 5px;
-  border-bottom: 1px solid #eee;
-}
-
-/* Input de comentarios */
-.comment-input {
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  border-top: 1px solid #ddd;
-}
-
-.comment-textarea {
-  flex-grow: 1;
-  border: none;
-  background: #f8f8f8;
+/* Estilo del footer de la tarjeta */
+.card-footer {
+  background: #1f1f1f; /* Negro */
   padding: 8px;
-  border-radius: 20px;
-  font-size: 14px;
-  resize: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.comment-textarea:focus {
-  outline: none;
-}
-
-.comment-btn {
-  background: none;
+/* Botón "Ver más" en rojo */
+.card-footer .btn-primary {
+  background-color: #ff4d4d; /* Rojo */
   border: none;
-  color: #0095f6;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 10px;
+  color: white;
+  padding: 6px 10px; /* Padding reducido */
+  border-radius: 4px;
+  font-size: 0.9rem; /* Tamaño de fuente reducido */
+  transition: background-color 0.3s ease;
 }
 
-.comment-btn:hover {
-  color: #007bb5;
+.card-footer .btn-primary:hover {
+  background-color: #ff1a1a; /* Rojo más oscuro al hacer hover */
+}
+
+.description{
+  color: #ff0000;
+}
+
+/* Botón de favoritos */
+.card-footer button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem; /* Tamaño de fuente reducido */
+  color: #ffffff; /* Texto blanco */
+}
+
+.card-footer button:hover {
+  color: #ff4d4d; /* Rojo al hacer hover */
+}
+
+/* Mensaje cuando no hay ítems */
+.no-items {
+  grid-column: 1 / -1; /* Ocupa todas las columnas */
+  text-align: center;
+  font-size: 1rem; /* Tamaño de fuente reducido */
+  color: #bdbdbd; /* Texto gris claro */
+  padding: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Ajuste para pantallas medianas */
+  }
+}
+
+@media (max-width: 992px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Ajuste para tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Ajuste para móviles grandes */
+  }
+}
+
+@media (max-width: 576px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Ajuste para móviles pequeños */
+  }
 }

@@ -2,17 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/misDiscosComponent.css";
 import { Modal, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const MisDiscosComponent = () => {
     const { store, actions } = useContext(Context);
     const [successMessage, setSuccessMessage] = useState("");
     const [deleteMessage, setDeleteMessage] = useState("");
-    const [showAuthModal, setShowAuthModal] = useState(false); // Estado del modal de autenticación
+    const [showAuthModal, setShowAuthModal] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!store.records || store.records.length === 0) {
-            actions.getRecords();
-        }
+        const fetchRecords = async () => {
+            if (!store.records || store.records.length === 0) {
+                await actions.getRecords();
+            }
+        };
+        fetchRecords();
     }, [store.records, actions]);
 
     const userId = store.user?.id || localStorage.getItem("userId");
@@ -37,26 +42,29 @@ const MisDiscosComponent = () => {
     };
 
     const handleDelete = async (recordId) => {
-        const result = await actions.deleteRecord(userId, recordId);
+        try {
+            const result = await actions.deleteRecord(userId, recordId);
 
-        if (!result.success) {
-            setDeleteMessage(result.error);
-        } else {
-            setDeleteMessage(result.msg);
+            if (!result.success) {
+                setDeleteMessage(result.error);
+            } else {
+                setDeleteMessage(result.msg);
+            }
+
+            setTimeout(() => {
+                setDeleteMessage("");
+            }, 3000);
+        } catch (error) {
+            console.error("Error al eliminar el disco:", error);
+            setDeleteMessage("Error al eliminar el disco.");
+            setTimeout(() => {
+                setDeleteMessage("");
+            }, 3000);
         }
-
-        setTimeout(() => {
-            setDeleteMessage("");
-        }, 3000);
-    };
-
-    const handleAuthRedirect = () => {
-        setShowAuthModal(false);
-        actions.redirectToLogin();
     };
 
     return (
-        <div className="mis-discos-container py-4">
+        <div className="mis-discos-container py-4 col-12">
             <h1 className="mis-discos-title text-warning text-center mb-4">Mi Lista de Discos</h1>
 
             {successMessage && (
@@ -75,7 +83,7 @@ const MisDiscosComponent = () => {
 
             {deleteMessage && (
                 <div
-                    className="alert alert-danger text-center position-fixed top-50 start-50 translate-middle z-index-1050"
+                    className="alert alert-danger text-center position-fixed top-50 start-50 translate-middle"
                     style={{
                         maxWidth: "800px",
                         width: "100%",
@@ -96,7 +104,7 @@ const MisDiscosComponent = () => {
             ) : (
                 <div className="mis-discos-row row g-3">
                     {store.records.map((record) => (
-                        <div className="mis-discos-col col-12 col-sm-6 col-md-4 col-lg-3" key={record.id}>
+                        <div className="mis-discos-col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" key={record.id}>
                             <div className="mis-discos-card card h-100">
                                 {record.cover_image && (
                                     <img
@@ -121,14 +129,14 @@ const MisDiscosComponent = () => {
                                     <div className="mis-discos-card-footer d-flex justify-content-between mt-3">
                                         <button
                                             id={`addRecordButton-${record.id}`}
-                                            className="mis-discos-button"
+                                            className="mis-discos-button btn-sm"
                                             onClick={() => handleAddToSellList(record.id)}
                                         >
                                             Agregar a la lista de ventas
                                         </button>
                                         <button
                                             id={`deleteRecordButton-${record.id}`}
-                                            className="btn btn-danger"
+                                            className="btn btn-danger btn-sm"
                                             onClick={() => handleDelete(record.id)}
                                         >
                                             Eliminar
@@ -153,7 +161,7 @@ const MisDiscosComponent = () => {
                     <Button variant="secondary" onClick={() => setShowAuthModal(false)}>
                         Cerrar
                     </Button>
-                    <Button variant="primary" onClick={handleAuthRedirect}>
+                    <Button variant="primary" onClick={() => navigate("/register")}>
                         Iniciar Sesión
                     </Button>
                 </Modal.Footer>
@@ -163,6 +171,3 @@ const MisDiscosComponent = () => {
 };
 
 export default MisDiscosComponent;
-
-
-

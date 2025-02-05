@@ -3,7 +3,8 @@
   display: flex;
   justify-content: space-between;
   min-height: 100vh;
-  background-color: #121212; 
+  height: 75rem;
+  background: #121212; 
   color: white;
   overflow: hidden; 
 }
@@ -25,4 +26,30 @@
   font-size: 1rem; /* Reducción de tamaño */
   text-align: center;
   margin-bottom: 15px; /* Espacio más pequeño */
+}
+
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Ajuste para pantallas medianas */
+  }
+}
+
+@media (max-width: 992px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Ajuste para tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Ajuste para móviles grandes */
+  }
+}
+
+@media (max-width: 576px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Ajuste para móviles pequeños */
+  }
 }

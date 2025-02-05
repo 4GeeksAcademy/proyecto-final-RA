@@ -1,126 +1,61 @@
-/* .mis-discos-container {
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 40px;
-  min-height: 100vh;
+.mis-discos-container {
+  padding: 20px;
 }
 
 .mis-discos-title {
-  color: red; 
-  font-size: 36px;
-  margin-bottom: 20px;
-  text-align: center;
+  font-size: 24px;
+  color: #ffc107; /* Color de advertencia (amarillo) */
 }
 
-.mis-discos-container p {
-  font-size: 18px;
-  color: #f8f9fa;
-  line-height: 1.8;
-  text-align: center;
+.mis-discos-row {
+  margin-left: 0;
+  margin-right: 0;
 }
 
+.mis-discos-col {
+  padding-left: 5px;
+  padding-right: 5px;
+}
 
 .mis-discos-card {
-  background-color: #333; 
-  border-radius: 10px;
-  border: none;
-  overflow: hidden;
-  height: 100%;
+  width: 100%; /* Ajusta la tarjeta para que se ajuste al tamaño de la columna */
+  max-width: 260px; /* Limita el ancho máximo de la tarjeta */
+  margin: auto; /* Centra la tarjeta */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .mis-discos-card-img {
-  height: 250px;
+  height: 150px;
   object-fit: cover;
-  width: 100%;
 }
 
 .mis-discos-card-body {
-  padding: 15px;
+  padding: 10px;
 }
 
 .mis-discos-card-title {
-  color: #f8f9fa;
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .mis-discos-card-text {
   font-size: 14px;
-  color: #f8f9fa;
 }
 
-.mis-discos-card-text strong {
-  color: #ff4500;
+.mis-discos-card-footer {
+  padding: 10px;
+  background-color: #f8f9fa;
 }
 
 .mis-discos-button {
-  background-color: #ff4500;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 12px;
 }
-
-.mis-discos-button:hover {
-  background-color: #e03e00;
-}
-
-
-.text-danger {
-  color: #f44336;
-  font-size: 16px;
-}
-
 
 .mis-discos-alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
   max-width: 800px;
   width: 100%;
-  z-index: 1050;
-  margin-top: -50px;
 }
-
-
-.mis-discos-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.mis-discos-col {
-  padding: 10px;
-}
-
-@media (max-width: 768px) {
-  .mis-discos-container {
-      padding: 20px;
-  }
-
-  .mis-discos-title {
-      font-size: 30px;
-  }
-
-  .mis-discos-card-body {
-      padding: 10px;
-  }
-
-  .mis-discos-card-title {
-      font-size: 16px;
-  }
-
-  .mis-discos-card-text {
-      font-size: 14px;
-  }
-
-  .mis-discos-button {
-      padding: 6px 12px;
-      font-size: 14px;
-  }
-
-  .mis-discos-card-img {
-      height: 200px;
-  }
-}
-
-   */
