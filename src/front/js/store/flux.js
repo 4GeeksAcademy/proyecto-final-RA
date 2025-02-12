@@ -593,30 +593,32 @@ const getState = ({ getStore, setStore, getActions }) => {
       setSellList: (onSale) => {
         setStore({ onSale });
       },
+
+      HandleDelete: async () => {
+        const token = localStorage.getItem("token");
+        try {
+            const response = await fetch(process.env.BACKEND_URL + "/api/user", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+      
+            if (!response.ok) throw new Error("Error al eliminar el usuario");
+      
+            localStorage.removeItem("token");
+            return { success: true };
+        } catch (error) {
+            console.error("Error en deleteUser:", error);
+            return { success: false, error: error.message };
+        }
+      }
     },
   };
 };
 
-deleteUser: async () => {
-  const token = localStorage.getItem("token"); // Si usas autenticación con JWT
-  try {
-      const response = await fetch(process.env.BACKEND_URL + "/api/user", {
-          method: "DELETE",
-          headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Si es necesario
-          },
-      });
 
-      if (!response.ok) throw new Error("Error al eliminar el usuario");
-
-      localStorage.removeItem("token"); // Limpia el token si se usó
-      return { success: true };
-  } catch (error) {
-      console.error("Error en deleteUser:", error);
-      return { success: false, error: error.message };
-  }
-}
 
 
 export default getState;
