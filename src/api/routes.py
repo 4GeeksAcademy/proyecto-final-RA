@@ -466,18 +466,19 @@ def exchange():
     if not selected_record_id or not exchange_record_id:
         return jsonify({"message": "Faltan datos para el intercambio."}), 400
 
-   
+    # Obtener el usuario logueado y el otro usuario
     user = User.query.get(user_id)
-    exchange_user = User.query.filter_by(id=user_id).first() 
-   
+    exchange_user = User.query.filter_by(id=user_id).first()  # Asegúrate de que el usuario logueado sea el dueño del ítem seleccionado
+
+    # Verificar que el usuario logueado tiene el ítem que desea intercambiar
     record_to_exchange = Record.query.get(exchange_record_id)
     if record_to_exchange not in user.on_sale:
         return jsonify({"message": "El disco seleccionado no pertenece al usuario logueado."}), 400
 
-    
-    record_to_exchange.user_id = exchange_user.id
+    # Intercambiar ítems
+    record_to_exchange.user_id = exchange_user.id  # Actualizar el usuario que posee el disco que se intercambia
     selected_record = Record.query.get(selected_record_id)
-    selected_record.user_id = user.id 
+    selected_record.user_id = user.id  # El usuario logueado obtiene el disco
 
     db.session.commit()
 
