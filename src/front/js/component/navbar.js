@@ -48,7 +48,7 @@ const Navbar = () => {
 
           {/* Mostrar email del usuario si está autenticado */}
           <div>
-            <p>💀{store.user?.email || "No disponible"}</p>
+            <p className="text-danger fw-bold pt-3">💀{store.user?.email || "No disponible"}</p>
           </div>
         </div>
       </nav>

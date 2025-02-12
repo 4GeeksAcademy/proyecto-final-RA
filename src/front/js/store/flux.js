@@ -45,7 +45,7 @@ const getState = ({ getStore, setStore, getActions }) => {
         try {
           const response = await fetch(`${process.env.BACKEND_URL}comments/${record_id}`);
           if (!response.ok) throw new Error("No se pudieron obtener los comentarios.");
-          
+
           const data = await response.json();
           setStore(prevStore => ({
             ...prevStore,
@@ -55,7 +55,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           console.error("Error obteniendo comentarios:", error.message);
         }
       },
-      
+
       // Agregar un comentario
       addComment: async (record_id, content) => {
         try {
@@ -126,7 +126,7 @@ const getState = ({ getStore, setStore, getActions }) => {
             return { success: false, error: "No se encontró un token válido" };
           }
 
-          const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
+          const response = await fetch(`${process.env.BACKEND_URL}api/wishlist`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -594,6 +594,45 @@ const getState = ({ getStore, setStore, getActions }) => {
         setStore({ onSale });
       },
     },
+
+
+
+    exchangeItems: async (selectedRecordId, exchangeRecordId) => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No hay token de autenticación.");
+          return false;
+        }
+
+        const response = await fetch(`${process.env.BACKEND_URL}/api/exchange`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            selected_record_id: selectedRecordId,
+            exchange_record_id: exchangeRecordId
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log("Intercambio exitoso:", data);
+          return true;
+        } else {
+          console.error("Error en el intercambio:", data.message);
+          return false;
+        }
+      } catch (error) {
+        console.error("Error al intercambiar ítems:", error);
+        return false;
+      }
+    },
+
+
   };
 };
 

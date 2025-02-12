@@ -1,5 +1,5 @@
 .jumbotron {
-    background: linear-gradient(135deg, #363636, #000000); /* Fondo degradado */
+    /* background: linear-gradient(135deg, #363636, #000000); */
     color: rgb(255, 255, 255); /* Texto en blanco */
     padding: 4rem 2rem; /* Espaciado interno */
     border-radius: 15px; /* Bordes redondeados */

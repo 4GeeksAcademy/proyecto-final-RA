@@ -19,6 +19,7 @@ export const BuscarEnPlataformaComponent = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [newComment, setNewComment] = useState("");
+  
 
   useEffect(() => {
     const fetchItems = async () => {

@@ -19,7 +19,7 @@ export const FavoritosComponent = () => {
                             <img src={fav.record_cover_image} alt={fav.record_title} className="favorite-image" />
                             <div className="favorite-details">
                                 <h3>{fav.record_title}</h3>
-                                <p><strong>Artista:</strong> {fav.record_artist}</p>
+                                <p><strong>Artista:</strong> {fav.record_title}</p>
                                 <p><strong>Año:</strong> {fav.record_year}</p>
                                 <p><strong>Sello:</strong> {fav.record_label.replace(/{|}/g, "") || "Sin sello"}</p>
                                 <p><strong>Género:</strong> {fav.record_genre.replace(/{|}/g, "") || "Sin género"}</p>

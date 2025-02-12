@@ -452,39 +452,42 @@ def get_wishlist():
 
     return jsonify(wishlist_data), 200
 
+# ---------------------------------------------------------------------------------------------------
 
-
-@api.route('/exchange_record', methods=['POST'])
+@api.route('/exchange', methods=['POST'])
 @jwt_required()
-def exchange_record():
-
-    user_id = get_jwt_identity() 
+def exchange():
+    user_id = get_jwt_identity()  # Usuario autenticado
     data = request.get_json()
 
-    user_id = data.get("user_id")
     selected_record_id = data.get("selected_record_id")
     exchange_record_id = data.get("exchange_record_id")
 
-    if not user_id or not selected_record_id or not exchange_record_id:
+    if not selected_record_id or not exchange_record_id:
         return jsonify({"message": "Faltan datos para el intercambio."}), 400
 
-    # Obtener el usuario logueado y el otro usuario
-    user = User.query.get(user_id)
-    exchange_user = User.query.filter_by(id=user_id).first()  # Asegúrate de que el usuario logueado sea el dueño del ítem seleccionado
-
-    # Verificar que el usuario logueado tiene el ítem que desea intercambiar
-    record_to_exchange = Record.query.get(exchange_record_id)
-    if record_to_exchange not in user.on_sale:
-        return jsonify({"message": "El disco seleccionado no pertenece al usuario logueado."}), 400
-
-    # Intercambiar ítems
-    record_to_exchange.user_id = exchange_user.id  # Actualizar el usuario que posee el disco que se intercambia
+    # Obtener los registros a intercambiar
     selected_record = Record.query.get(selected_record_id)
-    selected_record.user_id = user.id  # El usuario logueado obtiene el disco
+    exchange_record = Record.query.get(exchange_record_id)
+
+    if not selected_record or not exchange_record:
+        return jsonify({"message": "Uno de los registros no existe."}), 404
+
+    # Verificar que el usuario autenticado posee el disco que quiere intercambiar
+    if exchange_record.user_id != user_id:
+        return jsonify({"message": "No puedes intercambiar un disco que no te pertenece."}), 403
+
+    # Intercambiar discos
+    temp_user_id = selected_record.user_id
+    selected_record.user_id = exchange_record.user_id
+    exchange_record.user_id = temp_user_id
 
     db.session.commit()
 
     return jsonify({"message": "Intercambio realizado con éxito."}), 200
+
+    # -----------------------------------------------------------------------------------------------------------------
+
 
 
 @api.route("/comments/<int:record_id>", methods=["GET"])
