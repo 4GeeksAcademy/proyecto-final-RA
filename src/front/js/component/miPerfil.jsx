@@ -63,11 +63,11 @@ export const MiPerfil = () => {
 
     if (confirmDelete) {
         try {
-            const result = await actions.HandleDelete(); // Nombre corregido
+            const result = await actions.HandleDelete(); 
 
             if (result.success) {
                 setMessage("Usuario eliminado con éxito.");
-                window.location.href = "/login"; // Redirigir al login
+                window.location.href = "/register"; 
             } else {
                 setMessage(result.error || "Error al eliminar el usuario.");
             }
