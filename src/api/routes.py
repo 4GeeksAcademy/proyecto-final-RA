@@ -466,21 +466,18 @@ def exchange():
     if not selected_record_id or not exchange_record_id:
         return jsonify({"message": "Faltan datos para el intercambio."}), 400
 
-    # Obtener los registros a intercambiar
+   
+    user = User.query.get(user_id)
+    exchange_user = User.query.filter_by(id=user_id).first() 
+   
+    record_to_exchange = Record.query.get(exchange_record_id)
+    if record_to_exchange not in user.on_sale:
+        return jsonify({"message": "El disco seleccionado no pertenece al usuario logueado."}), 400
+
+    
+    record_to_exchange.user_id = exchange_user.id
     selected_record = Record.query.get(selected_record_id)
-    exchange_record = Record.query.get(exchange_record_id)
-
-    if not selected_record or not exchange_record:
-        return jsonify({"message": "Uno de los registros no existe."}), 404
-
-    # Verificar que el usuario autenticado posee el disco que quiere intercambiar
-    if exchange_record.user_id != user_id:
-        return jsonify({"message": "No puedes intercambiar un disco que no te pertenece."}), 403
-
-    # Intercambiar discos
-    temp_user_id = selected_record.user_id
-    selected_record.user_id = exchange_record.user_id
-    exchange_record.user_id = temp_user_id
+    selected_record.user_id = user.id 
 
     db.session.commit()
 
@@ -493,7 +490,7 @@ def exchange():
 @api.route("/comments/<int:record_id>", methods=["GET"])
 def get_comments(record_id):
     comments = Comment.query.filter_by(record_id=record_id).all()
-    return jsonify([comment.serialize() for comment in comments])  # Usa el método serialize()
+    return jsonify([comment.serialize() for comment in comments])
 
 
 @api.route("/comments", methods=["POST"])
@@ -502,11 +499,9 @@ def add_comment():
     data = request.get_json()
     user_id = get_jwt_identity()
 
-    # Verifica que los campos requeridos estén presentes
     if not data or "record_id" not in data or "content" not in data:
         return jsonify({"error": "record_id y content son campos requeridos"}), 400
 
-    # Crea el comentario
     comment = Comment(
         user_id=user_id,
         record_id=data["record_id"],
@@ -516,3 +511,29 @@ def add_comment():
     db.session.commit()
 
     return jsonify(comment.serialize()), 201
+
+@api.route('/user', methods=['DELETE'])
+@jwt_required()
+def delete_user():
+    try:
+        user_id = get_jwt_identity() 
+
+        user = User.query.get(user_id)
+        
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
+
+        # Eliminar los registros en SellList, WishList, y cualquier otro dato relacionado
+        WishList.query.filter_by(user_id=user_id).delete()
+        SellList.query.filter_by(user_id=user_id).delete()
+        Record.query.filter_by(owner_id=user_id).delete()
+
+    
+        db.session.delete(user)
+        db.session.commit() 
+
+        return jsonify({"msg": "Usuario y sus datos han sido eliminados correctamente"}), 200
+
+    except Exception as e:
+        db.session.rollback() 
+        return jsonify({"error": str(e)}), 500

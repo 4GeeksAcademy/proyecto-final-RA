@@ -58,6 +58,27 @@ export const MiPerfil = () => {
     }
   };
 
+  const HandleDelete = async () => {
+    const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es irreversible.");
+
+    if (confirmDelete) {
+        try {
+            const result = await actions.HandleDelete(); // Nombre corregido
+
+            if (result.success) {
+                setMessage("Usuario eliminado con éxito.");
+                window.location.href = "/login"; // Redirigir al login
+            } else {
+                setMessage(result.error || "Error al eliminar el usuario.");
+            }
+        } catch (error) {
+            console.error("Error al eliminar el usuario:", error);
+            setMessage("Error inesperado al intentar eliminar el usuario.");
+        }
+    }
+};
+
+
   if (!store.user) return <p className="mi-perfil-loading">Cargando datos...</p>;
 
   return (
@@ -74,7 +95,7 @@ export const MiPerfil = () => {
                   type="text"
                   className="input-field"
                   onChange={handleInputChange}
-                  name="name" 
+                  name="name"
                   placeholder="Nombre de Usuario"
                   value={formData.name || ""}
                 />
@@ -95,7 +116,7 @@ export const MiPerfil = () => {
                   type="password"
                   className="input-field"
                   onChange={handleInputChange}
-                  name="password" 
+                  name="password"
                   placeholder="Contraseña"
                   value={formData.password || ""}
                   required
@@ -117,9 +138,14 @@ export const MiPerfil = () => {
             <p>
               <strong className="text-black">Email:</strong> {store.user?.email || "N/A"}
             </p>
-            <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit styled-button">
-              Editar
-            </button>
+            <div className="mi-perfil-buttons">
+              <button onClick={() => setIsEditing(true)} className="mi-perfil-btn-edit styled-button">
+                Editar
+              </button>
+              <button onClick={HandleDelete} className="mi-perfil-btn-delete styled-button">
+                Eliminar Cuenta
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -128,6 +154,8 @@ export const MiPerfil = () => {
 };
 
 export default MiPerfil;
+
+
 
 
 
