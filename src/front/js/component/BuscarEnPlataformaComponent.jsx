@@ -35,6 +35,7 @@ export const BuscarEnPlataformaComponent = () => {
         setLoading(false);
       }
     };
+  
 
     const fetchWishlist = async (itemsFromFetch) => {
       if (!store.user || !itemsFromFetch) return;
@@ -66,6 +67,11 @@ export const BuscarEnPlataformaComponent = () => {
 
     loadData();
   }, [store.user]);
+
+  
+  useEffect(() => {
+    actions.getSellList();
+}, []);
 
   const handleShowModal = (item) => {
     setSelectedItem(item);
