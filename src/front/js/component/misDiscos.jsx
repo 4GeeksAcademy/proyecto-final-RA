@@ -2,7 +2,7 @@
 import React from "react";
 import MisDiscosComponent from "./misDiscosComponent.jsx"; // Asegurarse de que MisDiscosComponent esté exportado como nombrado
 import { Link } from "react-router-dom";
-import "../../styles/misDiscos.css";
+// import "../../styles/misDiscos.css";
 import SideBar from "./sideBar.jsx";
 
 const MisDiscos = () => {

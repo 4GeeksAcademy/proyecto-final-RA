@@ -26,6 +26,7 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 
 jwt = JWTManager(app)
 

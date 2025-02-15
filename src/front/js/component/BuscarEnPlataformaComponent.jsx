@@ -24,7 +24,9 @@ export const BuscarEnPlataformaComponent = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch(`${process.env.BACKEND_URL}/api/sell_listas`);
+        const response = await fetch(`${process.env.BACKEND_URL}/api/get_all_sell`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
         if (!response.ok) throw new Error("No se pudieron cargar los ítems.");
         const data = await response.json();
         setItems(data.sellList);
@@ -35,7 +37,7 @@ export const BuscarEnPlataformaComponent = () => {
         setLoading(false);
       }
     };
-  
+
 
     const fetchWishlist = async (itemsFromFetch) => {
       if (!store.user || !itemsFromFetch) return;
@@ -68,16 +70,21 @@ export const BuscarEnPlataformaComponent = () => {
     loadData();
   }, [store.user]);
 
-  
+
   useEffect(() => {
     actions.getSellList();
-}, []);
+  }, []);
 
-  const handleShowModal = (item) => {
+  const handleShowModal = async (item) => {
     setSelectedItem(item);
     setShowModal(true);
     setExchangeRecord("");
+
+    if (!store.onSale || store.onSale.length === 0) {
+      await actions.getUserSaleList(); // Asegura que los discos en venta se cargan antes de abrir el modal
+    }
   };
+
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -185,8 +192,49 @@ export const BuscarEnPlataformaComponent = () => {
     item.record_title.toLowerCase().includes(query.toLowerCase())
   );
 
+
+  const handleExchange = async () => {
+    if (!selectedItem || !exchangeRecord) {
+      alert("Selecciona un disco para intercambiar.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setShowRegisterModal(true);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/exchange`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          selected_record_id: selectedItem.record_id,
+          offered_record_id: exchangeRecord,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Error al solicitar intercambio.");
+
+      alert("Solicitud de intercambio enviada con éxito.");
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error:", error.message);
+      alert("No se pudo completar el intercambio.");
+    }
+  };
+
+
+
+
+
+
   return (
-    <div className="container my-4 col-12">
+    <div className="container my-4 col-4">
       <h1 className="text-center mb-4">Ítems en Venta</h1>
       <div className="search-container mb-4">
         <input
@@ -206,7 +254,7 @@ export const BuscarEnPlataformaComponent = () => {
                   <div className="avatar-container">
                     <i className="fa-solid fa-user"></i>
                   </div>
-                  <strong>{item.user_name}</strong>
+                  <strong>{item.username}</strong>
                 </div>
                 <img
                   src={item.record_cover_image || "placeholder.jpg"}
@@ -259,23 +307,32 @@ export const BuscarEnPlataformaComponent = () => {
           <p><strong className="description">Año:</strong> {selectedItem?.record_year.replace(/{|}/g, "")}</p>
           <Form.Group controlId="exchangeRecord">
             <Form.Label>Selecciona un ítem para intercambiar</Form.Label>
-            <Form.Control as="select" value={exchangeRecord} onChange={(e) => setExchangeRecord(e.target.value)}>
+            <Form.Control
+              as="select"
+              value={exchangeRecord}
+              onChange={(e) => setExchangeRecord(e.target.value)}
+            >
               <option value="">Selecciona un ítem...</option>
               {store.onSale && store.onSale.length > 0 ? (
-                store.onSale.map((record) => (
-                  <option key={record.record_id} value={record.record_id}>
-                    {record.record_title}
-                  </option>
-                ))
+                store.onSale
+                  .filter((record) => record.record_id !== selectedItem?.id) // Filtra los items
+                  .map((record) => (
+                    <option key={record.record_id} value={record.record_id}>
+                      {record.record_title}
+                    </option>
+                  ))
               ) : (
-                <option>No tienes ítems en venta.</option>
+                <option disabled>No tienes ítems en venta.</option>
               )}
             </Form.Control>
+
+
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
-          <Button variant="primary" >Intercambiar</Button>
+          <Button variant="primary" onClick={handleExchange}>Intercambiar</Button>
+
         </Modal.Footer>
       </Modal>
 

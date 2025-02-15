@@ -15,6 +15,7 @@
   text-align: center;
   cursor: pointer;
   transition: color 0.3s ease;
+
 }
 
 .mis-discos-container h1:hover {
@@ -25,6 +26,7 @@
   display: flex;
   flex-direction: row; /* Sidebar a la izquierda, contenido a la derecha */
   width: 100%;
+  
 }
 
 .mis-discos-container .main-content .content-area {

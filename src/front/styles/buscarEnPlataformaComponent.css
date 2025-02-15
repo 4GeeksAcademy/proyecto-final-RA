@@ -1,22 +1,28 @@
 /* Contenedor del grid */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Tarjetas más pequeñas y responsivas */
-  gap: 15px; /* Espacio entre tarjetas */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  /* Tarjetas más pequeñas y responsivas */
+  gap: 15px;
+  /* Espacio entre tarjetas */
   padding: 15px;
-  width: 100%; /* Asegura que el grid no se salga del contenedor */
-  box-sizing: border-box; /* Incluye el padding en el ancho total */
+  width: 100%;
+  /* Asegura que el grid no se salga del contenedor */
+  box-sizing: border-box;
+  /* Incluye el padding en el ancho total */
 }
 
 /* Estilo de cada tarjeta */
 .card-item {
   display: flex;
   flex-direction: column;
-  background: #2c2c2c; /* Gris oscuro */
+  background: #2c2c2c;
+  /* Gris oscuro */
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden; /* Evita que el contenido se desborde */
+  overflow: hidden;
+  /* Evita que el contenido se desborde */
 }
 
 .card-item:hover {
@@ -26,18 +32,27 @@
 
 /* Estilo del header de la tarjeta */
 .card-header {
-  background: #1f1f1f; /* Negro */
-  color: #ffffff; /* Texto blanco */
+  background: #1f1f1f;
+  /* Negro */
+  color: #ffffff;
+  /* Texto blanco */
   padding: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
+
+  strong {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .avatar-container {
   width: 30px;
   height: 30px;
-  background: #444; /* Gris más claro */
+  background: #444;
+  /* Gris más claro */
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -47,34 +62,49 @@
 /* Estilo de la imagen */
 .card-img-top {
   width: 100%;
-  height: 150px; /* Altura fija */
-  object-fit: cover; /* Asegura que la imagen cubra el espacio */
-  border-bottom: 2px solid #444; /* Gris más claro */
+  height: 150px;
+  /* Altura fija */
+  object-fit: cover;
+  /* Asegura que la imagen cubra el espacio */
+  border-bottom: 2px solid #444;
+  /* Gris más claro */
 }
 
 /* Estilo del cuerpo de la tarjeta */
 .card-body {
   padding: 10px;
-  background: #2c2c2c; /* Gris oscuro */
-  flex: 1; /* Hace que el cuerpo de la tarjeta ocupe el espacio restante */
+  background: #2c2c2c;
+  /* Gris oscuro */
+  flex: 1;
+  /* Hace que el cuerpo de la tarjeta ocupe el espacio restante */
+  .card-text {
+    color: white;
+  }
 }
 
 .card-title,
 .card-text {
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  overflow: hidden; /* Oculta el texto que no cabe */
-  text-overflow: ellipsis; /* Añade puntos suspensivos */
+  white-space: nowrap;
+  /* Evita que el texto se divida en varias líneas */
+  overflow: hidden;
+  /* Oculta el texto que no cabe */
+  text-overflow: ellipsis;
+  /* Añade puntos suspensivos */
 }
 
 .card-title {
-  font-size: 1rem; /* Tamaño de fuente reducido */
+  font-size: 1rem;
+  /* Tamaño de fuente reducido */
   font-weight: bold;
-  color: #ffffff; /* Texto blanco */
+  color: #ffffff;
+  /* Texto blanco */
 }
 
 .card-text {
-  font-size: 0.8rem; /* Tamaño de fuente reducido */
-  color: #bdbdbd; /* Texto gris claro */
+  font-size: 0.8rem;
+  /* Tamaño de fuente reducido */
+  color: #bdbdbd;
+  /* Texto gris claro */
 }
 
 /* Sección de comentarios */
@@ -85,22 +115,28 @@
 .comments-section input {
   width: 100%;
   padding: 4px;
-  border: 1px solid #444; /* Gris más claro */
+  border: 1px solid #444;
+  /* Gris más claro */
   border-radius: 4px;
   margin-bottom: 8px;
-  background: #1f1f1f; /* Negro */
-  color: #ffffff; /* Texto blanco */
+  background: #1f1f1f;
+  /* Negro */
+  color: #ffffff;
+  /* Texto blanco */
 }
 
 .comments-section div {
-  max-height: 80px; /* Altura reducida */
+  max-height: 80px;
+  /* Altura reducida */
   overflow-y: auto;
-  color: #bdbdbd; /* Texto gris claro */
+  color: #bdbdbd;
+  /* Texto gris claro */
 }
 
 /* Estilo del footer de la tarjeta */
 .card-footer {
-  background: #1f1f1f; /* Negro */
+  background: #1f1f1f;
+  /* Negro */
   padding: 8px;
   display: flex;
   justify-content: space-between;
@@ -109,20 +145,24 @@
 
 /* Botón "Ver más" en rojo */
 .card-footer .btn-primary {
-  background-color: #ff4d4d; /* Rojo */
+  background-color: #ff4d4d;
+  /* Rojo */
   border: none;
   color: white;
-  padding: 6px 10px; /* Padding reducido */
+  padding: 6px 10px;
+  /* Padding reducido */
   border-radius: 4px;
-  font-size: 0.9rem; /* Tamaño de fuente reducido */
+  font-size: 0.9rem;
+  /* Tamaño de fuente reducido */
   transition: background-color 0.3s ease;
 }
 
 .card-footer .btn-primary:hover {
-  background-color: #ff1a1a; /* Rojo más oscuro al hacer hover */
+  background-color: #ff1a1a;
+  /* Rojo más oscuro al hacer hover */
 }
 
-.description{
+.description {
   color: #ff0000;
 }
 
@@ -131,44 +171,54 @@
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 1rem; /* Tamaño de fuente reducido */
-  color: #ffffff; /* Texto blanco */
+  font-size: 1rem;
+  /* Tamaño de fuente reducido */
+  color: #ffffff;
+  /* Texto blanco */
 }
 
 .card-footer button:hover {
-  color: #ff4d4d; /* Rojo al hacer hover */
+  color: #ff4d4d;
+  /* Rojo al hacer hover */
 }
 
 /* Mensaje cuando no hay ítems */
 .no-items {
-  grid-column: 1 / -1; /* Ocupa todas las columnas */
+  grid-column: 1 / -1;
+  /* Ocupa todas las columnas */
   text-align: center;
-  font-size: 1rem; /* Tamaño de fuente reducido */
-  color: #bdbdbd; /* Texto gris claro */
+  font-size: 1rem;
+  /* Tamaño de fuente reducido */
+  color: #bdbdbd;
+  /* Texto gris claro */
   padding: 15px;
 }
 
 /* Responsive Design */
 @media (max-width: 1200px) {
   .card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Ajuste para pantallas medianas */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    /* Ajuste para pantallas medianas */
   }
 }
 
 @media (max-width: 992px) {
   .card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Ajuste para tablets */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    /* Ajuste para tablets */
   }
 }
 
 @media (max-width: 768px) {
   .card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Ajuste para móviles grandes */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    /* Ajuste para móviles grandes */
   }
 }
 
 @media (max-width: 576px) {
   .card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Ajuste para móviles pequeños */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    /* Ajuste para móviles pequeños */
   }
 }

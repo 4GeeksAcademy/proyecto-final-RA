@@ -11,7 +11,13 @@ const BuscarEnVenta = () => {
   const fetchItems = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/api/sell_listas`);
+      const response = await fetch(`${process.env.BACKEND_URL}/api/get_all_sell`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
       if (!response.ok) {
         throw new Error("No se pudieron cargar los ítems.");
       }

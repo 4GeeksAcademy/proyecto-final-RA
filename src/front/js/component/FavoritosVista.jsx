@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/misDiscos.css";
+// import "../../styles/misDiscosComponent.css";
 import { FavoritosComponent } from "./FavoritosComponent.jsx"
 import SideBar from "./sideBar.jsx"
 import "../../styles/sideBar.css"

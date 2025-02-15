@@ -540,7 +540,7 @@ const getState = ({ getStore, setStore, getActions }) => {
           });
           if (!response.ok) throw new Error("Error al obtener los registros");
           const data = await response.json();
-          console.log("Datos recibidos:", data);
+          console.log("Datos recibidos:", data.sellList);
 
           if (!data.sellList) throw new Error("sellList no encontrado en la respuesta");
 
@@ -652,6 +652,26 @@ const getState = ({ getStore, setStore, getActions }) => {
         return false;
       }
     },
+
+    getUserSaleList: async () => {
+      try {
+          const response = await fetch(`${process.env.BACKEND_URL}/api/user_sell_list`, {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+          });
+  
+          if (!response.ok) throw new Error("No se pudieron cargar los discos en venta del usuario.");
+  
+          const data = await response.json();
+          setStore({ onSale: data.records });
+      } catch (error) {
+          console.error("Error al obtener los discos en venta:", error.message);
+      }
+  },
+  
+
+
 
 
   };

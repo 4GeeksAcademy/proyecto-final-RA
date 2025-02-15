@@ -169,3 +169,30 @@ class Transaction(db.Model):
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
         }
+
+
+    
+class ExchangeList(db.Model):
+    __tablename__ = 'exchangelist'
+    id = db.Column(db.Integer, primary_key=True)
+    requester_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    origin_disc_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=True)  # Disco que quiere obtener
+    target_disc_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=True)  # Disco que ofrece a cambio
+    status = db.Column(db.String(20), default="pending")  # Estados posibles: pending, accepted, rejected
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relaciones
+    requester = db.relationship("User", foreign_keys=[requester_id], backref="exchanges_requested")
+
+    def __repr__(self):
+        return f'<Exchange {self.id} - Status: {self.status}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "requester_id": self.requester_id,
+            "origin_disc_id": self.exchanges.origin_disc_id,
+            "target_disc_id": self.target_disc_id,
+            "status": self.status,
+            "created_at": self.created_at.isoformat()
+        }

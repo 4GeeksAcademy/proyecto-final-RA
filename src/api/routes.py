@@ -3,15 +3,19 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import requests
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Record, SellList, WishList, Comment
+from api.models import db, User, Record, SellList, WishList, Comment, ExchangeList
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_login import current_user
+from sqlalchemy.orm import aliased
+import logging
 
 api = Blueprint('api', __name__)
 
 CORS(api)
+
+logging.basicConfig(filename="error.log", level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
 
 from requests_oauthlib import OAuth1
 
@@ -22,6 +26,7 @@ TOKEN_SECRET = 'XEGBwLwVNBQQqbXNxZxeLcgABTBqGGyDcaYYNFBM'
 BASE_URL = 'https://api.discogs.com/'
 
 @api.route('/search', methods=['GET'])
+@jwt_required()
 def search_discogs():
     query = request.args.get('q')
     search_type = request.args.get('type', 'release')
@@ -123,6 +128,7 @@ def get_users():
 from sqlalchemy.exc import SQLAlchemyError
 
 @api.route('/users/<int:user_id>', methods=['GET'])
+@jwt_required()
 def get_user(user_id):
     try:
         user = User.query.get(user_id)
@@ -193,13 +199,16 @@ def login():
 @api.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
-    id = get_jwt_identity()
-    user = User.query.get(id)
+    try:
+        id = get_jwt_identity()
+        user = User.query.get(id)
 
-    if not user:
-        return jsonify({"msg": "algo ha ido mal"}), 404
-    
-    return jsonify({"user": user.serialize()}), 200
+        if not user:
+            return jsonify({"msg": "algo ha ido mal"}), 404
+        
+        return jsonify({"user": user.serialize()}), 200
+    except Exception as error:
+        return jsonify({'error': str(error)}), 400
 
 
 
@@ -253,16 +262,34 @@ def edit_user():
 
     # ----------------------------------------------------------------------------------------------------------
 
+from sqlalchemy import or_
+
+from sqlalchemy import or_
+
 @api.route('/records', methods=['GET'])
 @jwt_required()
 def get_records():
     try:
         id = get_jwt_identity()
-        records = Record.query.filter_by(owner_id=id).all()
+
+        # Subconsulta para obtener los origin_disc_id donde requester es el usuario actual
+        subquery = db.session.query(ExchangeList.origin_disc_id).filter(ExchangeList.requester_id == id).subquery()
+
+        # Filtrar los registros donde el usuario es el owner_id o donde id aparece en la subconsulta
+        records = Record.query.filter(
+            or_(
+                Record.owner_id == id, 
+                Record.id.in_(db.session.query(subquery))
+            )
+        ).all()
+
         serialized_records = [record.serialize() for record in records]
         return jsonify(serialized_records), 200
+
     except Exception as e:
         return jsonify({"error": "Error al obtener los registros", "message": str(e)}), 500
+
+
 
 
 
@@ -342,23 +369,38 @@ def get_sell_list():
         return jsonify({'error': str(e)}), 500
 
 
-@api.route('/sell_listas', methods=['GET'])
+@api.route('/get_all_sell', methods=['GET'])
+@jwt_required()
 def get_sell_lists():
     try:
+        exchange_list_alias = aliased(ExchangeList)
 
-        sell_list_discs = SellList.query.all()
-        
+        sell_list_discs = SellList.query.filter(
+            ~SellList.id.in_(
+                db.session.query(exchange_list_alias.origin_disc_id)
+                .union(
+                    db.session.query(exchange_list_alias.target_disc_id)
+                )
+            )
+        ).all()
 
-        sell_list = [disc.serialize() for disc in sell_list_discs]
-        
+        sell_list = []
+        for disc in sell_list_discs:
+            user = get_user_by_id(disc.user_id)  # Fetch user by ID
+            sell_list.append({
+                **disc.serialize(),  # Serialize SellList object
+                "username": user.email if user else "Unknown"  # Add username
+            })
+
         return jsonify({'sellList': sell_list}), 200
     except Exception as e:
-
         return jsonify({'error': str(e)}), 500
 
 
 
+
 @api.route('/sell_lista/<int:record_id>', methods=['DELETE'])
+@jwt_required()
 def delete_sellList_record(record_id):
     try:
 
@@ -454,41 +496,64 @@ def get_wishlist():
 
 # ---------------------------------------------------------------------------------------------------
 
+from flask import request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from api.models import db, User, Record
+
 @api.route('/exchange', methods=['POST'])
 @jwt_required()
-def exchange():
-    user_id = get_jwt_identity()  # Usuario autenticado
+def create_exchange():
     data = request.get_json()
 
-    selected_record_id = data.get("selected_record_id")
-    exchange_record_id = data.get("exchange_record_id")
+    if not data or "selected_record_id" not in data or "offered_record_id" not in data:
+        return jsonify({"error": "Datos insuficientes"}), 400
 
-    if not selected_record_id or not exchange_record_id:
-        return jsonify({"message": "Faltan datos para el intercambio."}), 400
+    user_id = get_jwt_identity()
+    selected_record_id = data["selected_record_id"]
+    offered_record_id = data["offered_record_id"]
 
-    # Obtener el usuario logueado y el otro usuario
-    user = User.query.get(user_id)
-    exchange_user = User.query.filter_by(id=user_id).first()  # Asegúrate de que el usuario logueado sea el dueño del ítem seleccionado
+    try:
+        # Verificar que el usuario existe
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"error": "Usuario no encontrado"}), 404
 
-    # Verificar que el usuario logueado tiene el ítem que desea intercambiar
-    record_to_exchange = Record.query.get(exchange_record_id)
-    if record_to_exchange not in user.on_sale:
-        return jsonify({"message": "El disco seleccionado no pertenece al usuario logueado."}), 400
+        # Verificar que los discos existen
+        selected_record = Record.query.get(selected_record_id)
+        offered_record = Record.query.get(offered_record_id)
+        set_list_record = SellList.query.get(selected_record_id)
+        selected_record_comments = Comment.query.all()
 
-    # Intercambiar ítems
-    record_to_exchange.user_id = exchange_user.id  # Actualizar el usuario que posee el disco que se intercambia
-    selected_record = Record.query.get(selected_record_id)
-    selected_record.user_id = user.id  # El usuario logueado obtiene el disco
+        if not selected_record or not offered_record:
+            return jsonify({"error": "Uno o ambos discos no existen"}), 404
 
-    db.session.commit()
+        # Crear la solicitud de intercambio
+        exchange = ExchangeList(
+            requester_id=user_id,
+            origin_disc_id=selected_record_id,
+            target_disc_id=offered_record_id,
+            status="pending"  # Estado inicial del intercambio
+         )
 
-    return jsonify({"message": "Intercambio realizado con éxito."}), 200
+        db.session.add(exchange)
+
+        db.session.commit()
+
+        return jsonify({"message": "Solicitud de intercambio creada exitosamente"}), 201
+
+    except SQLAlchemyError as e:
+        db.session.rollback()  # Revertir cambios en caso de error
+        logging.error(f"Error en la base de datos: {str(e)}")  # Registrar el error en el archivo error.log
+        return jsonify({"error": f"Error interno del servidor: {str(e)}"}), 500
+
+
 
     # -----------------------------------------------------------------------------------------------------------------
 
 
 
 @api.route("/comments/<int:record_id>", methods=["GET"])
+@jwt_required()
 def get_comments(record_id):
     comments = Comment.query.filter_by(record_id=record_id).all()
     return jsonify([comment.serialize() for comment in comments])
@@ -538,3 +603,27 @@ def delete_user():
     except Exception as e:
         db.session.rollback() 
         return jsonify({"error": str(e)}), 500
+
+def delete_comments_by_record(record_id):
+    try:
+        # Eliminar todos los comentarios donde record_id coincida
+        deleted_rows = Comment.query.filter_by(record_id=record_id).delete()
+
+        if deleted_rows == 0:
+            return jsonify({"message": "No comments found for this record"}), 404
+
+        db.session.commit()
+        return jsonify({"message": f"{deleted_rows} comments deleted successfully"}), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logging.error(f"Database error while deleting comments: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+def get_user_by_id(user_id): 
+    try:
+        user = User.query.filter_by(id=user_id).first()
+        return user  # This will return None if no user is found
+    except SQLAlchemyError as e:
+        logging.error(f"Database error while fetching user: {str(e)}")
+        return None  # Return None to avoid breaking the main function

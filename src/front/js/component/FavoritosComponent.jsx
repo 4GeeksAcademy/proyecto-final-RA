@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import "../../styles/misDiscos.css";
+import "../../styles/misDiscosFavorites.css";
 import { Context } from "../store/appContext";
 
 export const FavoritosComponent = () => {
