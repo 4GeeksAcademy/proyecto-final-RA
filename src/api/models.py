@@ -15,7 +15,7 @@ class User(db.Model, UserMixin):
 
     # Relaciones
     records = db.relationship('Record', backref='owner', lazy=True)
-    comments = db.relationship('Comment', backref='user', lazy=True)
+    comments = db.relationship('Comment', back_populates='user', lazy=True)
     transactions_as_buyer = db.relationship('Transaction', foreign_keys='Transaction.buyer_id', backref='buyer', lazy=True)
     transactions_as_seller = db.relationship('Transaction', foreign_keys='Transaction.seller_id', backref='seller', lazy=True)
 
@@ -41,11 +41,23 @@ class Record(db.Model):
     genre = db.Column(db.String(255), nullable=True)
     style = db.Column(db.String(255), nullable=True)
     cover_image = db.Column(db.String(255), nullable=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
 
     # Relaciones
-    comments = db.relationship('Comment', backref='record', lazy=True)
-    transactions = db.relationship('Transaction', backref='record', lazy=True)
+    comments = db.relationship(
+        'Comment', 
+        back_populates='record', 
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        lazy=True
+    )
+    transactions = db.relationship(
+        'Transaction', 
+        backref='record', 
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        lazy=True
+    )
 
     def __repr__(self):
         return f'<Record {self.title}>'
@@ -66,8 +78,8 @@ class Record(db.Model):
 class SellList(db.Model):
     __tablename__ = 'sell_list'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    record_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
 
     __table_args__ = (
         db.UniqueConstraint('user_id', 'record_id', name='unique_sell_list'),  # Evita duplicados
@@ -94,19 +106,17 @@ class SellList(db.Model):
         }
 
 
-
 class WishList(db.Model):
     __tablename__ = 'wish_list'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    record_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
 
     __table_args__ = (
         db.UniqueConstraint('user_id', 'record_id', name='unique_wish_list'),  # Evita duplicados
     )
 
     user = db.relationship('User', backref='wish_list', lazy=True)
-
 
     record = db.relationship('Record', backref='wish_list', lazy=True)
 
@@ -131,28 +141,28 @@ class WishList(db.Model):
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Referencia corregida
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)  # Referencia corregida
+    record_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
+
+    # Relación con usuario y registro
+    user = db.relationship("User", back_populates="comments")
+    record = db.relationship("Record", back_populates="comments")
 
     def serialize(self):
         return {
             "id": self.id,
-            "user_name": self.user.name if self.user else "Anónimo",  # Devuelve el nombre del usuario
+            "user_name": self.user.name if self.user else "Anónimo",
             "content": self.content,
             "record_id": self.record_id
         }
 
-
-
-
-
 class Transaction(db.Model):
     __tablename__ = 'transactions'
     id = db.Column(db.Integer, primary_key=True)
-    buyer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    seller_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    record_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=False)
+    buyer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    seller_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    record_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -171,28 +181,35 @@ class Transaction(db.Model):
         }
 
 
-    
 class ExchangeList(db.Model):
     __tablename__ = 'exchangelist'
     id = db.Column(db.Integer, primary_key=True)
-    requester_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    origin_disc_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=True)  # Disco que quiere obtener
-    target_disc_id = db.Column(db.Integer, db.ForeignKey('records.id'), nullable=True)  # Disco que ofrece a cambio
-    status = db.Column(db.String(20), default="pending")  # Estados posibles: pending, accepted, rejected
+    requester_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    origin_disc_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
+    target_disc_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
+    status = db.Column(db.String(20), default="pending")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relaciones
-    requester = db.relationship("User", foreign_keys=[requester_id], backref="exchanges_requested")
+    # Relaciones explícitas
+    requester = db.relationship("User", foreign_keys=[requester_id], backref="exchanges_initiated")
+    origin_disc = db.relationship("Record", foreign_keys=[origin_disc_id])
+    target_disc = db.relationship("Record", foreign_keys=[target_disc_id])
 
-    def __repr__(self):
-        return f'<Exchange {self.id} - Status: {self.status}>'
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "requester_id": self.requester_id,
-            "origin_disc_id": self.exchanges.origin_disc_id,
-            "target_disc_id": self.target_disc_id,
-            "status": self.status,
-            "created_at": self.created_at.isoformat()
-        }
+    # En tu modelo ExchangeList
+def serialize(self):
+    return {
+        "id": self.id,
+        "requester": self.requester.serialize(),
+        "target_disc": {
+            "id": self.origin_disc.id,
+            "title": self.origin_disc.title,
+            "owner_id": self.origin_disc.owner_id
+        },
+        "offered_disc": {
+            "id": self.target_disc.id,
+            "title": self.target_disc.title,
+            "owner_id": self.target_disc.owner_id
+        },
+        "status": self.status,
+        "created_at": self.created_at.isoformat()
+    }

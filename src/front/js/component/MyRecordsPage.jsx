@@ -1,7 +1,7 @@
 // src/js/pages/MyRecordsPage.jsx
 import React, { useState, useEffect } from 'react';
 import AddRecordModal from '../component/AddRecordModal'; // Importación con nombre
-import "../../styles/myRecordsPage.css";
+// import "../../styles/myRecordsPage.css";
 
 const MyRecordsPage = () => {
   const [showModal, setShowModal] = useState(false);

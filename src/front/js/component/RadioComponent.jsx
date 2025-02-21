@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Plyr from "plyr";
 import "plyr/dist/plyr.css";
-import "../../styles/RadioComponent.css";
+// import "../../styles/RadioComponent.css";
 
 const RadioComponent = () => {
   const audioRef = useRef(null);

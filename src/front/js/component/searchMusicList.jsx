@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext"; // Usamos el contexto de 'appContext'
-import "../../styles/searchMusicList.css";
+// import "../../styles/searchMusicList.css";
 import { Carousel } from "react-bootstrap"; // Asegúrate de importar Carousel
 
 const SearchMusic = () => {

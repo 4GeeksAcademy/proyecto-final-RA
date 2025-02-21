@@ -2,10 +2,12 @@ import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import Search from "../component/search.jsx";
-import "../../styles/private.css";
+// import "../../styles/private.css";
+import "../../styles/components/_private.css"
 import RecordCarousel from "./RecordCarousel.jsx";
 import { Link } from "react-router-dom";
 import SideBar from "./sideBar.jsx";
+
 
 export const Private = () => {
     const { store, actions } = useContext(Context);
@@ -35,13 +37,10 @@ export const Private = () => {
 
     return (
         <div className="private-page-container d-flex flex-wrap">
-            <SideBar />
+  
+            {/* <SideBar /> */}
             <div className="private-content">
-                <h2 className="private-content-title">Perfil</h2>
-                <h3 className="private-content-subtitle">del usuario</h3>
-                <div className="search-container">
-                    <Search />
-                </div>
+                <Search />
             </div>
         </div>
     );

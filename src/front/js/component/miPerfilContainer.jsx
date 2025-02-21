@@ -1,15 +1,15 @@
 import React from "react";
-import { MiPerfil } from "./miPerfil.jsx";
-import "../../styles/userProfile.css"; // Asegúrate de que el CSS esté importado
+import MiPerfil from "./miPerfil.jsx";
 import SideBar from "./sideBar.jsx";
+import "../../styles/components/_miperfilcontainer.css"; // Importa el archivo de estilos
 
 export const MiPerfilContainer = () => {
-  return (
-    <div className="register-container"> {/* Usa el mismo estilo del contenedor principal */}
-      <div className="form-container"> {/* Usa el mismo estilo del formulario */}
-        <SideBar />
-        <MiPerfil />
-      </div>
-    </div>
-  );
+    return (
+        <div className="mi-perfil- container"> {/* Nombre de clase más descriptivo */}
+            <div className="mi-perfil-content"> {/* Contenedor para SideBar y MiPerfil */}
+                {/* <SideBar /> */}
+                <MiPerfil />
+            </div>
+        </div>
+    );
 };

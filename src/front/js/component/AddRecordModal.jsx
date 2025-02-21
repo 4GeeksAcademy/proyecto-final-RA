@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, ListGroup } from 'react-bootstrap';
-import "../../styles/addRecordModal.css"; // Asegúrate de tener este archivo con las clases adecuadas
+// import "../../styles/addRecordModal.css";
 
 const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
   const [selectedRecord, setSelectedRecord] = useState(null);

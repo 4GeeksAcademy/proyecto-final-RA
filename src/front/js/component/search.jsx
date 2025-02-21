@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/components/_search2.css"
 import { Modal, Button } from "react-bootstrap";
 
 const Search = () => {
@@ -16,6 +17,7 @@ const Search = () => {
     e.preventDefault();
     setLoading(true);
     actions.searchDiscogs(query);
+    setQuery('');
   };
 
   useEffect(() => {
@@ -90,14 +92,16 @@ const Search = () => {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Ingresa un término de búsqueda"
           />
-          <button
-            type="submit"
-            className="search-btn btn btn-primary"
-            onClick={handleSearch}
-            disabled={loading}
-          >
-            {loading ? "Buscando..." : "Buscar"}
-          </button>
+          <div className="button_search">
+            <button
+              type="submit"
+              className="search-btn btn btn-primary"
+              onClick={handleSearch}
+              disabled={loading}
+            >
+              {loading ? "Buscando..." : "Buscar"}
+            </button>
+          </div>
         </form>
       </div>
 
@@ -148,7 +152,7 @@ const Search = () => {
           show={showModal}
           onHide={handleCloseModal}
           centered
-          size="sm" // Modal más pequeño en altura
+          size="lg" // Modal más pequeño en altura
         >
           <Modal.Header closeButton>
             <Modal.Title>{selectedRecord.title || "Sin título"}</Modal.Title>

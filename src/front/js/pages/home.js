@@ -6,7 +6,9 @@ import { Register } from "../component/register.jsx";
 import SearchInvitados from "../component/SearchInvitados.jsx";
 import RandomRecordsCarousel from "../component/RandomRecordsCarousel.jsx";
 
-import "../../styles/home.css";
+
+// import "../../styles/home.css";
+import "../../styles/pages/_home.css"
 import { Jumbotron } from "../component/Jumbotron.jsx";
 
 const Home = () => {

@@ -1,0 +1,77 @@
+/* _jumbotron.css */
+
+.jumbotron {
+  background-color: var(--color-gris-oscuro);
+  color: var(--color-gris-claro);
+  padding: 5rem 3rem; /* Aumentar el padding para mejor espaciado */
+  border-radius: 12px; /* Bordes más redondeados */
+  margin-bottom: 3rem;
+  text-align: center; /* Centrar el texto en pantallas pequeñas */
+}
+
+.jumbotron-content {
+  max-width: 960px; /* Aumentar el ancho máximo del contenido */
+  margin: 0 auto;
+}
+
+.jumbotron h1 {
+  color: var(--color-rojo);
+  font-weight: 600; /* Peso de fuente semi-negrita */
+  font-size: 2.5rem; /* Tamaño de fuente más grande */
+  margin-bottom: 1.5rem;
+  font-family: 'Montserrat', sans-serif; /* Fuente moderna (ejemplo) */
+}
+
+.jumbotron .lead {
+  font-size: 1.4rem; /* Tamaño de letra del lead */
+  line-height: 1.7; /* Interlineado del lead */
+  margin-bottom: 2.5rem;
+  font-family: 'Roboto', sans-serif; /* Fuente moderna (ejemplo) */
+}
+
+.jumbotron hr {
+  border-color: rgba(255, 69, 0, 0.5); /* Color de la línea separadora con opacidad */
+  margin: 2.5rem 0;
+  opacity: 0.7; /* Opacidad de la línea */
+}
+
+.jumbotron ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2.5rem;
+}
+
+.jumbotron li {
+  margin-bottom: 1.2rem;
+  font-size: 1.1rem; /* Tamaño de fuente consistente */
+}
+
+.jumbotron strong {
+  color: var(--color-rojo);
+  font-weight: 600; /* Peso de fuente semi-negrita */
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.cta-buttons .btn {
+  background-color: var(--color-rojo);
+  border: none; /* Eliminar el borde */
+  color: var(--color-gris-claro);
+  font-weight: 500; /* Peso de fuente semi-negrita */
+  padding: 1rem 2rem; /* Ajustar el padding */
+  border-radius: 8px; /* Bordes más redondeados */
+  font-size: 1.2rem; /* Tamaño de fuente más grande */
+  text-transform: uppercase; /* Texto en mayúsculas */
+  letter-spacing: 1px; /* Espaciado entre letras */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+}
+
+.cta-buttons .btn:hover {
+  background-color: #cc3700; /* Rojo más oscuro al pasar el mouse */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada al pasar el mouse */
+  transform: translateY(-2px); /* Ligera elevación al pasar el mouse */
+}

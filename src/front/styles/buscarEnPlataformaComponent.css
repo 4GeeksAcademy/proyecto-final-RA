@@ -222,3 +222,21 @@
     /* Ajuste para móviles pequeños */
   }
 }
+
+
+
+.select-intercambio {
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  padding: 8px;
+  width: 100%;
+}
+
+.select-intercambio option {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.select-intercambio option:hover {
+  background-color: #f8f9fa;
+}

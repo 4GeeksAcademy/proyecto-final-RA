@@ -1,6 +1,7 @@
 //import react into the bundle
 import React from "react";
 import ReactDOM from "react-dom";
+import '../styles/index.css';
 
 //include your index.scss file into the bundle
 

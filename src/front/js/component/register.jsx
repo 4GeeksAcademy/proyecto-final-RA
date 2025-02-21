@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Context } from "../store/appContext";
 import { useNavigate } from 'react-router-dom';
-import "../../styles/register.css";
+// import "../../styles/register.css";
+import "../../styles/components/_register.css"
 
 const Register = () => {
   const { actions } = useContext(Context);

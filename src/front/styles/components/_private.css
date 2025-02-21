@@ -1,0 +1,108 @@
+/* _private.css */
+
+.private-page-container {
+    background-color: var(--color-negro);
+    /* Fondo negro */
+    color: var(--color-gris-claro);
+    /* Texto en gris claro */
+    min-height: 100vh;
+    /* Altura mínima de la pantalla */
+    padding: 2rem;
+    /* Espacio alrededor del contenido */
+}
+
+.private-content {
+    flex: 1;
+    /* Ocupa el espacio disponible */
+    padding: 2rem;
+    /* Espacio dentro del contenido principal */
+    display: flex;
+    /* Para alinear verticalmente los elementos */
+    flex-direction: column;
+    /* Elementos en columna */
+}
+
+.private-content-title {
+    color: var(--color-rojo);
+    /* Título en rojo */
+    font-size: 2rem;
+    /* Tamaño de fuente mayor */
+    margin-bottom: 0.5rem;
+    /* Espacio inferior */
+}
+
+.private-content-subtitle {
+    font-size: 1.2rem;
+    /* Tamaño de fuente menor */
+    margin-bottom: 2rem;
+    /* Espacio inferior */
+}
+
+.search-container {
+    /* Estilos para el contenedor de búsqueda si es necesario */
+    margin-top: 2rem;
+    /* Espacio superior */
+}
+
+/* Estilos para el SideBar (asumiendo que tienes un componente SideBar) */
+.sidebar {
+    /* Ajusta el selector si tu componente tiene otra clase */
+    width: 250px;
+    /* Ancho deseado para la barra lateral */
+    background-color: var(--color-gris-oscuro);
+    /* Fondo gris oscuro */
+    padding: 1rem;
+    /* Espacio interno */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    margin-right: 2rem;
+    /* Espacio a la derecha de la barra lateral */
+}
+
+/* Estilos para el contenido de la barra lateral (ejemplo) */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar a {
+    color: var(--color-gris-claro);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.sidebar a:hover {
+    color: var(--color-rojo);
+}
+
+/* Media query para diseño responsivo (opcional) */
+@media (max-width: 768px) {
+    .private-page-container {
+        flex-direction: column;
+        /* Contenido en columna en pantallas pequeñas */
+        padding: 1rem;
+    }
+
+    .sidebar {
+        width: 100%;
+        /* Barra lateral ocupa todo el ancho */
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .private-content {
+        padding: 1rem;
+    }
+
+    .private-content-title {
+        font-size: 1.5rem;
+    }
+
+    .private-content-subtitle {
+        font-size: 1rem;
+    }
+}

@@ -3,9 +3,33 @@
   color: white;
   padding: 40px;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column; /* Organiza el contenido en una columna */
-  /* margin-left: 8rem; */
+  margin-left: 270px; /* Ancho del sidebar + 30px */
+  width: calc(100% - 270px); /* Restar el ancho del sidebar */
+  position: relative;
+  z-index: 1; /* Asegurar que está detrás del sidebar */
+}
+
+.main-content {
+  display: block;
+  width: 100%;
+}
+
+.content-area {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Añadir media queries para responsividad */
+@media (max-width: 1200px) {
+  .mis-discos-container {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .content-area {
+    padding-left: 0;
+  }
 }
 
 .mis-discos-container h1 {
@@ -24,14 +48,17 @@
 
 .mis-discos-container .main-content {
   display: flex;
-  flex-direction: row; /* Sidebar a la izquierda, contenido a la derecha */
+  flex-direction: row;
+  /* Sidebar a la izquierda, contenido a la derecha */
   width: 100%;
-  
+
 }
 
 .mis-discos-container .main-content .content-area {
-  flex-grow: 1; /* El contenido principal ocupa el espacio restante */
-  padding-left: 270px; /* Espacio para el sidebar */
+  flex-grow: 1;
+  /* El contenido principal ocupa el espacio restante */
+  padding-left: 270px;
+  /* Espacio para el sidebar */
 }
 
 .mis-discos-container .mis-discos-content {

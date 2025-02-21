@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
@@ -22,12 +22,15 @@ import DiscosEnVenta from "./component/discosEnVenta.jsx";
 import { MiPerfilContainer } from "./component/miPerfilContainer.jsx";
 import { FavoritosVista } from "./component/FavoritosVista.jsx";
 
+import { Context } from './store/appContext';
+import SideBar from "./component/sideBar.jsx";
 
 
 
 //create your first component
 const Layout = () => {
     const basename = process.env.BASENAME || "";
+    const { store } = useContext(Context);
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
@@ -51,7 +54,7 @@ const Layout = () => {
                         <Route element={<AboutUs />} path="/aboutus" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
-                    <Footer />
+                    {/* <Footer /> */}
                 </ScrollToTop>
             </BrowserRouter>
         </div>

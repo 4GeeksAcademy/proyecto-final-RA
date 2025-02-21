@@ -46,7 +46,7 @@
 .submit-btn-css {
   width: 100%;
   padding: 15px;
-  background-color: red;
+  background-color: rgb(255, 0, 0);
 
   color: white;
   border: none;
@@ -118,7 +118,7 @@
 
 .styled-button:active {
   transform: scale(0.95); 
-  background-color: #c83500; 
+  background-color: #00c807; 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 

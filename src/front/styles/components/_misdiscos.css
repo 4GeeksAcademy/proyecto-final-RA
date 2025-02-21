@@ -1,0 +1,103 @@
+/* _misDiscos.css */
+
+.mis-discos-container {
+
+    flex-direction: column;
+    /* Contenedor en columna */
+    min-height: 100vh;
+    /* Altura mínima de la pantalla */
+    background-color: var(--color-background);
+    /* Color de fondo (variable CSS) */
+    color: var(--color-text);
+    /* Color de texto (variable CSS) */
+    padding: 2rem;
+    /* Espacio alrededor del contenido */
+}
+
+.back-link {
+    display: flex;
+    /* Flexbox para el enlace "Back" */
+    align-items: center;
+    /* Alinea verticalmente icono y texto */
+    text-decoration: none;
+    /* Quita el subrayado del enlace */
+    color: var(--color-primary);
+    /* Color del enlace (variable CSS) */
+    margin-bottom: 2rem;
+    /* Espacio debajo del enlace */
+    transition: color 0.3s ease;
+    /* Transición suave para el color */
+}
+
+.back-link:hover {
+    color: var(--color-primary-dark);
+    /* Color del enlace al pasar el mouse (variable CSS) */
+}
+
+.back-icon {
+    font-size: 1.2rem;
+    /* Tamaño del icono */
+    margin-right: 0.5rem;
+    /* Espacio entre icono y texto */
+}
+
+.main-content {
+    display: flex;
+    /* Usa flexbox para el contenido principal */
+    flex-grow: 1;
+    /* El contenido principal ocupa el espacio disponible */
+}
+
+.content-area {
+    flex-grow: 1;
+    /* El área de contenido ocupa el espacio disponible */
+    padding-left: 2rem;
+    /* Espacio a la izquierda del contenido */
+}
+
+/* Estilos para SideBar (si no están definidos en otro lugar) */
+.sidebar {
+    /* Ajusta el selector si tu componente SideBar tiene otra clase */
+    width: 250px;
+    /* Ancho deseado para la barra lateral */
+    background-color: var(--color-sidebar-background);
+    /* Color de fondo de la barra lateral (variable CSS) */
+    padding: 1rem;
+    /* Espacio interno de la barra lateral */
+    border-radius: 10px;
+    /* Bordes redondeados de la barra lateral */
+    margin-right: 2rem;
+    /* Espacio a la derecha de la barra lateral */
+}
+
+/* Estilos para MisDiscosComponent (si no están definidos en otro lugar) */
+.mis-discos-component {
+    /* ... estilos para el componente MisDiscosComponent ... */
+}
+
+/* Media query para diseño responsivo (opcional) */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+        /* Contenido en columna en pantallas pequeñas */
+    }
+
+    .sidebar {
+        width: 100%;
+        /* Barra lateral ocupa todo el ancho */
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .content-area {
+        padding-left: 0;
+        /* Sin espacio a la izquierda del contenido */
+    }
+}
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    /* 5 columnas de igual tamaño */
+    gap: 1.5rem;
+}

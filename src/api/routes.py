@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import requests
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Record, SellList, WishList, Comment, ExchangeList
+from api.models import db, User, Record, SellList, WishList, Comment, ExchangeList, Transaction
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -270,19 +270,22 @@ from sqlalchemy import or_
 @jwt_required()
 def get_records():
     try:
-        id = get_jwt_identity()
+        id = get_jwt_identity()  # Obtener el ID del usuario logueado
 
-        # Subconsulta para obtener los origin_disc_id donde requester es el usuario actual
+        # Subconsulta para obtener los origin_disc_id donde el requester es el usuario actual
         subquery = db.session.query(ExchangeList.origin_disc_id).filter(ExchangeList.requester_id == id).subquery()
 
-        # Filtrar los registros donde el usuario es el owner_id o donde id aparece en la subconsulta
+        # Filtrar los registros donde el usuario es el owner_id o donde el ID aparece en la subconsulta
         records = Record.query.filter(
             or_(
-                Record.owner_id == id, 
-                Record.id.in_(db.session.query(subquery))
-            )
-        ).all()
+            Record.owner_id == id,
+            Record.id.in_(
+            db.session.query(ExchangeList.origin_disc_id).filter(ExchangeList.requester_id == id)
+        )
+    )
+).all()
 
+        # Serializar los discos obtenidos
         serialized_records = [record.serialize() for record in records]
         return jsonify(serialized_records), 200
 
@@ -294,23 +297,26 @@ def get_records():
 
 
 @api.route('/records/<int:record_id>', methods=['DELETE'])
+@jwt_required()
 def delete_record(record_id):
     try:
-       
-        sell_list_entry = SellList.query.filter_by(record_id=record_id).first()
-        if sell_list_entry:
-            return jsonify({"error": "El disco está en venta y no se puede eliminar."}), 400
-
+        # Eliminar de listas de venta/deseos primero
+        SellList.query.filter_by(record_id=record_id).delete()
+        WishList.query.filter_by(record_id=record_id).delete()
+        
+        # Eliminar el disco (los comentarios se eliminarán en cascada)
         record = Record.query.get(record_id)
         if not record:
             return jsonify({"error": "Disco no encontrado."}), 404
 
         db.session.delete(record)
         db.session.commit()
-        return jsonify({"msg": "Disco eliminado correctamente."}), 200
+        
+        return jsonify({"msg": "Disco y comentarios eliminados correctamente."}), 200
 
     except Exception as e:
-        return jsonify({"error": "Error al eliminar el disco", "message": str(e)}), 500
+        db.session.rollback()
+        return jsonify({"error": f"Error al eliminar: {str(e)}"}), 500
 
 
 @api.route('/sell_list', methods=['POST'])
@@ -397,6 +403,41 @@ def get_sell_lists():
         return jsonify({'error': str(e)}), 500
 
 
+from flask_jwt_extended import get_jwt_identity
+from sqlalchemy import or_
+
+@api.route('/get_all_sell_list', methods=['GET'])
+@jwt_required()
+def get_all_sell_list():
+    try:
+        user_id = get_jwt_identity()  # Será None si no está autenticado
+        
+        # Subconsulta para obtener los discos con solicitudes de intercambio pendientes
+        pending_exchange_subquery = db.session.query(ExchangeList.origin_disc_id).filter(
+            ExchangeList.status == "pending"
+        ).subquery()
+
+        # Consulta para obtener los discos en venta
+        query = SellList.query.filter(~SellList.record_id.in_(pending_exchange_subquery))
+        
+        # Si el usuario está autenticado, excluimos sus propios discos
+        if user_id:
+            query = query.filter(SellList.user_id != user_id)
+
+        sell_list_items = query.all()
+        sell_list_data = [item.serialize() for item in sell_list_items]
+
+        return jsonify({"sellList": sell_list_data}), 200
+
+    except Exception as e:
+        return jsonify({
+            "error": "Error al obtener la lista de discos en venta",
+            "details": str(e)
+        }), 500
+
+
+
+
 
 
 @api.route('/sell_lista/<int:record_id>', methods=['DELETE'])
@@ -422,30 +463,40 @@ def delete_sellList_record(record_id):
 @jwt_required()
 def add_to_wishlist():
     try:
-        id = get_jwt_identity()
-
+        user_id = get_jwt_identity()  # Obtener el ID del usuario autenticado desde el JWT
         data = request.get_json()
-        print("Datos recibidos:", data)
 
-        record_id = data['record_id']
-        
-   
-        if not id or not record_id:
+        if not user_id:
+            return jsonify({"error": "No se encontró el ID del usuario"}), 400
+
+        if not data or 'record_id' not in data:
             return jsonify({"error": "Faltan datos obligatorios"}), 400
 
-        existing_entry = WishList.query.filter_by(user_id=id, record_id=record_id).first()
+        record_id = data['record_id']
+        print("ID del disco:", record_id)
+
+        # Verificar si el disco existe en la base de datos
+        record = Record.query.get(record_id)
+        if not record:
+            return jsonify({"error": "El disco no existe en la base de datos."}), 404
+
+        # Verificar si el usuario ya tiene el disco en su wishlist
+        existing_entry = WishList.query.filter_by(user_id=user_id, record_id=record_id).first()
         if existing_entry:
             return jsonify({"message": "Este disco ya está en tu wishlist."}), 400
 
-        new_entry = WishList(user_id=id, record_id=record_id)
+        # Agregar a la base de datos
+        new_entry = WishList(user_id=user_id, record_id=record_id)
         db.session.add(new_entry)
         db.session.commit()
 
         return jsonify({"message": "Disco agregado a tu wishlist."}), 200
 
     except Exception as e:
-        print("Error en el servidor:", str(e))
-        return jsonify({"error": str(e)}), 500
+        print("Error:", str(e))
+        return jsonify({"error": "Error interno del servidor", "details": str(e)}), 500
+
+
 
 
 # Eliminar de la wishlist (DELETE)
@@ -471,28 +522,38 @@ def remove_from_wishlist(record_id):
 @api.route("/wishlist", methods=["GET"])
 @jwt_required()
 def get_wishlist():
-    user_id = get_jwt_identity() 
+    try:
+        # Obtener el ID del usuario autenticado desde el JWT
+        user_id = get_jwt_identity()
 
-    wishlist_items = WishList.query.filter_by(user_id=user_id).all()
+        # Obtener todos los elementos de la wishlist del usuario
+        wishlist_items = WishList.query.filter_by(user_id=user_id).all()
 
-    if not wishlist_items:
-        return jsonify([]), 200
+        # Si no hay items en la wishlist, retornar una lista vacía
+        if not wishlist_items:
+            return jsonify([]), 200
 
-    wishlist_data = [
-        {
-            "id": item.id,
-            "record_id": item.record.id,
-            "record_title": item.record.title,
-            "record_artist": item.record.artist if hasattr(item.record, "artist") else "Desconocido",
-            "record_cover_image": item.record.cover_image,
-            "record_label": item.record.label,
-            "record_year": item.record.year,
-            "record_genre": item.record.genre
-        }
-        for item in wishlist_items
-    ]
+        # Serializar los items de la wishlist
+        wishlist_data = [
+            {
+                "id": item.id,
+                "record_id": item.record.id,
+                "record_title": item.record.title,
+                "record_artist": getattr(item.record, "artist", "Desconocido"),
+                "record_cover_image": item.record.cover_image,
+                "record_label": item.record.label,
+                "record_year": item.record.year,
+                "record_genre": item.record.genre
+            }
+            for item in wishlist_items
+        ]
 
-    return jsonify(wishlist_data), 200
+        return jsonify(wishlist_data), 200
+
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"error": "Error al obtener la wishlist", "details": str(e)}), 500
+
 
 # ---------------------------------------------------------------------------------------------------
 
@@ -503,48 +564,73 @@ from api.models import db, User, Record
 @api.route('/exchange', methods=['POST'])
 @jwt_required()
 def create_exchange():
-    data = request.get_json()
-
-    if not data or "selected_record_id" not in data or "offered_record_id" not in data:
-        return jsonify({"error": "Datos insuficientes"}), 400
-
-    user_id = get_jwt_identity()
-    selected_record_id = data["selected_record_id"]
-    offered_record_id = data["offered_record_id"]
-
     try:
-        # Verificar que el usuario existe
-        user = User.query.get(user_id)
-        if not user:
-            return jsonify({"error": "Usuario no encontrado"}), 404
+        data = request.get_json()
+        user_id = get_jwt_identity()
 
-        # Verificar que los discos existen
-        selected_record = Record.query.get(selected_record_id)
-        offered_record = Record.query.get(offered_record_id)
-        set_list_record = SellList.query.get(selected_record_id)
-        selected_record_comments = Comment.query.all()
+        # Debug: Imprimir datos recibidos
+        print(f"\n=== Datos recibidos ===")
+        print(f"Usuario: {user_id}")
+        print(f"Disco objetivo ID: {data.get('target_record_id')}")
+        print(f"Disco ofrecido ID: {data.get('offered_record_id')}\n")
 
-        if not selected_record or not offered_record:
-            return jsonify({"error": "Uno o ambos discos no existen"}), 404
+        # Obtener disco ofrecido
+        offered_record = Record.query.get(data['offered_record_id'])
+        
+        if not offered_record:
+            return jsonify({"error": "Disco ofrecido no existe"}), 404
 
-        # Crear la solicitud de intercambio
-        exchange = ExchangeList(
+        # Debug: Información del disco
+        print(f"=== Disco ofrecido ===")
+        print(f"ID: {offered_record.id}")
+        print(f"Título: {offered_record.title}")
+        print(f"Dueño actual: {offered_record.owner_id}\n")
+
+        if offered_record.owner_id != user_id:
+            return jsonify({
+                "error": f"""
+                    Error de propiedad. 
+                    Dueño real: {offered_record.owner_id}
+                    Usuario logueado: {user_id}
+                """
+            }), 403
+
+        # Validar campos requeridos
+        if not data or 'target_record_id' not in data or 'offered_record_id' not in data:
+            return jsonify({"error": "Datos incompletos"}), 400
+
+        # Verificar existencia de discos
+        target_record = Record.query.get(data['target_record_id'])
+        offered_record = Record.query.get(data['offered_record_id'])
+        
+        if not target_record or not offered_record:
+            return jsonify({"error": "Uno de los discos no existe"}), 404
+
+        # Validar propiedad del disco ofrecido
+        if offered_record.owner_id != user_id:
+            return jsonify({
+                "error": f"El disco ofrecido no te pertenece. Dueño real: {offered_record.owner_id}"
+            }), 403
+
+        # Crear registro de intercambio
+        new_exchange = ExchangeList(
             requester_id=user_id,
-            origin_disc_id=selected_record_id,
-            target_disc_id=offered_record_id,
-            status="pending"  # Estado inicial del intercambio
-         )
+            origin_disc_id=target_record.id,
+            target_disc_id=offered_record.id,
+            status="pending"
+        )
 
-        db.session.add(exchange)
-
+        db.session.add(new_exchange)
         db.session.commit()
 
-        return jsonify({"message": "Solicitud de intercambio creada exitosamente"}), 201
+        return jsonify({
+            "message": "Intercambio solicitado exitosamente",
+            "exchange": new_exchange.serialize()
+        }), 201
 
-    except SQLAlchemyError as e:
-        db.session.rollback()  # Revertir cambios en caso de error
-        logging.error(f"Error en la base de datos: {str(e)}")  # Registrar el error en el archivo error.log
-        return jsonify({"error": f"Error interno del servidor: {str(e)}"}), 500
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 
 
@@ -552,11 +638,21 @@ def create_exchange():
 
 
 
-@api.route("/comments/<int:record_id>", methods=["GET"])
-@jwt_required()
+@api.route('/comments/<int:record_id>', methods=['GET'])
 def get_comments(record_id):
-    comments = Comment.query.filter_by(record_id=record_id).all()
-    return jsonify([comment.serialize() for comment in comments])
+    try:
+        comments = Comment.query.filter_by(record_id=record_id).all()
+
+        if not comments:
+            return jsonify({"message": "No hay comentarios para este disco."}), 200
+
+        return jsonify([comment.serialize() for comment in comments]), 200
+
+    except Exception as e:
+        print("Error en la API:", str(e))  # Esto te permitirá ver más detalles sobre el error
+        return jsonify({"error": "Error al obtener los comentarios"}), 500
+
+
 
 
 @api.route("/comments", methods=["POST"])
@@ -627,3 +723,83 @@ def get_user_by_id(user_id):
     except SQLAlchemyError as e:
         logging.error(f"Database error while fetching user: {str(e)}")
         return None  # Return None to avoid breaking the main function
+
+
+
+@api.route('/purchase', methods=['POST'])
+@jwt_required()
+def purchase_record():
+    buyer_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or 'record_id' not in data:
+        return jsonify({"error": "Datos insuficientes"}), 400
+
+    try:
+        # 1. Eliminar TODAS las entradas de venta del disco
+        SellList.query.filter_by(record_id=data['record_id']).delete()
+        
+        # 2. Transferir propiedad
+        record = Record.query.get(data['record_id'])
+        if not record:
+            return jsonify({"error": "Disco no encontrado"}), 404
+            
+        record.owner_id = buyer_id
+        
+        # 3. Crear transacción
+        new_transaction = Transaction(
+            buyer_id=buyer_id,
+            seller_id=record.owner_id,  # Dueño original
+            record_id=data['record_id']
+        )
+        db.session.add(new_transaction)
+        
+        db.session.commit()
+
+        return jsonify({
+            "message": "Compra exitosa",
+            "record": record.serialize(),
+            "transaction_id": new_transaction.id
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Error en la compra: {str(e)}"}), 500
+
+@api.route('/user_records', methods=['GET'])  # <- Quitar el /api/ redundante
+@jwt_required()
+def get_user_records():
+    try:
+        user_id = get_jwt_identity()
+        records = Record.query.filter_by(owner_id=user_id).all()
+        
+        return jsonify([{
+            "id": record.id,
+            "title": record.title,
+            "year": record.year,
+            "genre": record.genre,
+            "owner_id": record.owner_id,  # Campo crítico
+            "cover_image": record.cover_image
+        } for record in records]), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@api.route('/validate_token', methods=['GET'])
+@jwt_required()
+def validate_token():
+    try:
+        # Obtener el identity directamente (debería ser el user_id)
+        user_id = get_jwt_identity()
+        
+        # Buscar el usuario por ID
+        user = User.query.get(user_id)
+        
+        if not user:
+            return jsonify({"msg": "Usuario no encontrado"}), 404
+            
+        return jsonify(user.serialize()), 200
+        
+    except Exception as e:
+        return jsonify({"msg": "Error validando token", "error": str(e)}), 500

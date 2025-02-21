@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Carousel, Modal, Button } from "react-bootstrap"; // Incluye Modal y Button
 import { Context } from "../store/appContext";
-import "../../styles/randomRecordsCarousel.css";
+// import "../../styles/randomRecordsCarousel.css";
 
 const RandomRecordsCarousel = () => {
   const { store, actions } = useContext(Context);

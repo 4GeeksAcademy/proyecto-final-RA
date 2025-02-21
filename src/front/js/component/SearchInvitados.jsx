@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Modal, Button } from "react-bootstrap";
-import "../../styles/searchInvitados.css";
+// import "../../styles/searchInvitados.css";
+import "../../styles/components/_search.css"
 
 const SearchInvitados = () => {
   const { store, actions } = useContext(Context);

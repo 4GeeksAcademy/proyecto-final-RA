@@ -1,0 +1,64 @@
+/* _footer.css */
+
+.footer {
+  background-color: var(--color-gris-oscuro); /* Fondo gris oscuro */
+  color: var(--color-gris-claro); /* Texto en gris claro */
+  padding: 1.5rem 0; /* Ajuste de padding */
+  text-align: center; /* Texto centrado */
+  border-top: 1px solid var(--color-rojo); /* Borde superior rojo */
+}
+
+.footer-container {
+  max-width: 960px; /* Ancho máximo del contenedor */
+  margin: 0 auto; /* Centrar el contenedor */
+  display: flex; /* Para alinear los elementos horizontalmente */
+  justify-content: space-between; /* Distribuye el espacio entre los elementos */
+  align-items: center; /* Centra verticalmente los elementos */
+  padding: 0 1rem; /* Ajuste de padding horizontal */
+}
+
+.footer p {
+  margin: 0; /* Elimina márgenes predeterminados del párrafo */
+  font-size: 0.9rem; /* Tamaño de letra pequeño */
+}
+
+.footer-nav {
+  list-style: none; /* Elimina los puntos de la lista */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Para que los elementos de la lista estén en línea */
+}
+
+.footer-nav li {
+  margin: 0 0.8rem; /* Espacio entre los elementos de la lista */
+}
+
+.footer-nav a {
+  color: var(--color-gris-claro); /* Color del enlace en gris claro */
+  text-decoration: none; /* Elimina el subrayado del enlace */
+  transition: color 0.3s ease; /* Transición suave para el cambio de color */
+}
+
+.footer-nav a:hover {
+  color: var(--color-rojo); /* Color del enlace en rojo al pasar el mouse */
+}
+
+/* Estilos para el footer en pantallas más pequeñas */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column; /* Los elementos se apilan verticalmente */
+    align-items: center; /* Centrar horizontalmente los elementos */
+  }
+
+  .footer p {
+    margin-bottom: 0.5rem; /* Espacio inferior para el párrafo */
+  }
+
+  .footer-nav {
+    flex-direction: column; /* Los elementos de la lista se apilan verticalmente */
+  }
+
+  .footer-nav li {
+    margin: 0.5rem 0; /* Espacio superior e inferior para los elementos de la lista */
+  }
+}
