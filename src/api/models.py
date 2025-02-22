@@ -82,7 +82,7 @@ class SellList(db.Model):
     record_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
 
     __table_args__ = (
-        db.UniqueConstraint('user_id', 'record_id', name='unique_sell_list'),  # Evita duplicados
+        db.UniqueConstraint('user_id', 'record_id', name='unique_sell_list'), 
     )
     user = db.relationship('User', backref='sell_list', lazy=True)
 
@@ -113,7 +113,7 @@ class WishList(db.Model):
     record_id = db.Column(db.Integer, db.ForeignKey('records.id', ondelete='CASCADE'), nullable=False)
 
     __table_args__ = (
-        db.UniqueConstraint('user_id', 'record_id', name='unique_wish_list'),  # Evita duplicados
+        db.UniqueConstraint('user_id', 'record_id', name='unique_wish_list'),  
     )
 
     user = db.relationship('User', backref='wish_list', lazy=True)

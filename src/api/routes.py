@@ -189,7 +189,7 @@ def login():
         if not check_user:
             return jsonify({"msg": "Usuario no encontrado"}), 404
 
-        # Usar check_password_hash para comparar la contraseña ingresada con la contraseña hasheada
+
         if not check_password_hash(check_user.password, password):
             return jsonify({"msg": "Contraseña incorrecta"}), 401
 
@@ -274,12 +274,11 @@ from sqlalchemy import or_
 @jwt_required()
 def get_records():
     try:
-        id = get_jwt_identity()  # Obtener el ID del usuario logueado
+        id = get_jwt_identity() 
 
-        # Subconsulta para obtener los origin_disc_id donde el requester es el usuario actual
+
         subquery = db.session.query(ExchangeList.origin_disc_id).filter(ExchangeList.requester_id == id).subquery()
 
-        # Filtrar los registros donde el usuario es el owner_id o donde el ID aparece en la subconsulta
         records = Record.query.filter(
             or_(
             Record.owner_id == id,
@@ -289,7 +288,7 @@ def get_records():
     )
 ).all()
 
-        # Serializar los discos obtenidos
+    
         serialized_records = [record.serialize() for record in records]
         return jsonify(serialized_records), 200
 
@@ -304,11 +303,10 @@ def get_records():
 @jwt_required()
 def delete_record(record_id):
     try:
-        # Eliminar de listas de venta/deseos primero
+
         SellList.query.filter_by(record_id=record_id).delete()
         WishList.query.filter_by(record_id=record_id).delete()
-        
-        # Eliminar el disco (los comentarios se eliminarán en cascada)
+
         record = Record.query.get(record_id)
         if not record:
             return jsonify({"error": "Disco no encontrado."}), 404
@@ -396,10 +394,10 @@ def get_sell_lists():
 
         sell_list = []
         for disc in sell_list_discs:
-            user = get_user_by_id(disc.user_id)  # Fetch user by ID
+            user = get_user_by_id(disc.user_id) 
             sell_list.append({
-                **disc.serialize(),  # Serialize SellList object
-                "username": user.email if user else "Unknown"  # Add username
+                **disc.serialize(),  
+                "username": user.email if user else "Unknown" 
             })
 
         return jsonify({'sellList': sell_list}), 200
@@ -414,17 +412,17 @@ from sqlalchemy import or_
 @jwt_required()
 def get_all_sell_list():
     try:
-        user_id = get_jwt_identity()  # Será None si no está autenticado
+        user_id = get_jwt_identity() 
         
-        # Subconsulta para obtener los discos con solicitudes de intercambio pendientes
+    
         pending_exchange_subquery = db.session.query(ExchangeList.origin_disc_id).filter(
             ExchangeList.status == "pending"
         ).subquery()
 
-        # Consulta para obtener los discos en venta
+    
         query = SellList.query.filter(~SellList.record_id.in_(pending_exchange_subquery))
         
-        # Si el usuario está autenticado, excluimos sus propios discos
+    
         if user_id:
             query = query.filter(SellList.user_id != user_id)
 
@@ -449,7 +447,7 @@ def get_all_sell_list():
 def delete_sellList_record(record_id):
     try:
 
-        # Eliminar el registro si no está en venta
+        
         record = SellList.query.get(record_id)
         if not record:
             return jsonify({"error": "Disco no encontrado."}), 404
@@ -467,7 +465,7 @@ def delete_sellList_record(record_id):
 @jwt_required()
 def add_to_wishlist():
     try:
-        user_id = get_jwt_identity()  # Obtener el ID del usuario autenticado desde el JWT
+        user_id = get_jwt_identity() 
         data = request.get_json()
 
         if not user_id:
@@ -479,17 +477,17 @@ def add_to_wishlist():
         record_id = data['record_id']
         print("ID del disco:", record_id)
 
-        # Verificar si el disco existe en la base de datos
+
         record = Record.query.get(record_id)
         if not record:
             return jsonify({"error": "El disco no existe en la base de datos."}), 404
 
-        # Verificar si el usuario ya tiene el disco en su wishlist
+        
         existing_entry = WishList.query.filter_by(user_id=user_id, record_id=record_id).first()
         if existing_entry:
             return jsonify({"message": "Este disco ya está en tu wishlist."}), 400
 
-        # Agregar a la base de datos
+    
         new_entry = WishList(user_id=user_id, record_id=record_id)
         db.session.add(new_entry)
         db.session.commit()
@@ -502,8 +500,6 @@ def add_to_wishlist():
 
 
 
-
-# Eliminar de la wishlist (DELETE)
 @api.route('/wishlist/<int:record_id>', methods=['DELETE'])
 @jwt_required()
 def remove_from_wishlist(record_id):
@@ -527,17 +523,17 @@ def remove_from_wishlist(record_id):
 @jwt_required()
 def get_wishlist():
     try:
-        # Obtener el ID del usuario autenticado desde el JWT
+        
         user_id = get_jwt_identity()
 
-        # Obtener todos los elementos de la wishlist del usuario
+    
         wishlist_items = WishList.query.filter_by(user_id=user_id).all()
 
-        # Si no hay items en la wishlist, retornar una lista vacía
+        
         if not wishlist_items:
             return jsonify([]), 200
 
-        # Serializar los items de la wishlist
+    
         wishlist_data = [
             {
                 "id": item.id,
@@ -572,19 +568,18 @@ def create_exchange():
         data = request.get_json()
         user_id = get_jwt_identity()
 
-        # Debug: Imprimir datos recibidos
+    
         print(f"\n=== Datos recibidos ===")
         print(f"Usuario: {user_id}")
         print(f"Disco objetivo ID: {data.get('target_record_id')}")
         print(f"Disco ofrecido ID: {data.get('offered_record_id')}\n")
 
-        # Obtener disco ofrecido
+    
         offered_record = Record.query.get(data['offered_record_id'])
         
         if not offered_record:
             return jsonify({"error": "Disco ofrecido no existe"}), 404
 
-        # Debug: Información del disco
         print(f"=== Disco ofrecido ===")
         print(f"ID: {offered_record.id}")
         print(f"Título: {offered_record.title}")
@@ -599,24 +594,23 @@ def create_exchange():
                 """
             }), 403
 
-        # Validar campos requeridos
+    
         if not data or 'target_record_id' not in data or 'offered_record_id' not in data:
             return jsonify({"error": "Datos incompletos"}), 400
 
-        # Verificar existencia de discos
         target_record = Record.query.get(data['target_record_id'])
         offered_record = Record.query.get(data['offered_record_id'])
         
         if not target_record or not offered_record:
             return jsonify({"error": "Uno de los discos no existe"}), 404
 
-        # Validar propiedad del disco ofrecido
+       
         if offered_record.owner_id != user_id:
             return jsonify({
                 "error": f"El disco ofrecido no te pertenece. Dueño real: {offered_record.owner_id}"
             }), 403
 
-        # Crear registro de intercambio
+   
         new_exchange = ExchangeList(
             requester_id=user_id,
             origin_disc_id=target_record.id,
@@ -653,7 +647,7 @@ def get_comments(record_id):
         return jsonify([comment.serialize() for comment in comments]), 200
 
     except Exception as e:
-        print("Error en la API:", str(e))  # Esto te permitirá ver más detalles sobre el error
+        print("Error en la API:", str(e))  
         return jsonify({"error": "Error al obtener los comentarios"}), 500
 
 
@@ -689,7 +683,7 @@ def delete_user():
         if not user:
             return jsonify({"msg": "Usuario no encontrado"}), 404
 
-        # Eliminar los registros en SellList, WishList, y cualquier otro dato relacionado
+      
         WishList.query.filter_by(user_id=user_id).delete()
         SellList.query.filter_by(user_id=user_id).delete()
         Record.query.filter_by(owner_id=user_id).delete()
@@ -706,7 +700,7 @@ def delete_user():
 
 def delete_comments_by_record(record_id):
     try:
-        # Eliminar todos los comentarios donde record_id coincida
+       
         deleted_rows = Comment.query.filter_by(record_id=record_id).delete()
 
         if deleted_rows == 0:
@@ -723,10 +717,10 @@ def delete_comments_by_record(record_id):
 def get_user_by_id(user_id): 
     try:
         user = User.query.filter_by(id=user_id).first()
-        return user  # This will return None if no user is found
+        return user  
     except SQLAlchemyError as e:
         logging.error(f"Database error while fetching user: {str(e)}")
-        return None  # Return None to avoid breaking the main function
+        return None 
 
 
 
@@ -740,20 +734,17 @@ def purchase_record():
         return jsonify({"error": "Datos insuficientes"}), 400
 
     try:
-        # 1. Eliminar TODAS las entradas de venta del disco
         SellList.query.filter_by(record_id=data['record_id']).delete()
         
-        # 2. Transferir propiedad
         record = Record.query.get(data['record_id'])
         if not record:
             return jsonify({"error": "Disco no encontrado"}), 404
             
         record.owner_id = buyer_id
         
-        # 3. Crear transacción
         new_transaction = Transaction(
             buyer_id=buyer_id,
-            seller_id=record.owner_id,  # Dueño original
+            seller_id=record.owner_id, 
             record_id=data['record_id']
         )
         db.session.add(new_transaction)
@@ -770,7 +761,7 @@ def purchase_record():
         db.session.rollback()
         return jsonify({"error": f"Error en la compra: {str(e)}"}), 500
 
-@api.route('/user_records', methods=['GET'])  # <- Quitar el /api/ redundante
+@api.route('/user_records', methods=['GET'])  
 @jwt_required()
 def get_user_records():
     try:
@@ -782,7 +773,7 @@ def get_user_records():
             "title": record.title,
             "year": record.year,
             "genre": record.genre,
-            "owner_id": record.owner_id,  # Campo crítico
+            "owner_id": record.owner_id,  
             "cover_image": record.cover_image
         } for record in records]), 200
         
@@ -794,10 +785,10 @@ def get_user_records():
 @jwt_required()
 def validate_token():
     try:
-        # Obtener el identity directamente (debería ser el user_id)
+        
         user_id = get_jwt_identity()
         
-        # Buscar el usuario por ID
+
         user = User.query.get(user_id)
         
         if not user:

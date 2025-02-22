@@ -25,7 +25,7 @@ const SearchMusic = () => {
           <div>
             <input
               type="text"
-              className="search-input" // Use search-input class
+              className="search-input" 
               value={query}
               onChange={handleInputChange}
               placeholder="Buscar por Artista..."
@@ -47,12 +47,12 @@ const SearchMusic = () => {
               <Carousel.Item key={index}>
                 <div className="d-flex justify-content-center text-dark">
                   <div
-                    className="record-item" // Use record-item class
+                    className="record-item" 
                     style={{ width: "18rem", textAlign: "center" }}
                   >
                     <img
-                      src={record.cover_image} // Usamos 'cover_image' para la imagen
-                      className="record-image" // Use record-image class
+                      src={record.cover_image} 
+                      className="record-image" 
                       alt={record.title || "Sin título"}
                       style={{ borderRadius: "8px" }}
                     />

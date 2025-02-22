@@ -66,7 +66,7 @@ const getState = ({ getStore, setStore }) => {
         }
       },
 
-      // Obtener comentarios de un ítem
+    
       getComments: async (record_id) => {
         try {
           const token = localStorage.getItem("token");
@@ -101,7 +101,7 @@ const getState = ({ getStore, setStore }) => {
 
 
 
-      // Agregar un comentario
+  
       addComment: async (record_id, content) => {
         try {
           const token = localStorage.getItem("token");
@@ -121,7 +121,7 @@ const getState = ({ getStore, setStore }) => {
 
           if (!response.ok) throw new Error("Error al agregar el comentario.");
 
-          // Actualiza el estado global con el nuevo comentario
+        
           const store = getStore();
           const newComment = { content: content, user: store.user.name };
           setStore({
@@ -144,7 +144,7 @@ const getState = ({ getStore, setStore }) => {
             return { success: false, error: "No se encontró un token válido" };
           }
       
-          setStore({ isLoading: true }); // Directly use setStore
+          setStore({ isLoading: true }); 
       
           const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
             method: "GET",
@@ -163,7 +163,7 @@ const getState = ({ getStore, setStore }) => {
           console.error("Error en getWishList:", error);
           return { success: false, error: error.message };
         } finally {
-          setStore({ isLoading: false }); // Directly use setStore in finally
+          setStore({ isLoading: false }); 
         }
       },
       
@@ -181,14 +181,14 @@ const getState = ({ getStore, setStore }) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ record_id: recordId }), // No es necesario el user_id
+            body: JSON.stringify({ record_id: recordId }), 
           });
       
           if (!response.ok) throw new Error("Error al agregar el favorito");
       
           // Actualiza el estado global
           const store = getStore();
-          const newWishItem = { record_id: recordId }; // No es necesario el user_id
+          const newWishItem = { record_id: recordId }; 
           setStore({ wishList: [...store.wishList, newWishItem] });
       
           return { success: true };
@@ -497,27 +497,27 @@ const getState = ({ getStore, setStore }) => {
 
       getAllSellList: async () => {
         try {
-          const token = localStorage.getItem("token"); // Obtenemos el token desde el almacenamiento local
+          const token = localStorage.getItem("token"); 
           if (!token) {
             console.error("Token no encontrado.");
-            return { success: false, error: "No se encontró un token válido" }; // Si no hay token, mostramos un error
+            return { success: false, error: "No se encontró un token válido" }; 
           }
       
-          // Realizamos la petición para obtener los discos en venta
+
           const response = await fetch(process.env.BACKEND_URL + "/api/get_all_sell_list", {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`, // Agregamos el token en el header de la petición
+              Authorization: `Bearer ${token}`, 
             },
           });
       
-          if (!response.ok) throw new Error("Error al obtener los discos en venta"); // Si hay un error en la respuesta, lanzamos una excepción
-          const data = await response.json(); // Convertimos la respuesta a formato JSON
+          if (!response.ok) throw new Error("Error al obtener los discos en venta"); 
+          const data = await response.json(); 
       
-          setStore({ sellList: data }); // Actualizamos el store con la lista de discos en venta
+          setStore({ sellList: data }); 
         } catch (error) {
-          console.error("Error en getAllSellList:", error); // Capturamos cualquier error que ocurra
-          setStore({ error: "No se pudieron cargar los discos en venta" }); // Actualizamos el store con el error
+          console.error("Error en getAllSellList:", error); 
+          setStore({ error: "No se pudieron cargar los discos en venta" }); 
         }
       },
       
@@ -556,10 +556,10 @@ const getState = ({ getStore, setStore }) => {
 
       deleteRecord: async (userId, recordId) => {
         try {
-          const token = localStorage.getItem("token"); // Obtenemos el token desde el almacenamiento local
+          const token = localStorage.getItem("token"); 
           if (!token) {
             console.error("Token no encontrado.");
-            return { success: false, error: "No se encontró un token válido" }; // Si no hay token, mostramos un error
+            return { success: false, error: "No se encontró un token válido" }; 
           }
           const response = await fetch(
             `${process.env.BACKEND_URL}api/records/${recordId}`,
