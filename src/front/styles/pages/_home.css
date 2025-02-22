@@ -1,0 +1,59 @@
+.hero {
+  background-color: var(--color-gris-oscuro);
+}
+
+.hero h1 {
+  color: var(--color-rojo);
+}
+
+
+/* Estilo para el navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Estilo para el sidebar */
+.sidebar {
+  position: fixed;
+  top: 60px;  /* Comienza justo debajo del navbar */
+  left: 0;
+  bottom: 60px; /* Termina antes del footer */
+  width: 200px;
+  background-color: #444;
+  color: #fff;
+  padding: 20px;
+  z-index: 900;
+}
+
+/* Estilo para el footer */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Ajuste de márgenes para el contenido */
+.content {
+  margin-top: 60px;   /* Altura del navbar */
+  margin-left: 200px;  /* Ancho del sidebar */
+  margin-bottom: 60px; /* Altura del footer */
+  padding: 20px;
+}

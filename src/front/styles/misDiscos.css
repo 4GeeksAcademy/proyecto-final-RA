@@ -1,0 +1,146 @@
+.mis-discos-container {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 40px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* Organiza el contenido en una columna */
+  /* margin-left: 8rem; */
+}
+
+.mis-discos-container h1 {
+  color: red;
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.mis-discos-container h1:hover {
+  color: #ff4500;
+}
+
+.mis-discos-container .main-content {
+  display: flex;
+  flex-direction: row; /* Sidebar a la izquierda, contenido a la derecha */
+  width: 100%;
+}
+
+.mis-discos-container .main-content .content-area {
+  flex-grow: 1; /* El contenido principal ocupa el espacio restante */
+  padding-left: 270px; /* Espacio para el sidebar */
+}
+
+.mis-discos-container .mis-discos-content {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.mis-discos-container .mis-discos-content h2 {
+  font-size: 28px;
+  color: #ff4500;
+  margin-bottom: 20px;
+}
+
+.mis-discos-container .mis-discos-content p {
+  font-size: 16px;
+  color: #f8f9fa;
+  line-height: 1.8;
+}
+
+.mis-discos-container .mis-discos-content .disco-item {
+  margin-bottom: 15px;
+}
+
+.mis-discos-container .mis-discos-content .disco-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 5px;
+}
+
+.avatar-container {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .mis-discos-container {
+    padding: 20px;
+  }
+
+  .mis-discos-container h1 {
+    font-size: 30px;
+  }
+
+  .mis-discos-container .mis-discos-content {
+    padding: 15px;
+  }
+
+  .mis-discos-container .mis-discos-content h2 {
+    font-size: 24px;
+  }
+
+  .mis-discos-container .mis-discos-content p {
+    font-size: 14px;
+  }
+
+  .mis-discos-container .main-content .content-area {
+    padding-left: 210px;
+  }
+
+  .mis-discos-container .mis-discos-content .disco-item img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.favorite-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  padding: 15px;
+}
+
+.favorite-image {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+}
+
+.favorite-details {
+  padding: 10px;
+}
+
+.favorite-details h3 {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.favorite-details p {
+  font-size: 14px;
+  color: #555;
+}

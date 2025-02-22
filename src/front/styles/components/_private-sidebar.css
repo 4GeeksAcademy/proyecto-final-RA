@@ -1,0 +1,69 @@
+/* _private-sidebar.css */
+
+.private-sidebar {
+    width: 250px;
+    /* Ancho fijo para la barra lateral */
+    background-color: #222;
+    /* Fondo gris oscuro, puedes usar una variable */
+    padding: 2rem;
+    /* Aumentar el padding */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    margin-right: 2rem;
+    /* Espacio a la derecha de la barra lateral */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Sombra suave */
+    transition: all 0.3s ease;
+    /* Transición para efectos hover */
+    position: fixed;
+
+}
+
+.private-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    /* Asegura la disposición en columna */
+}
+
+.private-sidebar-link {
+    color: #eee;
+    /* Texto en gris claro, puedes usar una variable */
+    padding: 1rem 1.5rem;
+    /* Ajustar el padding */
+    margin-bottom: 0.8rem;
+    /* Espacio entre enlaces */
+    border-radius: 8px;
+    /* Bordes redondeados para los enlaces */
+    text-decoration: none;
+    /* Quitar el subrayado de los enlaces */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    /* Transiciones para hover y active */
+    font-size: 1rem;
+    /* Tamaño de fuente consistente */
+}
+
+.private-sidebar-link:hover {
+    background-color: var(--color-rojo);
+    /* Fondo rojo al pasar el mouse */
+    color: #111;
+    /* Texto negro al pasar el mouse */
+    transform: translateX(5px);
+    /* Desplazamiento sutil al hacer hover */
+}
+
+.private-sidebar-link:active {
+    background-color: #cc3700;
+    /* Rojo más oscuro al hacer click */
+    transform: scale(0.98);
+    /* Ligera escala al hacer click */
+}
+
+/* Media query para diseño responsivo (opcional) */
+@media (max-width: 768px) {
+    .private-sidebar {
+        width: 100%;
+        /* Barra lateral ocupa todo el ancho en pantallas pequeñas */
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}

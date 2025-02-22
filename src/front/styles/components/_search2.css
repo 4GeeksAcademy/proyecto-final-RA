@@ -1,0 +1,167 @@
+/* _search.css */
+
+.search-container {
+    background-color: var(--color-negro);
+    color: var(--color-gris-claro);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.search-title {
+    color: var(--color-rojo);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-form {
+    width: 50%;
+    max-width: 600px;
+    display: flex;
+    /* Añadimos flexbox para alinear input y botón */
+    gap: 1rem;
+    /* Espacio entre input y botón */
+}
+
+.search-form .form-control {
+    background-color: #333;
+    color: var(--color-gris-claro);
+    border: none;
+    padding: 1.2rem;
+    border-radius: 8px;
+    border-color: #cc3700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    flex-grow: 1;
+    /* El input ocupa el espacio disponible */
+}
+
+.search-form .form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-rojo);
+    background-color: #444;
+}
+
+.search-btn {
+    background-color: var(--color-rojo);
+    color: var(--color-gris-claro);
+    border: none;
+    padding: 1.2rem;
+    border-radius: 8px;
+    margin-left: 40px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    height: fit-content;
+    /* El botón se ajusta a la altura del input */
+}
+
+.search-btn:hover {
+    background-color: #cc3700;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.text-danger {
+    color: var(--color-rojo) !important;
+    margin-top: 1rem;
+}
+
+.decorative-bar {
+    height: 3px;
+    background-color: var(--color-rojo);
+    width: 100%;
+    margin: 1.5rem 0;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.col-12 {
+    flex: 0 0 100%;
+}
+
+.col-md-2 {
+    flex: 0 0 calc(20% - 1rem);
+    max-width: calc(20% - 1rem);
+}
+
+.card {
+    background-color: var(--color-gris-oscuro);
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card-img-top {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    object-fit: cover;
+    height: 200px;
+}
+
+.card-title {
+    color: var(--color-rojo);
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0.5rem;
+}
+
+/* Modal */
+.modal-content {
+    background-color: var(--color-gris-oscuro);
+    color: var(--color-gris-claro);
+    border: none;
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem 2rem 0;
+}
+
+.modal-title {
+    color: var(--color-rojo);
+}
+
+.modal-body {
+    padding: 1rem 2rem;
+}
+
+.modal-body img {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 0 2rem 1.5rem;
+}
+
+.modal-footer .btn-secondary {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: var(--color-rojo);
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: var(--color-rojo);
+    color: var(--color-gris-oscuro);
+}

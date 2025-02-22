@@ -1,0 +1,76 @@
+/* Estilos generales para el Footer */
+.footer {
+  background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro translúcido */
+  color: white;
+  padding: 10px 0; /* Hacemos el footer más fino */
+  text-align: center;
+  position: fixed; /* Fija el footer en la parte inferior */
+  bottom: 0;
+  width: 100%;
+  z-index: 100; /* Asegura que el footer esté por encima de otros elementos */
+}
+
+/* Contenedor del Footer */
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center; /* Centra los elementos */
+  align-items: center; /* Alinea verticalmente en el centro */
+}
+
+/* Estilos para el texto */
+.footer p {
+  font-size: 14px; /* Font-size reducido para que sea más fino */
+  color: #f8f9fa; /* Color blanco suave */
+  margin-bottom: 0;
+}
+
+/* Estilos para los enlaces del footer */
+.footer-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex; /* Los enlaces estarán en una línea horizontal */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilos para los elementos de la lista */
+.footer-nav li {
+  margin: 0 10px; /* Menor espacio entre los elementos */
+}
+
+/* Estilos para los enlaces */
+.footer-nav a {
+  color: #f8f9fa;
+  font-size: 14px; /* Tamaño de fuente más pequeño */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+  color: #ff4500; /* Cambio de color al pasar el ratón */
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+  .footer {
+      padding: 10px 0; /* Mantener el footer más fino en pantallas pequeñas */
+  }
+
+  .footer p {
+      font-size: 12px; /* Reducir el tamaño de texto en pantallas pequeñas */
+  }
+
+  .footer-nav {
+      flex-direction: row; /* Mantener los enlaces en una fila */
+  }
+
+  .footer-nav li {
+      margin: 0 5px; /* Espaciado más pequeño entre los enlaces */
+  }
+}
+
+  

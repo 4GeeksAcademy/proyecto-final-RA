@@ -1,0 +1,30 @@
+body {
+    background-color: var(--color-negro);
+    color: var(--color-gris-claro);
+    font-family: sans-serif;
+  }
+  
+  h1, h2, h3 {
+    color: var(--color-rojo);
+  }
+  
+  a {
+    color: var(--color-rojo);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: var(--color-gris-claro);
+  }
+  
+  button {
+    background-color: var(--color-gris-oscuro);
+    color: var(--color-gris-claro);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: var(--color-rojo);
+  }

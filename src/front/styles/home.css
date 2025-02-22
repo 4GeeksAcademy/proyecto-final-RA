@@ -1,7 +1,55 @@
-/*
-    home.css: This website contains selectors only used in home.css
+/* Contenedor principal de la página de inicio */
+.home-layout {
+  display: flex;
+  justify-content: space-between;
+  min-height: 100vh;
+  height: 100rem;
+  background: #121212; 
+  color: white;
+  overflow: hidden; 
+}
 
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+
+
+
+/* Título principal */
+.home-layout__content-wrapper__welcome-title {
+  color: #ff4500; /* Título en naranja brillante */
+  font-size: 1.8rem; /* Reducido para un diseño más compacto */
+  text-align: center;
+  margin-bottom: 10px; /* Menos espacio abajo */
+}
+
+/* Subtítulo */
+.home-layout__content-wrapper__welcome-subtitle {
+  color: #ccc; /* Subtítulo */
+  font-size: 1rem; /* Reducción de tamaño */
+  text-align: center;
+  margin-bottom: 15px; /* Espacio más pequeño */
+}
+
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Ajuste para pantallas medianas */
+  }
+}
+
+@media (max-width: 992px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Ajuste para tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Ajuste para móviles grandes */
+  }
+}
+
+@media (max-width: 576px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Ajuste para móviles pequeños */
+  }
+}

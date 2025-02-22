@@ -1,0 +1,120 @@
+/* Estilos generales para la página Discos en Venta */
+.discos-en-venta-container {
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
+  color: white;
+  padding: 40px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* Organiza el contenido en una columna */
+}
+
+.discos-en-venta-container h1 {
+  color: red; /* Título en rojo */
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.discos-en-venta-container h1:hover {
+  color: #ff4500;
+}
+
+.discos-en-venta-container p {
+  font-size: 18px;
+  color: #f8f9fa; /* Texto blanco suave */
+  line-height: 1.8;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.discos-en-venta-page-container {
+  display: flex;
+  flex-direction: row; /* Sidebar a la izquierda, contenido a la derecha */
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.discos-en-venta-page-container .discos-en-venta-container {
+  flex-grow: 1; /* El contenido principal ocupa el espacio restante */
+  padding-left: 270px; /* Espacio para el sidebar */
+}
+
+.sell-list {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.sell-list h2 {
+  font-size: 28px;
+  color: #ff4500;
+  margin-bottom: 20px;
+}
+
+.sell-list p {
+  font-size: 16px;
+  color: #f8f9fa;
+  line-height: 1.8;
+}
+
+.sell-list-item {
+  margin-bottom: 15px;
+}
+
+.sell-list-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 5px;
+}
+
+.avatar-container {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .discos-en-venta-container {
+    padding: 20px;
+  }
+
+  .discos-en-venta-container h1 {
+    font-size: 30px;
+  }
+
+  .sell-list {
+    padding: 15px;
+  }
+
+  .sell-list h2 {
+    font-size: 24px;
+  }
+
+  .sell-list p {
+    font-size: 14px;
+  }
+
+  .discos-en-venta-page-container .discos-en-venta-container {
+    padding-left: 210px; /* Espacio reducido para un sidebar más pequeño */
+  }
+
+  .sell-list-item img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+  

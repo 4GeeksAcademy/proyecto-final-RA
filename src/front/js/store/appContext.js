@@ -4,6 +4,7 @@ import getState from "./flux.js";
 // Don't change, here is where we initialize our context, by default it's just going to be null.
 export const Context = React.createContext(null);
 
+
 // This function injects the global store to any view/component where you want to use it, we will inject the context to layout.js, you can see it here:
 // https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
 const injectContext = PassedComponent => {
@@ -28,7 +29,57 @@ const injectContext = PassedComponent => {
 			 * you should do your ajax requests or fetch api requests here. Do not use setState() to save data in the
 			 * store, instead use actions, like this:
 			 **/
-			state.actions.getMessage(); // <---- calling this function from the flux.js actions
+			// state.actions.getMessage(); // <---- calling this function from the flux.js actions
+
+			// state.actions.getUserData();
+
+			const controller = new AbortController();
+      		let isMounted = true;
+
+      const checkAuth = async () => {
+        try {
+          state.actions.setLoading(true);
+          const token = localStorage.getItem("token");
+          if (!token || !isMounted) return;
+
+          const response = await fetch(`${process.env.BACKEND_URL}/api/validate_token`, {
+            headers: { Authorization: `Bearer ${token}` },
+            signal: controller.signal
+          });
+
+          if (isMounted) {
+            if (response.ok) {
+              const userData = await response.json();
+              state.actions.setStore({ user: userData });
+            } else {
+              localStorage.removeItem("token");
+              state.actions.setStore({ user: null });
+            }
+          }
+        } catch (error) {
+          if (isMounted && error.name !== 'AbortError') {
+            console.error("Error validando token:", error);
+            localStorage.removeItem("token");
+            state.actions.setStore({ user: null });
+          }
+        } finally {
+          if (isMounted) state.actions.setLoading(false);
+        }
+      };
+
+  
+
+      checkAuth();
+
+
+      return () => {
+        isMounted = false;
+        controller.abort();
+      };
+
+
+
+
 		}, []);
 
 		// The initial value for the context is not null anymore, but the current state of this component,

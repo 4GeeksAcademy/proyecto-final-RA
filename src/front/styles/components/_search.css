@@ -1,0 +1,189 @@
+/* _search.css */
+
+.container {
+  background-color: transparent;
+  /* Fondo transparente */
+  color: var(--color-gris-claro);
+  /* Texto en gris claro */
+  padding: 3rem 0;
+  /* Ajuste de padding */
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fondo negro semi-transparente para el input */
+  color: var(--color-gris-claro);
+  /* Texto en gris claro para el input */
+  border: none;
+  /* Sin borde */
+  padding: 0.8rem 1rem;
+  /* Ajuste de padding */
+  border-radius: 20px;
+  /* Bordes muy redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Sombra suave */
+}
+
+.btn-primary {
+  background-color: var(--color-rojo);
+  /* Fondo rojo para el botón */
+  border: none;
+  /* Sin borde */
+  color: var(--color-gris-claro);
+  /* Texto gris claro para el botón */
+  padding: 0.8rem 1.5rem;
+  /* Ajuste de padding */
+  border-radius: 20px;
+  /* Bordes muy redondeados */
+  transition: all 0.3s ease;
+  /* Transición suave para los cambios */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Sombra suave */
+}
+
+.btn-primary:hover {
+  background-color: var(--color-gris-oscuro);
+  /* Fondo gris oscuro al pasar el mouse */
+  color: var(--color-rojo);
+  /* Texto rojo al pasar el mouse */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* Sombra más pronunciada al pasar el mouse */
+}
+
+.text-danger {
+  color: var(--color-rojo) !important;
+}
+
+.decorative-bar {
+  height: 3px;
+  background-color: var(--color-rojo);
+  /* Barra decorativa roja */
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.carousel-wrapper {
+  position: relative;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.3);
+  /* Fondo semi-transparente para los botones */
+  color: var(--color-gris-claro);
+  /* Color de las flechas */
+  border: none;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 5px;
+  /* Bordes redondeados */
+  transition: all 0.3s ease;
+}
+
+.carousel-control:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fondo más oscuro al pasar el mouse */
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.carousel-inner {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 1.5rem 0;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Fondo negro semi-transparente para las cards */
+  border: none;
+  transition: transform 0.2s ease;
+  border-radius: 10px;
+  /* Bordes redondeados para las cards */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Sombra suave */
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* Sombra más pronunciada al pasar el mouse */
+}
+
+.card-title {
+  color: var(--color-rojo);
+}
+
+/* Modal */
+.modal-content {
+  background-color: var(--color-gris-oscuro);
+  color: var(--color-gris-claro);
+  border: none;
+  border-radius: 10px;
+  /* Bordes redondeados para el modal */
+}
+
+.modal-header {
+  border-bottom: none;
+  /* Sin borde inferior para el header */
+  padding: 1.5rem 2rem 0;
+  /* Ajuste de padding */
+}
+
+.modal-title {
+  color: var(--color-rojo);
+}
+
+.modal-body {
+  padding: 1rem 2rem;
+  /* Ajuste de padding */
+}
+
+.modal-body img {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Sombra suave para la imagen del modal */
+}
+
+.modal-footer {
+  border-top: none;
+  /* Sin borde superior para el footer */
+  padding: 0 2rem 1.5rem;
+  /* Ajuste de padding */
+}
+
+.modal-footer .btn-secondary {
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fondo negro semi-transparente para el botón secundario */
+  border: none;
+  color: var(--color-rojo);
+  transition: all 0.3s ease;
+  border-radius: 20px;
+  /* Bordes muy redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Sombra suave */
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: var(--color-rojo);
+  color: var(--color-gris-oscuro);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* Sombra más pronunciada al pasar el mouse */
+}

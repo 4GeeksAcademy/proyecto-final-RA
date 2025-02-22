@@ -1,3 +1,16 @@
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
+/* src/front/styles/index.css */
+
+/* Base */
+@import './base/_reset.css';
+@import './base/_variables.css';
+@import './base/_global.css';
+
+/* Components */
+@import './components/_navbar.css';
+@import './components/_footer.css';
+@import './components/_scrollToTop.css';
+
+/* Pages */
+@import './pages/_home.css';
+@import './pages/_demo.css';
+@import './pages/_single.css';

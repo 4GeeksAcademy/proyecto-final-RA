@@ -1,0 +1,25 @@
+.mi-perfil-btn-save,
+.mi-perfil-btn-cancel,
+.mi-perfil-btn-edit {
+  width: 100%; /* Asegura que todos los botones ocupen el mismo espacio */
+  padding: 15px; /* Igualar el padding para todos los botones */
+  background-color: red; /* Fondo rojo */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.mi-perfil-btn-save:hover,
+.mi-perfil-btn-cancel:hover,
+.mi-perfil-btn-edit:hover {
+  background-color: #ff0000; /* Efecto hover */
+}
+
+
+
+
+

@@ -1,0 +1,49 @@
+.searchWorldwide-page-container {
+  display: flex;
+  background: #121212; 
+  color: white; 
+  /* overflow: hidden;  */
+  height: 42rem; 
+}
+
+.searchWorldwide-content-container {
+  padding: 40px; 
+  margin-left: 250px; /* Igual que el margen izquierdo del segundo */
+  background: #1c1c1c; /* Fondo oscuro del contenido */
+  color: #ccc; /* Color gris claro para el texto */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra interna */
+  width: calc(100% - 250px); /* Ancho ajustado igual que el segundo */
+  overflow: hidden; /* Oculta contenido desbordado */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra verticalmente */
+  align-items: center; /* Centra horizontalmente */
+  text-align: center; /* Alinea el texto */
+}
+
+h2 {
+  color: #ff4500; /* Texto en color naranja */
+  font-size: 1rem; /* Igual que el título en el segundo CSS */
+  margin-bottom: 10px; /* Igual que el margen del título en el segundo */
+}
+
+p {
+  font-size: 1rem; /* Igual que el subtítulo en el segundo */
+  color: #ff4500; /* Color del subtítulo */
+  margin-bottom: 20px; /* Igual que el subtítulo en el segundo */
+}
+
+
+  
+  /* p {
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+  } */
+  
+  /* @media (max-width: 768px) {
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+   */

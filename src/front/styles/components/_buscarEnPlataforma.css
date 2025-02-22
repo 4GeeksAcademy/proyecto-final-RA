@@ -1,0 +1,19 @@
+.caja {
+    background-color: var(--color-negro);
+    color: var(--color-gris-claro);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+
+
+.form-control {
+    border-style: solid;
+    border-color: red;
+}
+
+
+.card-grid {
+    flex-wrap: nowrap;
+}

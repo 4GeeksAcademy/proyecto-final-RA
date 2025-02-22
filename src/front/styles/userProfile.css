@@ -1,0 +1,38 @@
+.mi-perfil-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  align-items: center;
+  width: 100%;
+}
+
+.mi-perfil-btn-edit,
+.mi-perfil-btn-delete {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.mi-perfil-btn-edit {
+  background-color: #007bff;
+  color: white;
+}
+
+.mi-perfil-btn-edit:hover {
+  background-color: #0056b3;
+}
+
+.mi-perfil-btn-delete {
+  background-color: darkred;
+  color: white;
+}
+
+.mi-perfil-btn-delete:hover {
+  background-color: red;
+}
