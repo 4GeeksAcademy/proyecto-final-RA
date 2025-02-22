@@ -10,6 +10,7 @@ from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_requir
 from flask_login import current_user
 from sqlalchemy.orm import aliased
 import logging
+from werkzeug.security import generate_password_hash, check_password_hash
 
 api = Blueprint('api', __name__)
 
@@ -155,19 +156,21 @@ def register():
         password = request.json.get('password', None)
         
         if not email or not password:
-            raise Exception('Faltan datos: name, email o contraseña')
+            raise Exception('Faltan datos: email o contraseña')
         
         check_user = User.query.filter_by(email=email).first()
-
         if check_user:
-            return jsonify({"msg": "Ya exite un usuario con este correo, intenta iniciar sesion"}), 400
+            return jsonify({"msg": "Ya existe un usuario con este correo, intenta iniciar sesión"}), 400
         
-        new_user = User(email=email, password=password, is_active=True)
+        # Hashear la contraseña antes de almacenarla
+        hashed_password = generate_password_hash(password)
+
+        new_user = User(email=email, password=hashed_password, is_active=True)
         db.session.add(new_user)
         db.session.commit()
         
         access_token = create_access_token(identity=str(new_user.id))
-        return ({"msg": "Usuario registrado con exito", "token": access_token}), 201
+        return jsonify({"msg": "Usuario registrado con éxito", "token": access_token}), 201
 
     except Exception as error:
         return jsonify({"error": str(error)}), 400
@@ -179,18 +182,19 @@ def login():
         password = request.json.get('password', None)
 
         if not email or not password:
-            raise Exception('Faltan datos: email o contrasena')
+            raise Exception('Faltan datos: email o contraseña')
         
         check_user = User.query.filter_by(email=email).first()
 
         if not check_user:
             return jsonify({"msg": "Usuario no encontrado"}), 404
 
-        if check_user.password != password:
-            return jsonify({"msg": "Contrasena incorrecta"}), 401
+        # Usar check_password_hash para comparar la contraseña ingresada con la contraseña hasheada
+        if not check_password_hash(check_user.password, password):
+            return jsonify({"msg": "Contraseña incorrecta"}), 401
 
         access_token = create_access_token(identity=str(check_user.id))
-        return jsonify({"msg": "Inicio de sesion exitoso", 'token': access_token}), 200
+        return jsonify({"msg": "Inicio de sesión exitoso", 'token': access_token}), 200
     
     except Exception as error:
         return jsonify({'error': str(error)}), 400
