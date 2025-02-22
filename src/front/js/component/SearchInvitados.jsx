@@ -6,12 +6,12 @@ import "../../styles/components/_search.css"
 
 const SearchInvitados = () => {
   const { store, actions } = useContext(Context);
-  const [query, setQuery] = useState(""); // Término de búsqueda
-  const [searchBy, setSearchBy] = useState("artist"); // Tipo de búsqueda
-  const [showModal, setShowModal] = useState(false); // Estado del modal
-  const [selectedRecord, setSelectedRecord] = useState(null); // Disco seleccionado
-  const [addLoading, setAddLoading] = useState(false); // Estado del botón "Agregar Disco"
-  const [currentPage, setCurrentPage] = useState(0); // Estado para la página actual
+  const [query, setQuery] = useState(""); 
+  const [searchBy, setSearchBy] = useState("artist"); 
+  const [showModal, setShowModal] = useState(false); 
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [addLoading, setAddLoading] = useState(false); 
+  const [currentPage, setCurrentPage] = useState(0); 
 
   useEffect(() => {
     if (!store.randomFetched) {
@@ -37,28 +37,26 @@ const SearchInvitados = () => {
 
   const handleAddRecord = () => {
     setAddLoading(true);
-    // Simulación de la lógica de agregar un disco
     setTimeout(() => {
       setAddLoading(false);
       alert("¡Regístrate o inicia sesión!");
-      setSelectedRecord(null); // Cierra el modal
-    }, 1000); // Simula un retraso
+      setSelectedRecord(null);
+    }, 1000);
   };
 
-  // Dividir los resultados en bloques de 5 para el carrusel
   const chunkedResults = [];
-  const limitedResults = store.searchResults.slice(0, 50); // Limitar a los primeros 50 resultados
+  const limitedResults = store.searchResults.slice(0, 50); 
   for (let i = 0; i < limitedResults.length; i += 5) {
     chunkedResults.push(limitedResults.slice(i, i + 5));
   }
 
   const handlePageChange = (direction) => {
     if (direction === "next") {
-      setCurrentPage((prevPage) => (prevPage + 1) % chunkedResults.length); // Circular hacia adelante
+      setCurrentPage((prevPage) => (prevPage + 1) % chunkedResults.length); 
     } else if (direction === "prev") {
       setCurrentPage((prevPage) =>
         prevPage === 0 ? chunkedResults.length - 1 : prevPage - 1
-      ); // Circular hacia atrás
+      ); 
     }
   };
 

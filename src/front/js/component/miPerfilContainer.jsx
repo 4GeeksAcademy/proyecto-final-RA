@@ -5,8 +5,8 @@ import "../../styles/components/_miperfilcontainer.css"; // Importa el archivo d
 
 export const MiPerfilContainer = () => {
     return (
-        <div className="mi-perfil- container"> {/* Nombre de clase más descriptivo */}
-            <div className="mi-perfil-content"> {/* Contenedor para SideBar y MiPerfil */}
+        <div className="mi-perfil- container"> 
+            <div className="mi-perfil-content">
                 {/* <SideBar /> */}
                 <MiPerfil />
             </div>

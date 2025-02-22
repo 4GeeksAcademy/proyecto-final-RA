@@ -31,7 +31,7 @@ const AddRecordModal = ({ show, onHide, onAddRecord, apiData }) => {
         const data = await response.json();
         alert('Disco agregado exitosamente!');
         onAddRecord(data.record);
-        onHide(); // Close the modal
+        onHide(); 
       } else {
         const errorData = await response.json();
         alert('Error al agregar el disco: ' + errorData.error);

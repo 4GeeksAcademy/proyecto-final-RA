@@ -4,10 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const BuscarEnVenta = () => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState([]); // Estado para almacenar los ítems de la API
+  const [items, setItems] = useState([]); 
   const [message, setMessage] = useState("");
 
-  // Función para cargar los ítems desde la API
+  
   const fetchItems = async () => {
     setLoading(true);
     try {
@@ -22,7 +22,7 @@ const BuscarEnVenta = () => {
         throw new Error("No se pudieron cargar los ítems.");
       }
       const data = await response.json();
-      setItems(data.sellList); // Asume que la API devuelve un campo "sellList"
+      setItems(data.sellList); 
     } catch (error) {
       setMessage("Error al cargar los ítems: " + error.message);
     } finally {
@@ -30,12 +30,12 @@ const BuscarEnVenta = () => {
     }
   };
 
-  // Cargar los ítems al montar el componente
+
   useEffect(() => {
     fetchItems();
   }, []);
 
-  // Filtrar los ítems basados en la consulta de búsqueda
+  
   const filteredItems = items.filter((item) => {
     const name = item.name ? item.name.toLowerCase() : '';
     const searchQuery = query ? query.toLowerCase() : '';

@@ -4,14 +4,13 @@ import { Carousel } from "react-bootstrap";
 // import "../../styles/recordCarousel.css";
 
 const RecordCarousel = ({ records }) => {
-  // Dividir los elementos en bloques de 5
   const chunkedRecords = [];
   for (let i = 0; i < records.length; i += 5) {
     chunkedRecords.push(records.slice(i, i + 5));
   }
 
   return (
-    <div className="record-carousel-container"> {/* Added class */}
+    <div className="record-carousel-container">
       <h2 className="text-center mb-4">Lista de Discos</h2>
       <Carousel>
         {chunkedRecords.map((chunk, index) => (

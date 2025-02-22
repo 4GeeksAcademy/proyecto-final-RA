@@ -7,7 +7,7 @@ import "../../styles/components/_register.css"
 const Register = () => {
   const { actions } = useContext(Context);
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [isRegister, setIsRegister] = useState(false); // Cambié el estado a false para que se vea "Iniciar sesión" por defecto
+  const [isRegister, setIsRegister] = useState(false); 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -16,20 +16,20 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Lógica para login o registro
+
     const success = isRegister
-      ? await actions.register(formData) // Registro
-      : await actions.login(formData);   // Login
+      ? await actions.register(formData) 
+      : await actions.login(formData); 
 
     if (success) {
-      navigate('/private'); // Redirige al usuario después de registrarse o iniciar sesión
+      navigate('/private'); 
     } else {
       setError('Usuario o contraseña incorrectos');
     }
   };
 
   return (
-    <div className="register-container"> {/* Contenedor principal */}
+    <div className="register-container">
       <div className="form-container">
         <h2>{isRegister ? 'Registro' : 'Inicio de Sesión'}</h2>
         <form onSubmit={handleSubmit} className="form-control">

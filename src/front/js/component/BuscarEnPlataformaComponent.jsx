@@ -27,11 +27,11 @@ export const BuscarEnPlataformaComponent = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault();  // Evita el comportamiento por defecto (salto de línea en el input)
-      handleAddComment();  // Llama a la función para agregar el comentario
+      e.preventDefault();  
+      handleAddComment();  
     }
   };
-  // Carga de ítems y wishlist
+
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -84,7 +84,7 @@ export const BuscarEnPlataformaComponent = () => {
     actions.getSellList();
   }, []);
 
-  // Funciones para modales y comentarios
+  
   const handleShowModal = async (item) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -188,7 +188,7 @@ export const BuscarEnPlataformaComponent = () => {
     }
   };
 
-  // Función para wishlist
+
   const handleAddToWishlist = async (item) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -217,7 +217,7 @@ export const BuscarEnPlataformaComponent = () => {
     }
   };
 
-  // Función de compra mejorada
+  
   const handlePurchase = async (recordId) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -227,10 +227,10 @@ export const BuscarEnPlataformaComponent = () => {
     try {
       setPaymentStatus("processing");
       setShowPaymentModal(true);
-      // 1. Simulación de proceso de pago
+
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setPaymentStatus("validating");
-      // 2. Llamada real al backend
+    
       const response = await fetch(`${process.env.BACKEND_URL}/api/purchase`, {
         method: "POST",
         headers: {
@@ -243,16 +243,16 @@ export const BuscarEnPlataformaComponent = () => {
       if (!response.ok) {
         throw new Error(data.error || "Error en la compra");
       }
-      // 3. Actualización de estado optimizada
+
       setItems((prev) => prev.filter((item) => item.record_id !== recordId));
-      // 4. Actualización de datos del usuario
+  
       if (actions.getRecords) {
         await actions.getRecords();
       }
       if (actions.getSellList) {
         await actions.getSellList();
       }
-      // 5. Feedback visual
+    
       setPaymentStatus("success");
       setTimeout(() => setShowPaymentModal(false), 2000);
     } catch (error) {
@@ -263,7 +263,7 @@ export const BuscarEnPlataformaComponent = () => {
     }
   };
 
-  // Función para intercambio
+
   const handleExchange = async () => {
     if (!selectedItem || !exchangeRecord) {
       alert("Selecciona ambos discos para el intercambio");
@@ -303,7 +303,7 @@ export const BuscarEnPlataformaComponent = () => {
     }
   };
 
-  // Componente Modal de Pago
+
   const PaymentModal = () => (
     <Modal show={showPaymentModal} onHide={() => setShowPaymentModal(false)}>
       <Modal.Header closeButton>
@@ -351,7 +351,6 @@ export const BuscarEnPlataformaComponent = () => {
     </Modal>
   );
 
-  // Filtrado de ítems
   const filteredItems = items.filter((item) =>
     item.record_title.toLowerCase().includes(query.toLowerCase())
   );
@@ -527,7 +526,7 @@ export const BuscarEnPlataformaComponent = () => {
           </div>
           <Form.Group className="mt-3">
             <Form.Control
-              onKeyDown={handleKeyDown}  // Detecta la tecla 'Enter'
+              onKeyDown={handleKeyDown}
               as="textarea"
               rows={3}
               placeholder="Escribe un comentario..."

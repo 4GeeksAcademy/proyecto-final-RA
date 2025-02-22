@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-// import '../../styles/components/_favoritosComponent.css';
+
 
 export const FavoritosComponent = () => {
   const { store, actions } = useContext(Context);

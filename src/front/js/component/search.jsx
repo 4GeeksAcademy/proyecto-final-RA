@@ -152,7 +152,7 @@ const Search = () => {
           show={showModal}
           onHide={handleCloseModal}
           centered
-          size="lg" // Modal más pequeño en altura
+          size="lg" 
         >
           <Modal.Header closeButton>
             <Modal.Title>{selectedRecord.title || "Sin título"}</Modal.Title>

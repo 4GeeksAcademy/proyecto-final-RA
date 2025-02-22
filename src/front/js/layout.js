@@ -15,7 +15,6 @@ import Private from "./component/private.jsx";
 import MisDiscos from "./component/misDiscos.jsx";
 // import { SearchMusic } from "./component/searchMusic.jsx";
 import BuscarEnPlataforma from "./component/BuscarEnPlataforma.jsx";
-import SearchLocal from "./component/searchLocal.jsx";
 import AboutUs from "./component/aboutUs.jsx"
 import { MiPerfil } from "./component/miPerfil.jsx"
 import DiscosEnVenta from "./component/discosEnVenta.jsx";

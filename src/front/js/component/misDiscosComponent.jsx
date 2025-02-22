@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-// import "../../styles/components/_misdiscoscomponent.css";
-// import "../../styles/components/_search2.css";
+
 
 const MisDiscosComponent = () => {
   const { store, actions } = useContext(Context);

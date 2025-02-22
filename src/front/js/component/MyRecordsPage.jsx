@@ -9,19 +9,18 @@ const MyRecordsPage = () => {
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
-    // Obtener discos de la API externa (por ejemplo, Discogs)
     const fetchApiData = async () => {
       try {
-        const response = await fetch('https://api.discogs.com/some-endpoint'); // Cambia esta URL por la que estés usando
+        const response = await fetch('https://api.discogs.com/some-endpoint'); 
         const data = await response.json();
-        setApiData(data.records); // Ajusta esto según la respuesta real de la API
+        setApiData(data.records); 
       } catch (error) {
         console.error('Error al obtener discos de la API:', error);
       }
     };
 
     fetchApiData();
-  }, []); // Solo se ejecuta una vez cuando se monta el componente
+  }, []); 
 
   const handleAddRecord = (newRecord) => {
     setRecords([...records, newRecord]);
