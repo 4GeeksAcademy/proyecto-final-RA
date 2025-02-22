@@ -162,7 +162,6 @@ def register():
         if check_user:
             return jsonify({"msg": "Ya existe un usuario con este correo, intenta iniciar sesión"}), 400
         
-        # Hashear la contraseña antes de almacenarla
         hashed_password = generate_password_hash(password)
 
         new_user = User(email=email, password=hashed_password, is_active=True)

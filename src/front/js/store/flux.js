@@ -28,14 +28,14 @@ const getState = ({ getStore, setStore }) => {
       validateToken: async () => {
         const token = localStorage.getItem("token");
         if (!token) return false;
-        
+
         try {
           const response = await fetch(`${process.env.BACKEND_URL}/api/validate_token`, {
             headers: { Authorization: `Bearer ${token}` }
           });
-          
+
           if (!response.ok) throw new Error("Token inválido");
-          
+
           const userData = await response.json();
           setStore({ user: userData });
           return true;
@@ -66,15 +66,15 @@ const getState = ({ getStore, setStore }) => {
         }
       },
 
-    
+
       getComments: async (record_id) => {
         try {
           const token = localStorage.getItem("token");
           if (!token) throw new Error("No se encontró el Token");
-      
+
           const url = `${process.env.BACKEND_URL}/api/comments/${record_id}`;
           console.log("Obteniendo comentarios desde:", url);
-      
+
           const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -82,12 +82,12 @@ const getState = ({ getStore, setStore }) => {
               Authorization: `Bearer ${token}`,
             },
           });
-      
+
           if (!response.ok) throw new Error("No se pudieron cargar los comentarios.");
-      
+
           const data = await response.json();
           console.log("Comentarios recibidos:", data);
-      
+
           setStore(prevStore => ({
             ...prevStore,
             comments: { ...prevStore.comments, [record_id]: data }
@@ -96,12 +96,12 @@ const getState = ({ getStore, setStore }) => {
           console.error("Error al obtener los comentarios:", error.message);
         }
       },
-      
-      
 
 
 
-  
+
+
+
       addComment: async (record_id, content) => {
         try {
           const token = localStorage.getItem("token");
@@ -121,7 +121,7 @@ const getState = ({ getStore, setStore }) => {
 
           if (!response.ok) throw new Error("Error al agregar el comentario.");
 
-        
+
           const store = getStore();
           const newComment = { content: content, user: store.user.name };
           setStore({
@@ -143,30 +143,30 @@ const getState = ({ getStore, setStore }) => {
             console.error("Token no encontrado.");
             return { success: false, error: "No se encontró un token válido" };
           }
-      
-          setStore({ isLoading: true }); 
-      
+
+          setStore({ isLoading: true });
+
           const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-      
+
           if (!response.ok) throw new Error("Error al obtener la lista de favoritos");
-      
+
           const data = await response.json();
           setStore({ wishList: data });
-      
+
           return { success: true };
         } catch (error) {
           console.error("Error en getWishList:", error);
           return { success: false, error: error.message };
         } finally {
-          setStore({ isLoading: false }); 
+          setStore({ isLoading: false });
         }
       },
-      
+
       addToWishlist: async (recordId) => {
         try {
           const token = localStorage.getItem("token");
@@ -174,37 +174,37 @@ const getState = ({ getStore, setStore }) => {
             console.error("Token no encontrado.");
             return { success: false, error: "No se encontró un token válido" };
           }
-      
+
           const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ record_id: recordId }), 
+            body: JSON.stringify({ record_id: recordId }),
           });
-      
+
           if (!response.ok) throw new Error("Error al agregar el favorito");
-      
+
           // Actualiza el estado global
           const store = getStore();
-          const newWishItem = { record_id: recordId }; 
+          const newWishItem = { record_id: recordId };
           setStore({ wishList: [...store.wishList, newWishItem] });
-      
+
           return { success: true };
         } catch (error) {
           console.error("Error en addToWishlist:", error);
           return { success: false, error: error.message };
         }
       },
-      
+
       removeFromWishlist: async (record_id) => {
         const token = localStorage.getItem("token");
         if (!token) {
           console.error("Token no encontrado.");
           return { success: false, error: "No se encontró un token válido" };
         }
-      
+
         try {
           const response = await fetch(`${process.env.BACKEND_URL}/api/wishlist/${record_id}`, {
             method: "DELETE",
@@ -212,20 +212,20 @@ const getState = ({ getStore, setStore }) => {
               Authorization: `Bearer ${token}`,
             },
           });
-      
+
           if (!response.ok) throw new Error("Error al eliminar de la wishlist");
-      
+
           const store = getStore();
           const updatedWishlist = store.wishList.filter(item => item.record_id !== record_id);
           setStore({ wishList: updatedWishlist });
-      
+
           return { success: true };
         } catch (error) {
           console.error("Error eliminando de la wishlist:", error);
           return { success: false, error: error.message };
         }
       },
-      
+
 
       searchDiscogs: async (query, searchBy) => {
         const store = getStore();
@@ -497,30 +497,30 @@ const getState = ({ getStore, setStore }) => {
 
       getAllSellList: async () => {
         try {
-          const token = localStorage.getItem("token"); 
+          const token = localStorage.getItem("token");
           if (!token) {
             console.error("Token no encontrado.");
-            return { success: false, error: "No se encontró un token válido" }; 
+            return { success: false, error: "No se encontró un token válido" };
           }
-      
+
 
           const response = await fetch(process.env.BACKEND_URL + "/api/get_all_sell_list", {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`, 
+              Authorization: `Bearer ${token}`,
             },
           });
-      
-          if (!response.ok) throw new Error("Error al obtener los discos en venta"); 
-          const data = await response.json(); 
-      
-          setStore({ sellList: data }); 
+
+          if (!response.ok) throw new Error("Error al obtener los discos en venta");
+          const data = await response.json();
+
+          setStore({ sellList: data });
         } catch (error) {
-          console.error("Error en getAllSellList:", error); 
-          setStore({ error: "No se pudieron cargar los discos en venta" }); 
+          console.error("Error en getAllSellList:", error);
+          setStore({ error: "No se pudieron cargar los discos en venta" });
         }
       },
-      
+
 
       getUserData: async (userId) => {
         try {
@@ -556,10 +556,10 @@ const getState = ({ getStore, setStore }) => {
 
       deleteRecord: async (userId, recordId) => {
         try {
-          const token = localStorage.getItem("token"); 
+          const token = localStorage.getItem("token");
           if (!token) {
             console.error("Token no encontrado.");
-            return { success: false, error: "No se encontró un token válido" }; 
+            return { success: false, error: "No se encontró un token válido" };
           }
           const response = await fetch(
             `${process.env.BACKEND_URL}api/records/${recordId}`,

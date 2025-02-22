@@ -23,7 +23,7 @@
 
 /* Título */
 .mi-perfil-title {
-  color: #333;
+  color: white;
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
@@ -47,13 +47,13 @@
 
 .mi-perfil-info p {
   font-size: 1rem;
-  color: #555;
+  color: white;
   margin-bottom: 0.5rem;
 }
 
 .mi-perfil-label {
   font-weight: bold;
-  color: #222;
+  color: white;
 }
 
 /* Contenedor del formulario */
