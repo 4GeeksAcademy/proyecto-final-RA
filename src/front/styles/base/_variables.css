@@ -1,0 +1,7 @@
+/* src/front/styles/base/_variables.css */
+:root {
+    --color-negro: #000000;
+    --color-gris-oscuro: #333333;
+    --color-gris-claro: #cccccc;
+    --color-rojo: #e62a2a;
+  }

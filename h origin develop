@@ -1,0 +1,46 @@
+[33mcommit 96f4922da542f1b3baf604506e940a3bb615003e[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m, [m[1;31morigin/login-register[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mlogin-register[m[33m)[m
+Merge: 9882d62 0131740
+Author: Alejandro <64385399+Fractal-Vortex@users.noreply.github.com>
+Date:   Wed Jan 15 21:57:10 2025 +0000
+
+    Merge branch 'develop' into login-register
+
+[33mcommit 9882d622a2bd9ddf29ccc57d70739d88df486a4d[m
+Author: Alejandro <64385399+Fractal-Vortex@users.noreply.github.com>
+Date:   Wed Jan 15 21:55:42 2025 +0000
+
+    migraciones y base de datos actualizadas
+
+[33mcommit 01317405a6d2ae4d67770c47a8697c08b9562962[m
+Merge: 5c4cf89 b067b2b
+Author: Alejandro <64385399+Fractal-Vortex@users.noreply.github.com>
+Date:   Wed Jan 15 19:52:25 2025 +0000
+
+    Merge branch 'login-register' into develop yeah
+
+[33mcommit b067b2b8f6578b2ad9bcf26b6d92807c8411a6d2[m
+Author: Alejandro <64385399+Fractal-Vortex@users.noreply.github.com>
+Date:   Wed Jan 15 19:50:28 2025 +0000
+
+    cambios generales
+
+[33mcommit 5c4cf897a6c754669bf180ab56b9d3a5ec39cf0c[m
+Merge: 71bd0c2 1d54753
+Author: Alejandro <64385399+Fractal-Vortex@users.noreply.github.com>
+Date:   Wed Jan 15 11:25:21 2025 +0100
+
+    Merge pull request #1 from 4GeeksAcademy/main
+    
+    1
+
+[33mcommit 1d5475332bef4594823aa9ed94d3203f6116f2a7[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Alejandro <64385399+Fractal-Vortex@users.noreply.github.com>
+Date:   Wed Jan 15 10:18:41 2025 +0000
+
+    1
+
+[33mcommit 71bd0c287a7871b76bf6ae159805ca9da44cd2c3[m
+Author: Alejandro <64385399+Fractal-Vortex@users.noreply.github.com>
+Date:   Tue Jan 14 23:39:23 2025 +0100
+
+    Initial commit

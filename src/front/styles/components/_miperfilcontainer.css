@@ -1,0 +1,60 @@
+/* MiPerfilContainer.css */
+
+.mi-perfil-container {
+    display: flex;
+    /* Usa flexbox para el diseño principal */
+    flex-direction: column;
+    /* Contenedor en columna */
+    min-height: 100vh;
+    /* Altura mínima de la pantalla */
+    background-color: var(--color-background);
+    /* Color de fondo (variable CSS) */
+    color: var(--color-text);
+    /* Color de texto (variable CSS) */
+    padding: 2rem;
+    /* Espacio alrededor del contenido */
+}
+
+.mi-perfil-content {
+    display: flex;
+    /* Usa flexbox para el contenido principal (SideBar y MiPerfil) */
+    flex-grow: 1;
+    /* El contenido principal ocupa el espacio disponible */
+    gap: 2rem;
+    /* Espacio entre SideBar y MiPerfil */
+}
+
+/* Estilos para SideBar (si no están definidos en otro lugar) */
+.sidebar {
+    /* Ajusta el selector si tu componente SideBar tiene otra clase */
+    width: 250px;
+    /* Ancho deseado para la barra lateral */
+    background-color: var(--color-sidebar-background);
+    /* Color de fondo de la barra lateral (variable CSS) */
+    padding: 1rem;
+    /* Espacio interno de la barra lateral */
+    border-radius: 10px;
+    /* Bordes redondeados de la barra lateral */
+}
+
+/* Estilos para MiPerfil (si no están definidos en otro lugar) */
+.mi-perfil {
+    flex-grow: 1;
+    /* MiPerfil ocupa el espacio restante */
+    /* ... otros estilos para MiPerfil ... */
+}
+
+/* Media query para diseño responsivo (opcional) */
+@media (max-width: 768px) {
+    .mi-perfil-content {
+        flex-direction: column;
+        /* Contenido en columna en pantallas pequeñas */
+    }
+
+    .sidebar {
+        width: 100%;
+        /* Barra lateral ocupa todo el ancho */
+        margin-bottom: 1rem;
+        /* Espacio debajo de la barra lateral */
+    }
+}

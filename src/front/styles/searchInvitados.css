@@ -1,0 +1,47 @@
+/* Contenedor del carrusel */
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  /* overflow: visible; */
+  padding-top: 3rem;
+}
+
+/* Flechas de navegación */
+.carousel-control {
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo translúcido */
+  color: white;
+  border: none;
+  font-size: 1.5rem; /* Tamaño del texto */
+  width: 50px; /* Ancho del botón */
+  height: 50px; /* Alto del botón */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* Forma circular */
+  position: absolute; /* Posicionamiento absoluto */
+  top: 50%; /* Centrado vertical */
+  transform: translateY(-50%); /* Ajuste para centrar */
+  z-index: 10; /* Asegurarse de que esté por encima del contenido */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+/* Botón izquierdo */
+.carousel-control.prev {
+  left: 10px; /* Separación del borde izquierdo */
+}
+/* Botón derecho */
+.carousel-control.next {
+  right: 10px; /* Misma posición que SearchInvitados */
+}
+
+/* Hover en las flechas */
+.carousel-control:hover {
+  background-color: rgba(255, 255, 255, 0.8); /* Color de fondo al pasar por encima */
+  color: black;
+}
+
+
+
+  
+  

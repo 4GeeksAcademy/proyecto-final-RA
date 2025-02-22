@@ -1,0 +1,61 @@
+.jumbotron {
+    /* background: linear-gradient(135deg, #363636, #000000); */
+    color: rgb(255, 255, 255); /* Texto en blanco */
+    padding: 4rem 2rem; /* Espaciado interno */
+    border-radius: 15px; /* Bordes redondeados */
+    margin: 2rem auto; /* Margen exterior */
+    max-width: 1200px; /* Ancho máximo */
+    box-shadow: 0 4px 15px rgba(141, 138, 138, 0.2); /* Sombra */
+  }
+  
+  .jumbotron-content {
+    text-align: center; /* Centrar el contenido */
+  }
+  
+  .jumbotron h1 {
+    font-size: 2.5rem; /* Tamaño del título */
+    margin-bottom: 1.5rem; /* Espaciado inferior */
+    color: red;
+  }
+  
+  .jumbotron .lead {
+    font-size: 1.25rem; /* Tamaño del texto principal */
+    margin-bottom: 1.5rem; /* Espaciado inferior */
+    color: white;
+  }
+  
+  .jumbotron hr {
+    border-top: 2px solid rgba(255, 255, 255, 0.2); /* Línea divisoria */
+    margin: 2rem auto; /* Espaciado exterior */
+    width: 50%; /* Ancho de la línea */
+  }
+  
+  .jumbotron ul {
+    text-align: left; /* Alinear texto a la izquierda */
+    list-style-type: none; /* Quitar viñetas */
+    padding-left: 0; /* Quitar padding izquierdo */
+  }
+  
+  .jumbotron ul li {
+    font-size: 1rem; /* Tamaño del texto */
+    margin-bottom: 0.75rem; /* Espaciado entre elementos */
+  }
+  
+  .jumbotron ul li strong {
+    color: #b61919; /* Color destacado para el texto fuerte */
+  }
+  
+  .cta-buttons {
+    margin-top: 2rem; /* Espaciado superior */
+  }
+  
+  .cta-buttons .btn {
+    margin: 0 0.5rem; /* Espaciado entre botones */
+    font-weight: bold; /* Texto en negrita */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+  }
+  
+  .cta-buttons .btn:hover {
+    transform: translateY(-3px); /* Efecto de elevación */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra al hacer hover */
+  }

@@ -1,0 +1,62 @@
+.mis-discos-container {
+  padding: 20px;
+  /* margin-left: 8rem; */
+}
+
+.mis-discos-title {
+  font-size: 24px;
+  color: #ffc107; /* Color de advertencia (amarillo) */
+}
+
+.mis-discos-row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.mis-discos-col {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.mis-discos-card {
+  width: 100%; /* Ajusta la tarjeta para que se ajuste al tamaño de la columna */
+  max-width: 260px; /* Limita el ancho máximo de la tarjeta */
+  margin: auto; /* Centra la tarjeta */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mis-discos-card-img {
+  height: 150px;
+  object-fit: cover;
+}
+
+.mis-discos-card-body {
+  padding: 10px;
+}
+
+.mis-discos-card-title {
+  font-size: 16px;
+}
+
+.mis-discos-card-text {
+  font-size: 14px;
+}
+
+.mis-discos-card-footer {
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.mis-discos-button {
+  font-size: 12px;
+}
+
+.mis-discos-alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  max-width: 800px;
+  width: 100%;
+}

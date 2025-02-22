@@ -1,0 +1,95 @@
+/* Estilos generales para la página de Mis Discos */
+.my-records-container {
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro translúcido */
+    color: white;
+    padding: 40px;
+    min-height: 100vh;
+  }
+  
+  .my-records-container h1 {
+    color: red; /* Título en rojo */
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .my-records-container button {
+    background-color: #ff4500; /* Botón de color llamativo */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 30px;
+  }
+  
+  .my-records-container button:hover {
+    background-color: #e03e00; /* Cambio de color en hover */
+  }
+  
+  .my-records-container ul.record-list {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+  }
+  
+  .my-records-container ul.record-list li {
+    font-size: 18px;
+    background-color: #333; /* Fondo oscuro para cada disco */
+    color: #f8f9fa; /* Texto claro */
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .my-records-container ul.record-list li:hover {
+    background-color: #444; /* Fondo ligeramente más claro al pasar el ratón */
+  }
+  
+  .my-records-container ul.record-list li:active {
+    background-color: #555; /* Fondo al hacer clic */
+  }
+  
+  /* Estilos para el modal */
+  .modal-content {
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro para el modal */
+    color: white;
+  }
+  
+  .modal-header {
+    background-color: #ff4500; /* Header con color llamativo */
+  }
+  
+  .modal-body {
+    background-color: #333; /* Cuerpo del modal oscuro */
+  }
+  
+  /* Estilos para la lista de discos (cuando se agrega desde la API) */
+  .record-list {
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .my-records-container {
+      padding: 20px;
+    }
+  
+    .my-records-container h1 {
+      font-size: 30px;
+    }
+  
+    .my-records-container button {
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+  
+    .my-records-container ul.record-list li {
+      font-size: 16px;
+      padding: 8px;
+    }
+  }
+  
+  

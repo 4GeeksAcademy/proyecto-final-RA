@@ -1,0 +1,56 @@
+/* Card styling */
+
+
+
+
+.mis-discos-container .card {
+  transition: transform 0.2s ease;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;     /* Se adapta al ancho del contenedor */
+  /* height: auto;  */
+}
+
+.mis-discos-container .card img {
+  width: 100%;     /* La imagen ocupa el 100% del ancho del card */
+  height: auto;    /* La altura se ajusta para mantener la proporción */
+  object-fit: cover;
+}
+.mis-discos-container .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Image styling */
+.mis-discos-container .card-img-top {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Button styling */
+.mis-discos-container .btn-primary {
+  background-color: var(--color-rojo);
+  border: none;
+}
+
+.mis-discos-container .btn-primary:hover {
+  background-color: var(--color-gris-oscuro);
+  color: var(--color-rojo);
+}
+
+.mis-discos-container .btn-outline-danger {
+  border-color: var(--color-rojo);
+  color: var(--color-rojo);
+}
+
+.mis-discos-container .btn-outline-danger:hover {
+  background-color: var(--color-rojo);
+  color: white;
+}
+
+/* Text truncation */
+.mis-discos-container .card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

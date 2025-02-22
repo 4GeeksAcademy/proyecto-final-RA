@@ -1,0 +1,91 @@
+/* Contenedor principal del carrusel */
+.random-records-carousel {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  color: white;
+}
+
+/* Título del carrusel */
+.random-records-carousel h2 {
+  font-size: 36px;
+  text-align: center;
+  color: red;
+  margin-bottom: 30px;
+}
+
+/* Contenedor del carrusel */
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Contenedor interno para las tarjetas */
+.carousel-inner {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+}
+
+/* Flechas de navegación */
+.carousel-control {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 2;
+  padding: 0 20px;
+  user-select: none;
+}
+
+.carousel-control:focus {
+  outline: none;
+}
+
+.carousel-control.prev {
+  position: absolute;
+  left: 0;
+}
+
+.carousel-control.next {
+  position: absolute;
+  right: 0;
+}
+
+/* Tarjetas */
+.card {
+  background-color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Media queries para dispositivos pequeños */
+@media (max-width: 768px) {
+  .random-records-carousel h2 {
+    font-size: 28px;
+  }
+
+  .card {
+    width: 80%;
+    margin: 10px auto;
+  }
+}
+
+
+  
